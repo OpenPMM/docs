@@ -1,16 +1,16 @@
 ---
 title: "Connect a destination"
-description: "Start an authorization session and detect the connected social account."
+description: "Authorize a provider account and get its destination ID."
 ---
 
-You can start a provider authorization flow through the API. OpenPMM stores the resulting provider credential and exposes a destination ID to your integration.
+Use a connection session to authorize a provider account. OpenPMM stores the provider credential. Your application receives a destination ID.
 
 <Steps>
   <Step title="Choose a provider">
-    Use a provider returned by the public API. Mastodon also requires the instance origin, such as `https://mastodon.social`.
+    Use a provider value from the endpoint reference. For Mastodon, also send the instance origin. For example, use `https://mastodon.social`.
   </Step>
   <Step title="Create a connection session">
-    Send the provider to the workspace connection-session endpoint.
+    Send the provider to the connection-session endpoint.
 
     ```bash
     curl --request POST \
@@ -22,10 +22,21 @@ You can start a provider authorization flow through the API. OpenPMM stores the 
     ```
   </Step>
   <Step title="Open the authorization URL">
-    Redirect the person connecting the account to the returned `authorization_url`. Do not open provider authorization in an unattended worker.
+    Open the returned `authorization_url` in a browser. A person must complete this step. Do not open the URL in an unattended worker.
   </Step>
-  <Step title="Find the destination">
-    After authorization completes, list workspace destinations and store the new destination ID.
+  <Step title="Check the connection status">
+    Save the returned session `id`. Get the session until its status is `completed` or `expired`.
+
+    ```bash
+    export OPENPMM_CONNECTION_SESSION_ID="your_connection_session_id"
+
+    curl --request GET \
+      --url "https://api.openpmm.com/v1/workspaces/$OPENPMM_WORKSPACE_ID/destination-connection-sessions/$OPENPMM_CONNECTION_SESSION_ID" \
+      --header "Authorization: Bearer $OPENPMM_API_KEY"
+    ```
+  </Step>
+  <Step title="Get the destination ID">
+    After the session is complete, list the destinations. Store the new destination ID.
 
     ```bash
     curl --request GET \
@@ -36,5 +47,5 @@ You can start a provider authorization flow through the API. OpenPMM stores the 
 </Steps>
 
 <Note>
-  Provider access tokens never pass through your integration. OpenPMM stores them encrypted and uses them only for the connected destination.
+  OpenPMM does not return provider access tokens to your application. It stores the tokens in encrypted form.
 </Note>

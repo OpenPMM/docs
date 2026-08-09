@@ -12,21 +12,34 @@
 ## Public terminology
 
 - **Account** is a person's OpenPMM identity.
-- **Workspace** is the tenant boundary for API keys, destinations, and posts.
+- **API credential** is an account-owned bearer key. It can have access to all
+  workspaces or selected workspaces.
+- **Workspace** is the tenant boundary for destinations, assets, drafts, and
+  posts.
 - **Destination** is a connected social account that can receive content.
-- **Post** is content prepared for one destination.
-- **Send** is the durable result of confirmed publishing work. Use the exact API resource name when documenting an endpoint.
+- **Post** is one channel's content and publishing state. Publishing changes
+  the state of the post; it does not create a second customer object.
+- **Post group** contains related channel drafts. Use this term only when you
+  document the `/post-groups` resource.
+- **Post submission** describes posts that were created together. The current
+  wire object is `send_group`; use that exact name only when you document its
+  path or response.
 
 Do not substitute internal model names for these terms in explanatory content.
 
 ## Style preferences
 
+- Use ASD-STE100 Simplified Technical English for all public copy.
 - Use active voice and second person ("you").
-- Keep sentences concise. Give each sentence one idea.
+- Use short sentences. Give each sentence one idea.
+- Use one approved term for each object. Do not use a synonym to add variety.
+- Use a verb-and-object title for an action. For example, use `Create Post`.
+- Do not add an article, condition, or result to an endpoint title.
 - Use sentence case for headings.
 - Bold UI elements: Click **Settings**.
 - Use code formatting for file names, commands, paths, parameters, and code references.
-- Distinguish editable posts from confirmed sends. State clearly when an action can publish externally.
+- Distinguish drafts from posts that can publish. State clearly when an action
+  can publish externally.
 - Use exact, tested examples. Prefer read-only examples in introductory content.
 
 ## Content boundaries
@@ -36,3 +49,11 @@ Do not substitute internal model names for these terms in explanatory content.
 - Do not document private `/api` routes.
 - Do not present the internal CLI as a public product until it ships.
 - Never include real API keys, tokens, provider credentials, workspace IDs, or customer data.
+
+## API navigation
+
+`docs.json` sets the production OpenAPI URL on the `API reference` tab. It
+lists each endpoint explicitly under Posts, Drafts, Assets, Destinations, or
+Account. Keep each `METHOD /path` entry in exactly one group. Update this list
+when the public API adds, removes, or moves an endpoint. Do not add an
+`Endpoints` wrapper around these groups.

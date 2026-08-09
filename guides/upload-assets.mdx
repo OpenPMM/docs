@@ -1,13 +1,13 @@
 ---
 title: "Upload assets"
-description: "Upload media directly and attach it to a post."
+description: "Upload a media file and add it to a post."
 ---
 
-OpenPMM uses a three-step upload flow. Your application creates an upload, sends bytes to the returned storage URL, then marks the upload complete.
+OpenPMM uses three steps to upload a file. Create an upload, send the file to the returned URL, and complete the upload.
 
 <Steps>
   <Step title="Begin the upload">
-    Send the file metadata. Use the real byte length and MIME type.
+    Send the file data. Use the exact byte size and media type.
 
     ```json
     {
@@ -19,15 +19,15 @@ OpenPMM uses a three-step upload flow. Your application creates an upload, sends
     ```
   </Step>
   <Step title="Upload the bytes">
-    Send the file directly to the signed URL returned by OpenPMM. Match the declared `Content-Type` and do not add your OpenPMM bearer token to this request.
+    Send the file to `upload_url`. Include all values from `required_headers`. Do not send the OpenPMM API key to this URL.
   </Step>
   <Step title="Complete the upload">
-    Call the completion endpoint after the storage upload succeeds. OpenPMM verifies the object before making the asset available to posts.
+    Call `POST /workspaces/{workspace_id}/asset-uploads/{upload_id}/complete`. This request does not have a JSON body. OpenPMM checks the file and returns the asset.
   </Step>
 </Steps>
 
-Store the returned asset reference and include it in a post's `media` array.
+Store the returned asset `id`. Add the ID to the post `media` array.
 
 <Warning>
-  Signed upload URLs expire. Begin a new upload instead of reusing an expired URL.
+  The upload URL expires at `expires_at`. Create a new upload after this time.
 </Warning>

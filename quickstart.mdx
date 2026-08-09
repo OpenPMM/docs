@@ -1,29 +1,25 @@
 ---
 title: "OpenPMM API quickstart"
 sidebarTitle: "Quickstart"
-description: "Create an API key and make a safe, read-only request to verify your OpenPMM workspace."
+description: "Create an API key and make read-only requests."
 ---
 
 This guide makes a read-only request. It does not publish content.
 
 ## Before you begin
 
-You need an OpenPMM account with access to a workspace. Sign in at [app.openpmm.com](https://app.openpmm.com).
+You need an OpenPMM account and access to a workspace. Sign in at [app.openpmm.com](https://app.openpmm.com).
 
 <Steps>
   <Step title="Create an API key">
     Open your workspace, then go to **Workspace settings** and select **API keys**.
-    Create a key and copy it immediately. OpenPMM shows the secret once and stores only a hash.
+    Create a key and copy it immediately. OpenPMM shows the secret one time.
   </Step>
-  <Step title="Copy your workspace ID">
-    Copy the **Workspace ID** shown on the same page. Keep it next to the key in your local secret manager.
-  </Step>
-  <Step title="Set local environment variables">
-    Use the names below in your shell. Do not commit either value.
+  <Step title="Set the API key">
+    Set the API key in your shell. Do not commit it.
 
     ```bash
     export OPENPMM_API_KEY="your_api_key"
-    export OPENPMM_WORKSPACE_ID="your_workspace_id"
     ```
   </Step>
   <Step title="Verify the credential">
@@ -35,7 +31,22 @@ You need an OpenPMM account with access to a workspace. Sign in at [app.openpmm.
       --header "Authorization: Bearer $OPENPMM_API_KEY"
     ```
 
-    A successful response identifies the credential, its environment, access mode, and scopes.
+    The response shows the credential environment, workspace access mode, scopes, and expiry time.
+  </Step>
+  <Step title="List workspaces">
+    List the workspaces that the credential can use.
+
+    ```bash
+    curl --request GET \
+      --url https://api.openpmm.com/v1/workspaces \
+      --header "Authorization: Bearer $OPENPMM_API_KEY"
+    ```
+
+    Copy a workspace `id` from the response. Set it in your shell.
+
+    ```bash
+    export OPENPMM_WORKSPACE_ID="your_workspace_id"
+    ```
   </Step>
   <Step title="List destinations">
     Check which connected social accounts are available.
@@ -49,7 +60,7 @@ You need an OpenPMM account with access to a workspace. Sign in at [app.openpmm.
 </Steps>
 
 <Warning>
-  Treat an API key like a password. Keep production keys in your deployment platform's secret store, never in source control or client-side code.
+  Treat an API key like a password. Keep production keys in a server-side secret store. Do not put a key in source control or client code.
 </Warning>
 
-Next, [connect a destination](/guides/connect-a-destination) or learn how to [publish posts safely](/guides/publish-posts).
+Next, [connect a destination](/guides/connect-a-destination) or [create a post](/guides/publish-posts).

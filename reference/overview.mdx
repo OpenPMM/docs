@@ -1,29 +1,29 @@
 ---
 title: "API overview"
-description: "Use the versioned OpenPMM HTTP API."
+description: "Learn the base URL and rules for the OpenPMM API."
 ---
 
-The OpenPMM API is a JSON-over-HTTP interface for agent-owned social publishing.
+The OpenPMM API uses JSON over HTTP.
 
 ```text
 https://api.openpmm.com/v1
 ```
 
-The OpenAPI definition in this reference comes directly from the production API. A successful production deployment asks Mintlify to refresh the generated endpoint pages.
+The endpoint reference uses the OpenAPI document from the production API. OpenPMM refreshes the reference after a successful production deployment.
 
 ## Conventions
 
-- Authenticate every request with a bearer API key.
-- Send and receive JSON unless an upload URL instructs you otherwise.
-- Use public IDs exactly as returned.
-- Send `Idempotency-Key` on operations marked idempotent.
-- Send `If-Match` on conditional updates.
-- Treat publishing as confirmed only when the request includes `confirmed: true`.
+- Send the API key as a bearer token on each API request.
+- Send and receive JSON unless an upload endpoint gives different instructions.
+- Use IDs without changes.
+- Send `Idempotency-Key` when the endpoint requires it.
+- Send `If-Match` when the endpoint requires an ETag.
+- Send `confirmed: true` for an action that can publish.
 
 ## Versioning
 
-The `/v1` prefix identifies the public contract. Additive fields may appear within the version. Clients should ignore response fields they do not recognize.
+The `/v1` prefix identifies this API version. OpenPMM can add response fields without a new version. Ignore response fields that your application does not use.
 
 <Note>
-  Private dashboard routes under `/api` are not part of this contract.
+  Private dashboard routes under `/api` are not part of the public API.
 </Note>

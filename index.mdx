@@ -1,38 +1,39 @@
 ---
-title: "OpenPMM API documentation"
+title: "OpenPMM API"
 sidebarTitle: "Home"
-description: "Connect social accounts and publish through one agent-friendly API."
+description: "Connect social accounts and create posts with one API."
 ---
 
-OpenPMM gives your software one API for publishing to the social accounts you already own.
-You connect a destination once, then create, schedule, and inspect posts without implementing each provider separately.
+Use OpenPMM to connect social accounts and create posts through one API.
+You do not need a separate integration for each provider.
 
 <Note>
-  OpenPMM is in limited access. The documented API is the public contract for available accounts. Features that are still in development are not included here.
+  OpenPMM is in limited access. These pages document the available public API. They do not document features that are in development.
 </Note>
 
 ## Start here
 
 <CardGroup cols={2}>
   <Card title="Make your first API request" icon="rocket" href="/quickstart">
-    Create an API key and verify the workspace it belongs to.
+    Create an API key and list the workspaces that it can use.
   </Card>
-  <Card title="Understand posts and sends" icon="paper-plane" href="/concepts/posts-and-sends">
-    Learn where editable content ends and confirmed delivery begins.
+  <Card title="Understand posts and publishing" icon="paper-plane" href="/concepts/posts-and-sends">
+    Learn how drafts, posts, and publishing states work.
   </Card>
-  <Card title="Publish a post" icon="arrow-up-right-from-square" href="/guides/publish-posts">
-    Validate a request, confirm it, and track the resulting send.
+  <Card title="Create a post" icon="arrow-up-right-from-square" href="/guides/publish-posts">
+    Validate a request, publish it, and check the post status.
   </Card>
   <Card title="Explore the API" icon="brackets-curly" href="/reference/overview">
-    Browse authentication, pagination, errors, and endpoint definitions.
+    Read the API rules and browse the endpoints.
   </Card>
 </CardGroup>
 
 ## The OpenPMM model
 
-Every API key belongs to one **workspace**. A workspace contains **destinations**, which are the connected social accounts that can receive content. A **post** describes the content for one destination. Confirming one or more posts creates a **send**, the durable record of a publishing attempt.
+An **account** owns API credentials and workspaces. A **workspace** contains destinations, assets, drafts, and posts. A **destination** is a connected social account. A **post** contains content for one destination and its publishing status.
 
 <CardGroup cols={2}>
   <Card title="Accounts and workspaces" icon="users" href="/concepts/accounts-and-workspaces" />
   <Card title="Destinations" icon="share-nodes" href="/concepts/destinations" />
+  <Card title="Posts and publishing" icon="paper-plane" href="/concepts/posts-and-sends" />
 </CardGroup>

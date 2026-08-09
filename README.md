@@ -38,4 +38,8 @@ The marketing site keeps control of `www.openpmm.com` and proxies only `/docs` t
 
 ## Content boundaries
 
-Use **Account**, **Workspace**, **Destination**, **Post**, and **Send** in public explanations. Do not document internal or admin routes, worker endpoints, provider credentials, or behavior that has not shipped. See [`AGENTS.md`](./AGENTS.md) for the complete writing rules.
+Use **Account**, **API credential**, **Workspace**, **Destination**, **Asset**,
+**Draft**, and **Post** in public explanations. Use ASD-STE100 Simplified
+Technical English. Do not document internal routes, admin routes, worker
+endpoints, provider credentials, or behavior that has not shipped. See
+[`AGENTS.md`](./AGENTS.md) for the complete writing rules.

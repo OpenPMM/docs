@@ -1,16 +1,16 @@
 ---
 title: "Pagination"
-description: "Traverse list endpoints with opaque cursors."
+description: "Read a list response one page at a time."
 ---
 
-List endpoints use cursor pagination.
+Some list endpoints return one page of results.
 
 | Parameter | Meaning |
 | --- | --- |
 | `limit` | Maximum number of items to return |
-| `after` | Opaque cursor from the previous response |
+| `after` | `next_cursor` value from the previous response |
 
-Pass the returned cursor unchanged. Do not parse it or construct your own value.
+Send `next_cursor` as the next `after` value. Do not change or create this value.
 
 ```bash
 curl --request GET \
@@ -18,4 +18,4 @@ curl --request GET \
   --header "Authorization: Bearer $OPENPMM_API_KEY"
 ```
 
-Stop when the response does not include a next cursor. Results may change while you paginate, so do not treat page numbers as stable positions.
+Stop when `has_more` is `false` and `next_cursor` is `null`. Results can change while you read the pages.
