@@ -1,0 +1,123 @@
+---
+title: "Open PMM API Error Codes and Responses"
+sidebarTitle: "Errors"
+description: "Understand Open PMM API error responses. All errors return JSON with a code, message, and details field to help you debug failures."
+---
+
+When a request cannot be completed, the Open PMM API returns a non-2xx HTTP status code and a consistent JSON error body. Every error response uses the same envelope format, so you can write a single error-handling path in your integration regardless of the specific failure.
+
+## Error Envelope Format
+
+All error responses return a top-level `error` object with three fields:
+
+```json
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Human-readable description of what went wrong.",
+    "details": {}
+  }
+}
+```
+
+<ResponseField name="error.code" type="string" required>
+  A machine-readable string constant identifying the error type. Use this field in your error-handling logic rather than parsing the `message` string, which may change.
+</ResponseField>
+
+<ResponseField name="error.message" type="string" required>
+  A human-readable sentence describing the error. Suitable for logging and debugging, but not guaranteed to be stable across API versions.
+</ResponseField>
+
+<ResponseField name="error.details" type="object">
+  An optional object containing structured context about the error — for example, which fields failed validation. May be an empty object `{}` when no additional detail is available.
+</ResponseField>
+
+## HTTP Status Code Reference
+
+| Status Code | Meaning |
+|---|---|
+| `400` | **Bad Request** — the request body contains malformed JSON or is missing a required field |
+| `401` | **Unauthorized** — the `Authorization` header is missing, malformed, or contains an invalid or revoked API key |
+| `403` | **Forbidden** — the API key is valid but does not have the scope required for this operation |
+| `404` | **Not Found** — the requested resource does not exist or you do not have permission to see it |
+| `409` | **Conflict** — a resource with a conflicting unique identifier (e.g., slug or name) already exists |
+| `422` | **Unprocessable Entity** — the request is well-formed but fails business-logic validation |
+| `429` | **Too Many Requests** — you have exceeded the rate limit for your API key |
+| `500` | **Internal Server Error** — an unexpected error occurred on Open PMM's servers |
+
+## Sample Error Responses
+
+### 422 Unprocessable Entity
+
+A `422` error includes field-level validation details inside `details.fields`. Each entry names the failing field and explains the constraint that was violated:
+
+```json
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "The request body failed validation. Check the details field for field-level errors.",
+    "details": {
+      "fields": [
+        {
+          "field": "name",
+          "message": "Name is required and must be between 1 and 255 characters."
+        },
+        {
+          "field": "targetDate",
+          "message": "targetDate must be an ISO 8601 date string (e.g. 2025-12-31)."
+        }
+      ]
+    }
+  }
+}
+```
+
+### 401 Unauthorized
+
+A `401` error is returned when no valid API key is present. Check that your `Authorization` header is correctly formatted and that the key has not been revoked:
+
+```json
+{
+  "error": {
+    "code": "UNAUTHORIZED",
+    "message": "Missing or invalid API key. Include a valid Bearer token in the Authorization header.",
+    "details": {}
+  }
+}
+```
+
+### 429 Too Many Requests
+
+A `429` error includes a `retryAfter` value (in seconds) in `details`. Respect the `Retry-After` response header and pause requests accordingly:
+
+```json
+{
+  "error": {
+    "code": "RATE_LIMIT_EXCEEDED",
+    "message": "You have exceeded the rate limit for this key. Wait before retrying.",
+    "details": {
+      "retryAfter": 23,
+      "limit": 1000,
+      "window": "60s"
+    }
+  }
+}
+```
+
+## Handling Errors in Your Integration
+
+<Tip>
+  Always branch on the `error.code` string in your error-handling logic, not on the `error.message` text. Error messages are intended for human readers and may be updated to improve clarity without a version change.
+</Tip>
+
+A robust integration handles at minimum the following error codes:
+
+- `UNAUTHORIZED` — refresh or prompt for a new API key
+- `FORBIDDEN` — inform the user that additional permissions are required
+- `VALIDATION_ERROR` — surface `details.fields` back to the user or calling system
+- `RATE_LIMIT_EXCEEDED` — pause and retry with exponential backoff (see [Rate Limits](/api-reference/rate-limits))
+- `NOT_FOUND` — treat as a missing resource and handle gracefully in your UI or data pipeline
+
+<Info>
+  `500` errors are logged automatically by Open PMM. If you encounter repeated `500` responses, check the [Open PMM status page](https://status.open-pmm.com) for active incidents and contact support if the issue persists.
+</Info>

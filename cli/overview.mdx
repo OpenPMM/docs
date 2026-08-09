@@ -1,0 +1,154 @@
+---
+title: "Open PMM CLI: Command-Line API Access"
+sidebarTitle: "Overview"
+description: "The Open PMM CLI lets you interact with the API from your terminal, automate resource management, and build agent-driven workflows."
+---
+
+The Open PMM CLI brings the full power of the Open PMM API to your terminal. Whether you are scripting repetitive resource management tasks, integrating Open PMM into CI/CD pipelines, or building AI agent workflows that need structured access to product metrics and events, the CLI gives you a fast, scriptable interface without writing a single line of application code.
+
+<Note>
+  The Open PMM CLI is in active development and is coming soon. The commands and flags documented here reflect the planned interface. Sign up for early access to be notified when the first release is available.
+</Note>
+
+## What is the Open PMM CLI?
+
+The CLI is a standalone binary that wraps the Open PMM REST API. Every resource, metric, event, and webhook operation available through the API is also available as a CLI command. Output can be formatted as JSON, YAML, or a human-readable table, making it equally useful for interactive exploration and machine-to-machine automation.
+
+Key use cases include:
+
+- **Scripting and automation** — integrate Open PMM into shell scripts, Makefiles, and CI/CD workflows to create or update resources on deploy.
+- **AI agent workflows** — expose structured API access to LLM-based agents that need to read and write product data programmatically.
+- **Local development** — quickly inspect resources, replay events, and validate webhook configurations without leaving your terminal.
+
+## Installation
+
+Choose the installation method that matches your environment.
+
+<CodeGroup>
+
+```bash npm
+npm install -g @open-pmm/cli
+```
+
+```bash Homebrew
+brew tap open-pmm/tap
+brew install open-pmm
+```
+
+```bash Binary (Linux / macOS)
+# Replace <version> and <platform> with your target, e.g. v0.1.0 and linux-amd64
+curl -L https://releases.openpmm.io/cli/<version>/pmm-<platform>.tar.gz | tar -xz
+sudo mv pmm /usr/local/bin/pmm
+```
+
+```powershell Binary (Windows)
+# Download the latest release from https://releases.openpmm.io/cli
+# Extract the ZIP and add pmm.exe to your PATH
+Expand-Archive pmm-windows-amd64.zip -DestinationPath C:\pmm
+$env:PATH += ";C:\pmm"
+```
+
+</CodeGroup>
+
+Verify the installation by running:
+
+```bash
+pmm --version
+```
+
+## Configuration
+
+Before making any API calls you need to authenticate. You have two options: run the interactive configure command, or set an environment variable.
+
+### Interactive setup
+
+Run `pmm configure` to store your credentials in `~/.config/openpmm/config.yaml`:
+
+```bash
+pmm configure
+```
+
+The command prompts you for your API key and an optional default organisation ID:
+
+```bash
+? API key: pmm_live_••••••••••••••••
+? Default organisation ID (optional): org_01hx9
+Configuration saved to ~/.config/openpmm/config.yaml
+```
+
+Once saved, every subsequent command uses these values automatically.
+
+### Environment variable
+
+Set `OPEN_PMM_API_KEY` to skip the config file entirely. This is the recommended approach for CI/CD environments and containerised workloads:
+
+```bash
+export OPEN_PMM_API_KEY="pmm_live_your_key_here"
+pmm resources list
+```
+
+If both a config file and the environment variable are present, the environment variable takes precedence.
+
+<Tip>
+  Prefix your key with `pmm_test_` to target the sandbox environment and avoid mutating production data during development and testing.
+</Tip>
+
+## Command structure
+
+All CLI commands follow a consistent three-part pattern:
+
+```bash
+pmm <resource> <action> [flags]
+```
+
+| Segment | Description |
+|---|---|
+| `resource` | The API resource you are acting on: `resources`, `metrics`, `events`, `webhooks` |
+| `action` | The operation to perform: `list`, `get`, `create`, `update`, `delete`, `record` |
+| `flags` | Optional modifiers that control filtering, formatting, and behaviour |
+
+## Global flags
+
+These flags are available on every command:
+
+| Flag | Type | Description |
+|---|---|---|
+| `--api-key` | `string` | Override the configured API key for a single invocation |
+| `--output` | `json` \| `table` \| `yaml` | Set the output format (default: `table`) |
+| `--help` | — | Print help text for the current command and exit |
+
+## Quick start
+
+The following session shows a typical workflow: create a resource, record a metric against it, and verify the result.
+
+```bash
+# 1. Authenticate
+pmm configure
+
+# 2. Create a new resource
+pmm resources create \
+  --name "Checkout Service" \
+  --type service \
+  --status active
+
+# Output:
+# ID          NAME               TYPE      STATUS
+# res_04ab2   Checkout Service   service   active
+
+# 3. Record a metric against the new resource
+pmm metrics record \
+  --resource-id res_04ab2 \
+  --name "p99_latency_ms" \
+  --value 142 \
+  --unit milliseconds
+
+# 4. List recent metrics for that resource
+pmm metrics list --resource-id res_04ab2 --output json
+
+# 5. Create a webhook to receive future events
+pmm webhooks create \
+  --url https://hooks.example.com/openpmm \
+  --events resource.created resource.updated metrics.recorded
+```
+
+For a complete reference of every command, flag, and argument, see [CLI Commands](/cli/commands).

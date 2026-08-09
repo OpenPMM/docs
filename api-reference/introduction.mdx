@@ -1,0 +1,95 @@
+---
+title: "Open PMM REST API Reference"
+sidebarTitle: "Introduction"
+description: "Complete reference for the Open PMM REST API. Base URL, versioning, content types, and how to read endpoint documentation."
+---
+
+The Open PMM REST API gives you programmatic access to all product management and metrics data in your account. Every feature available in the dashboard is also available through the API, so you can automate workflows, build integrations, and pull data into your own tools. This page explains the foundational concepts you need before making your first request.
+
+## Base URL
+
+All API requests target the following base URL:
+
+```
+https://api.open-pmm.com/v1
+```
+
+Every endpoint path in this reference is relative to this base URL. For example, the endpoint documented as `/products` is reached at `https://api.open-pmm.com/v1/products`.
+
+## Versioning
+
+The current API version is **v1**, embedded directly in the base URL path. Open PMM follows a two-tier versioning policy:
+
+- **Major versions** (e.g., `v1` → `v2`) are introduced in the URL path and announced with a migration guide. Old versions remain available for a deprecation period.
+- **Backward-compatible changes** — such as new optional fields, new endpoints, or new enum values — are added to the existing version without a version bump.
+
+<Note>
+  Subscribe to the [Open PMM changelog](https://open-pmm.com/changelog) to be notified of all API updates, including additive changes that do not increment the version.
+</Note>
+
+## Content Types
+
+All request bodies must be JSON, and all responses are JSON. Set the `Content-Type` header on every request that includes a body:
+
+```
+Content-Type: application/json
+Accept: application/json
+```
+
+Requests with malformed JSON or an incorrect `Content-Type` return a `400 Bad Request` error.
+
+## Request and Response Envelope
+
+Successful responses wrap the primary resource in a top-level `data` field. List responses include a `meta` object with pagination details:
+
+```json
+{
+  "data": {
+    "id": "prod_01HZ9K2QR4WVBN3E7FX8",
+    "name": "Analytics Suite",
+    "createdAt": "2024-06-01T12:00:00Z"
+  }
+}
+```
+
+```json
+{
+  "data": [...],
+  "meta": {
+    "total": 84,
+    "page": 1,
+    "perPage": 20
+  }
+}
+```
+
+Errors use a separate `error` envelope. See the [Errors](/api-reference/errors) page for the full error format.
+
+## Minimal Working Example
+
+The following curl command authenticates with your API key and retrieves your list of products. Replace `YOUR_API_KEY` with a real key from your dashboard:
+
+```bash
+curl https://api.open-pmm.com/v1/products \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Accept: application/json"
+```
+
+A successful response returns HTTP `200 OK` with a JSON body matching the envelope format above.
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Authentication" icon="key" href="/api-reference/authentication">
+    Learn how to generate API keys and pass them securely in every request.
+  </Card>
+  <Card title="Errors" icon="circle-exclamation" href="/api-reference/errors">
+    Understand the error envelope format and every HTTP status code the API returns.
+  </Card>
+  <Card title="Rate Limits" icon="gauge-high" href="/api-reference/rate-limits">
+    Review per-key rate limits and learn how to handle 429 responses gracefully.
+  </Card>
+  <Card title="Endpoints" icon="webhook" href="/api-reference/endpoints">
+    Browse the full catalog of available REST endpoints with request and response schemas.
+  </Card>
+</CardGroup>

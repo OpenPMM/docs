@@ -1,0 +1,97 @@
+---
+title: "Open PMM API Rate Limits and Throttling"
+sidebarTitle: "Rate Limits"
+description: "Open PMM enforces rate limits per API key. Learn the limits, how to read rate limit headers, and how to handle 429 responses gracefully."
+---
+
+Open PMM enforces rate limits on all API keys to ensure fair usage and platform stability. Limits are tracked independently per API key using a sliding one-minute window. When you exceed a limit, the API returns `429 Too Many Requests` and tells you exactly how long to wait before retrying.
+
+## Default Limits
+
+| Operation Type | Limit |
+|---|---|
+| Read (`GET`) | 1,000 requests per minute |
+| Write (`POST`, `PUT`, `PATCH`, `DELETE`) | 200 requests per minute |
+
+Read and write budgets are tracked separately. Exhausting your write budget does not affect how many `GET` requests you can make, and vice versa.
+
+<Info>
+  Higher rate limits are available on enterprise plans. Contact [sales@open-pmm.com](mailto:sales@open-pmm.com) to discuss your requirements.
+</Info>
+
+## Rate Limit Response Headers
+
+Every API response includes the following headers so you can monitor your budget in real time:
+
+| Header | Description |
+|---|---|
+| `X-RateLimit-Limit` | Total number of requests allowed in the current window |
+| `X-RateLimit-Remaining` | Number of requests remaining in the current window |
+| `X-RateLimit-Reset` | Unix timestamp (UTC) when the current window resets and your budget is restored |
+| `Retry-After` | Seconds to wait before retrying — **only present on `429` responses** |
+
+### Example Response Headers
+
+The following shows the rate limit headers on a typical successful response and on a `429` response:
+
+```bash
+# Successful response — budget remaining
+HTTP/2 200
+Content-Type: application/json
+X-RateLimit-Limit: 1000
+X-RateLimit-Remaining: 843
+X-RateLimit-Reset: 1719835260
+
+# Rate-limited response
+HTTP/2 429
+Content-Type: application/json
+X-RateLimit-Limit: 1000
+X-RateLimit-Remaining: 0
+X-RateLimit-Reset: 1719835260
+Retry-After: 23
+```
+
+## Best Practices
+
+Follow these practices to stay within your limits and keep integrations resilient:
+
+- **Cache `GET` responses.** Most read resources change infrequently. Cache responses locally for at least 30–60 seconds to reduce redundant requests.
+- **Batch writes where possible.** Use bulk endpoints (e.g., `POST /metrics/batch`) instead of issuing individual write requests in a loop.
+- **Read headers proactively.** Check `X-RateLimit-Remaining` on every response and slow down voluntarily before you hit zero, rather than waiting for a `429`.
+- **Implement exponential backoff.** When you do receive a `429`, wait at least `Retry-After` seconds before your next attempt, and increase the delay on successive failures.
+
+## Exponential Backoff on 429
+
+The following Python snippet demonstrates a simple retry loop with exponential backoff. It respects the `Retry-After` header when present and falls back to a calculated delay:
+
+```python
+import os
+import time
+import requests
+
+def get_with_backoff(url: str, max_retries: int = 5) -> dict:
+    api_key = os.environ["OPEN_PMM_API_KEY"]
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json",
+    }
+
+    for attempt in range(max_retries):
+        response = requests.get(url, headers=headers)
+
+        if response.status_code == 429:
+            # Prefer the server-supplied Retry-After value
+            retry_after = int(response.headers.get("Retry-After", 2 ** attempt))
+            print(f"Rate limited. Retrying in {retry_after}s (attempt {attempt + 1}/{max_retries})")
+            time.sleep(retry_after)
+            continue
+
+        response.raise_for_status()
+        return response.json()
+
+    raise RuntimeError(f"Request failed after {max_retries} attempts due to rate limiting.")
+```
+
+<Warning>
+  Sustained or deliberate abuse of the API — such as ignoring `429` responses and continuing to send requests at high volume — may result in your API key being temporarily or permanently suspended. If you anticipate unusually high traffic, contact support in advance.
+</Warning>

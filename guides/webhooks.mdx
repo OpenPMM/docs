@@ -1,0 +1,234 @@
+---
+title: "Receive Real-Time Events with Open PMM Webhooks"
+sidebarTitle: "Webhooks"
+description: "Set up Open PMM webhooks to receive HTTP notifications when resources change, metrics are recorded, or events occur in your account."
+---
+
+Webhooks let your application respond to activity in Open PMM the moment it happens, without polling the API. When a relevant change occurs — a resource is updated, a metric is recorded, or an event is created — Open PMM sends an HTTP `POST` request to a URL you specify, carrying a signed JSON payload that describes exactly what changed.
+
+## Supported event types
+
+You subscribe to one or more event types when registering a webhook endpoint. Open PMM fires a delivery for each event type you have subscribed to.
+
+| Event type | Triggered when |
+|---|---|
+| `resource.created` | A new resource is created. |
+| `resource.updated` | An existing resource is modified. |
+| `resource.deleted` | A resource is permanently deleted. |
+| `metric.recorded` | A new metric value is recorded against a resource. |
+| `event.created` | A new event is logged in your account. |
+
+<Warning>
+  Always verify the webhook signature before trusting or acting on a payload. Without signature verification, your endpoint is vulnerable to spoofed requests from third parties.
+</Warning>
+
+## Setup
+
+<Steps>
+  <Step title="Create a webhook endpoint in your application">
+    Your endpoint must accept `POST` requests and return an HTTP `200` status code to acknowledge receipt. Open PMM treats any non-`200` response as a failed delivery and schedules a retry.
+
+    Your endpoint should:
+    - Respond quickly (within 10 seconds) to avoid timeout failures.
+    - Perform heavy processing asynchronously after acknowledging the delivery.
+    - Be accessible over the public internet via HTTPS.
+  </Step>
+
+  <Step title="Register the webhook via the API">
+    Send a `POST` request to `/v1/webhooks` with your endpoint URL and the list of event types you want to subscribe to.
+
+    ```bash
+    curl -X POST https://api.open-pmm.com/v1/webhooks \
+      -H "Authorization: Bearer $OPEN_PMM_API_KEY" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "url": "https://your-app.example.com/webhooks/open-pmm",
+        "events": [
+          "resource.created",
+          "resource.updated",
+          "resource.deleted",
+          "metric.recorded"
+        ]
+      }'
+    ```
+
+    **Response — `200 OK`**
+
+    ```json
+    {
+      "id": "wh_07ij3c5d7e9fg1hi4jklmn6p",
+      "url": "https://your-app.example.com/webhooks/open-pmm",
+      "events": [
+        "resource.created",
+        "resource.updated",
+        "resource.deleted",
+        "metric.recorded"
+      ],
+      "secret": "whsec_a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6",
+      "created_at": "2024-11-15T13:00:00Z"
+    }
+    ```
+
+    Store the `secret` value securely — you'll use it to verify incoming signatures. Open PMM will not display it again.
+  </Step>
+
+  <Step title="Receive the signed POST from Open PMM">
+    When a subscribed event fires, Open PMM sends a `POST` request to your endpoint. The request includes two custom headers alongside the JSON payload.
+
+    | Header | Description |
+    |---|---|
+    | `X-Open-PMM-Signature` | HMAC-SHA256 hex digest of the raw request body, signed with your webhook secret. |
+    | `X-Open-PMM-Timestamp` | Unix timestamp (seconds) of when the delivery was initiated. |
+
+    **Sample webhook payload**
+
+    ```json
+    {
+      "id": "evt_08kl4d6e8f0gh2ij5klmno7q",
+      "type": "resource.updated",
+      "created_at": "2024-11-15T13:05:22Z",
+      "data": {
+        "id": "res_04ef1a3b5c7dg2hi8jklmn4o",
+        "name": "Payments v2",
+        "type": "initiative",
+        "status": "archived",
+        "metadata": {
+          "quarter": "Q1-2025",
+          "owner": "payments-team",
+          "completed_at": "2025-03-31"
+        },
+        "created_at": "2024-11-15T12:00:00Z",
+        "updated_at": "2025-03-31T17:45:00Z"
+      }
+    }
+    ```
+  </Step>
+
+  <Step title="Verify the signature">
+    Compute the expected HMAC-SHA256 signature using your webhook secret and the raw request body, then compare it to the value in the `X-Open-PMM-Signature` header. Reject any request where the signatures do not match.
+
+    Use a constant-time comparison function to prevent timing attacks.
+
+    <CodeGroup>
+      ```python Python
+      import hashlib
+      import hmac
+
+      def verify_signature(payload_body: bytes, secret: str, signature_header: str) -> bool:
+          """
+          Verify an Open PMM webhook signature.
+
+          :param payload_body: The raw request body as bytes.
+          :param secret: Your webhook secret (whsec_...).
+          :param signature_header: The value of X-Open-PMM-Signature.
+          :return: True if the signature is valid, False otherwise.
+          """
+          expected = hmac.new(
+              key=secret.encode("utf-8"),
+              msg=payload_body,
+              digestmod=hashlib.sha256
+          ).hexdigest()
+
+          return hmac.compare_digest(expected, signature_header)
+
+
+      # Example usage inside a Flask route
+      from flask import Flask, request, abort
+
+      app = Flask(__name__)
+      WEBHOOK_SECRET = "whsec_a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6"
+
+      @app.route("/webhooks/open-pmm", methods=["POST"])
+      def handle_webhook():
+          signature = request.headers.get("X-Open-PMM-Signature", "")
+          if not verify_signature(request.get_data(), WEBHOOK_SECRET, signature):
+              abort(400, "Invalid signature")
+
+          payload = request.get_json()
+          # Process the event...
+          return "", 200
+      ```
+
+      ```javascript Node.js
+      const crypto = require("crypto");
+
+      /**
+       * Verify an Open PMM webhook signature.
+       *
+       * @param {Buffer|string} payloadBody - The raw request body.
+       * @param {string} secret - Your webhook secret (whsec_...).
+       * @param {string} signatureHeader - The value of X-Open-PMM-Signature.
+       * @returns {boolean} True if the signature is valid.
+       */
+      function verifySignature(payloadBody, secret, signatureHeader) {
+        const expected = crypto
+          .createHmac("sha256", secret)
+          .update(payloadBody)
+          .digest("hex");
+
+        return crypto.timingSafeEqual(
+          Buffer.from(expected, "hex"),
+          Buffer.from(signatureHeader, "hex")
+        );
+      }
+
+      // Example usage with Express
+      const express = require("express");
+      const app = express();
+
+      const WEBHOOK_SECRET = "whsec_a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6";
+
+      app.post(
+        "/webhooks/open-pmm",
+        express.raw({ type: "application/json" }),
+        (req, res) => {
+          const signature = req.headers["x-open-pmm-signature"] || "";
+
+          if (!verifySignature(req.body, WEBHOOK_SECRET, signature)) {
+            return res.status(400).send("Invalid signature");
+          }
+
+          const payload = JSON.parse(req.body);
+          // Process the event...
+          res.status(200).send();
+        }
+      );
+      ```
+    </CodeGroup>
+  </Step>
+
+  <Step title="Return 200 to acknowledge the delivery">
+    Your endpoint must respond with HTTP `200` within 10 seconds of receiving the request. Open PMM considers any other status code — including redirects — as a failed delivery and schedules a retry.
+
+    Offload any time-consuming processing to a background queue and return `200` immediately after signature verification.
+  </Step>
+</Steps>
+
+## Retry policy
+
+If your endpoint fails to return `200` within the timeout window, Open PMM retries the delivery automatically. Retries use exponential backoff according to the following schedule.
+
+| Attempt | Delay after previous attempt |
+|---|---|
+| 1st retry | 1 minute |
+| 2nd retry | 5 minutes |
+| 3rd retry | 30 minutes |
+| 4th retry | 2 hours |
+| 5th retry | 8 hours |
+
+After 5 failed retries (6 total attempts), the delivery is marked as permanently failed and no further retries are attempted. You can inspect failed deliveries and manually replay them from the Open PMM dashboard.
+
+<Info>
+  Make your webhook handler idempotent. Due to network conditions, it is possible — though rare — for Open PMM to deliver the same event more than once. Use the `id` field in the payload to deduplicate deliveries on your end.
+</Info>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Managing Resources" icon="layers" href="/guides/managing-resources">
+    Understand the full resource lifecycle, including the events that trigger webhook deliveries.
+  </Card>
+  <Card title="Using the CLI" icon="terminal" href="/guides/using-the-cli">
+    Automate webhook registration and management from the command line.
+  </Card>
+</CardGroup>

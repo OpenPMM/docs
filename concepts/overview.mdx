@@ -1,0 +1,65 @@
+---
+title: "Open PMM Core Concepts and Architecture"
+sidebarTitle: "Overview"
+description: "Understand how Open PMM is structured: resources, metrics, events, and webhooks — and how they relate to each other in the API."
+---
+
+Open PMM organizes all product management and metrics data around four core primitives. Every API call you make either reads or mutates one of these building blocks, and understanding how they relate to each other is the fastest way to get productive with the platform.
+
+## The Four Primitives
+
+**Resources** are the central objects in Open PMM — they represent anything you want to track: a product, a feature, a team, or a custom entity your organization defines. Every other primitive is anchored to a resource.
+
+**Metrics** capture quantitative measurements associated with a resource over time. Each metric record stores a single value, a unit, and a timestamp, so you can build time-series views of any dimension you care about.
+
+**Events** represent discrete occurrences that happen to or around a resource — a status change, a deployment, a milestone reached. Events carry a typed payload and an `occurred_at` timestamp, giving you a structured audit trail.
+
+**Webhooks** let Open PMM push event notifications to your own infrastructure in real time. You register a URL and a list of event types, and Open PMM delivers a signed HTTP POST whenever a matching event fires.
+
+## How They Relate
+
+The diagram below shows the ownership and reference relationships between the four primitives.
+
+```text
+┌─────────────────────────────────────────────────┐
+│                    Resource                      │
+│  id · name · type · status · metadata           │
+└───────────────┬─────────────────┬───────────────┘
+                │  has many       │  has many
+                ▼                 ▼
+        ┌───────────┐     ┌───────────────┐
+        │  Metric   │     │     Event     │
+        │           │     │               │
+        │ resource_ │     │ type · payload│
+        │ id · value│     │ occurred_at   │
+        └───────────┘     └───────────────┘
+
+┌─────────────────────────────────────────────────┐
+│                    Webhook                       │
+│  url · events[] · secret                        │
+│  Subscribes to one or more Event types          │
+└─────────────────────────────────────────────────┘
+```
+
+A **Resource** sits at the top of the hierarchy. **Metrics** and **Events** both carry a `resource_id` foreign key that ties them back to their parent resource. **Webhooks** are not scoped to a single resource — they subscribe to event *types* across your entire account and fire whenever a matching event is recorded on any resource.
+
+## Concepts at a Glance
+
+<CardGroup cols={2}>
+  <Card title="Resources" icon="box" href="/concepts/data-model#resources">
+    The foundational objects in Open PMM. Every metric and event belongs to a resource. Resources carry a flexible `metadata` map so you can attach custom fields without schema changes.
+  </Card>
+  <Card title="Metrics" icon="chart-line" href="/concepts/data-model#metrics">
+    Time-stamped numeric measurements tied to a resource. Use metrics to track KPIs, usage counters, performance indicators, or any scalar value over time.
+  </Card>
+  <Card title="Events" icon="bolt" href="/concepts/data-model#events">
+    Typed, timestamped records of significant occurrences on a resource. Events carry a structured JSON payload and form the backbone of Open PMM's audit and notification systems.
+  </Card>
+  <Card title="Webhooks" icon="webhook" href="/concepts/data-model#webhooks">
+    HTTP callbacks that deliver real-time event notifications to your systems. Webhooks are HMAC-signed so you can verify every delivery is authentic.
+  </Card>
+</CardGroup>
+
+<Note>
+  For a full field-by-field breakdown of every object — including ID formats, timestamp conventions, and JSON examples — see the [Data Model](/concepts/data-model) page.
+</Note>

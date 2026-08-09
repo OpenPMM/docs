@@ -1,47 +1,94 @@
 ---
-title: "Quickstart"
-description: "Begin with a guide on the fastest path to a successful outcome"
+title: "Get Started with Open PMM in 5 Minutes"
+sidebarTitle: "Quickstart"
+description: "Make your first Open PMM API call in under 5 minutes. Get an API key, authenticate, and retrieve your first resource — no SDK required."
 ---
 
-Describe how someone begins using your product. What is the first thing they need to do? Are there any prerequisites?
-
-A quickstart should take someone from zero to using your product. They'll get a quick win and a sense of what they can accomplish.
+You don't need a special library or framework to start using Open PMM — any tool that can send an HTTP request is enough. This guide walks you through getting an API key, making your first authenticated call, and understanding the response, so you have a solid foundation before diving into the full API surface.
 
 ## Prerequisites
 
-Before you begin, you must have:
+- An HTTP client — `curl`, [Postman](https://www.postman.com/), or any language with an HTTP library
+- An [Open PMM account](https://app.open-pmm.com/signup) (free to create)
 
-- Requirement one (for example, Node.js 18+, a free account, an API key)
-- Requirement two (for example, a compatible device, a compatible browser, a compatible operating system)
-
-## Get started
+## Steps
 
 <Steps>
-  <Step title="Install">
-    Describe how to install your product or sign up.
+  <Step title="Sign up and get your API key">
+    Create your account at [app.open-pmm.com/signup](https://app.open-pmm.com/signup), then navigate to **Settings → API Keys → Create Key**. Give the key a descriptive name (e.g. `local-dev`) and choose the **read** scope to start.
+
+    Copy the key immediately — Open PMM will not show the full value again after you leave the creation screen. Store it in a secure location such as a password manager or environment variable.
 
     ```bash
-    npm install your-package
+    # Store your key in an environment variable so you don't hard-code it
+    export OPEN_PMM_API_KEY="opmm_live_xxxxxxxxxxxxxxxxxxxx"
     ```
   </Step>
-  <Step title="Configure">
-    Describe any setup or configuration needed before first use.
+
+  <Step title="Make your first request">
+    Use the key as a Bearer token in the `Authorization` header. The `/v1/resources` endpoint returns a paginated list of all products and features in your account — it's a safe, read-only way to confirm that authentication is working.
 
     ```bash
-    your-cli init
+    curl https://api.open-pmm.com/v1/resources \
+      -H "Authorization: Bearer $OPEN_PMM_API_KEY" \
+      -H "Accept: application/json"
     ```
+
+    A successful request returns HTTP `200 OK` along with a JSON body. If you see a `401` instead, double-check that the key is copied in full and that the environment variable is exported in the current shell session.
   </Step>
-  <Step title="Run it">
-    Show the first thing a user does to see it working.
 
-    ```bash
-    your-cli start
+  <Step title="Parse the response">
+    The response body is a JSON object with a `data` array of resource objects and a `meta` block for pagination.
+
+    ```json
+    {
+      "data": [
+        {
+          "id": "res_01hx9z3k2m4p8qrt5vwy6abcde",
+          "name": "Mobile App",
+          "type": "product",
+          "status": "active",
+          "created_at": "2024-03-15T09:22:41Z",
+          "updated_at": "2024-11-07T14:05:18Z"
+        },
+        {
+          "id": "res_01hx9z7n8r2s6uvwx3yz4fghij",
+          "name": "Push Notifications",
+          "type": "feature",
+          "status": "in_progress",
+          "created_at": "2024-06-01T11:00:00Z",
+          "updated_at": "2024-12-02T08:33:55Z"
+        }
+      ],
+      "meta": {
+        "total": 2,
+        "page": 1,
+        "per_page": 20
+      }
+    }
     ```
+
+    Each resource object includes:
+
+    | Field | Type | Description |
+    |---|---|---|
+    | `id` | string | Unique, stable identifier for the resource |
+    | `name` | string | Human-readable name you assigned |
+    | `type` | string | Either `product` or `feature` |
+    | `status` | string | Current lifecycle status of the resource |
+    | `created_at` | string (ISO 8601) | Timestamp of resource creation |
+    | `updated_at` | string (ISO 8601) | Timestamp of the most recent update |
+  </Step>
+
+  <Step title="What's next">
+    You've authenticated and retrieved live data from the Open PMM API. From here you can:
+
+    - Read the [Authentication guide](/authentication) to understand token scopes, how to pass keys securely, and how to handle auth errors.
+    - Browse the [API Reference](/api-reference/introduction) to explore endpoints for metrics ingestion, event publishing, and webhook management.
+    - Follow the [Webhooks guide](/guides/webhooks) to subscribe to real-time change notifications.
   </Step>
 </Steps>
 
 <Tip>
-  Give people a way to get help. This could be a link to a support page, a chat with a customer support agent, or a forum for your product.
-
-  Example: Need help? Reach out to us at [support@yourcompany.com](mailto:support@yourcompany.com).
+  The [API Reference](/api-reference/introduction) includes a built-in request runner — paste your API key once and execute any endpoint directly in the browser without leaving the docs.
 </Tip>
