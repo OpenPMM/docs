@@ -1,0 +1,29 @@
+---
+title: "API overview"
+description: "Use the versioned OpenPMM HTTP API."
+---
+
+The OpenPMM API is a JSON-over-HTTP interface for agent-owned social publishing.
+
+```text
+https://api.openpmm.com/v1
+```
+
+The OpenAPI definition in this reference comes directly from the production API. A successful production deployment asks Mintlify to refresh the generated endpoint pages.
+
+## Conventions
+
+- Authenticate every request with a bearer API key.
+- Send and receive JSON unless an upload URL instructs you otherwise.
+- Use public IDs exactly as returned.
+- Send `Idempotency-Key` on operations marked idempotent.
+- Send `If-Match` on conditional updates.
+- Treat publishing as confirmed only when the request includes `confirmed: true`.
+
+## Versioning
+
+The `/v1` prefix identifies the public contract. Additive fields may appear within the version. Clients should ignore response fields they do not recognize.
+
+<Note>
+  Private dashboard routes under `/api` are not part of this contract.
+</Note>

@@ -1,0 +1,37 @@
+---
+title: "Errors"
+description: "Handle stable error codes, request IDs, and ambiguous outcomes."
+---
+
+OpenPMM returns problem-detail JSON for API errors. Use the HTTP status for broad handling and the stable error code for application logic.
+
+```json
+{
+  "type": "https://api.openpmm.com/problems/validation-error",
+  "title": "Validation failed",
+  "status": 422,
+  "detail": "The request could not be accepted.",
+  "code": "validation_error",
+  "request_id": "req_example"
+}
+```
+
+## What to log
+
+Log the HTTP status, stable `code`, and `request_id`. Do not log bearer tokens, provider credentials, or sensitive post content.
+
+## Retry guidance
+
+| Status | Typical action |
+| --- | --- |
+| `400` or `422` | Fix the request before retrying |
+| `401` | Replace or correct the API key |
+| `403` | Check workspace scope and permissions |
+| `404` | Verify the public ID belongs to the current workspace |
+| `409` or `412` | Reconcile idempotency or fetch the latest version |
+| `429` | Respect `Retry-After` and back off |
+| `5xx` | Retry with backoff and the same idempotency key |
+
+<Warning>
+  A network timeout or provider error can have an ambiguous outcome. Inspect the send before creating new publishing work.
+</Warning>

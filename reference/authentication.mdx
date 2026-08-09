@@ -1,0 +1,27 @@
+---
+title: "Authentication"
+description: "Authenticate with a workspace-scoped bearer API key."
+---
+
+Create API keys under **Workspace settings** → **API keys**. Every key belongs to one workspace.
+
+```bash
+curl --request GET \
+  --url https://api.openpmm.com/v1/me \
+  --header "Authorization: Bearer $OPENPMM_API_KEY"
+```
+
+The header format is:
+
+```http
+Authorization: Bearer <api-key>
+```
+
+## Key handling
+
+- Store keys in a server-side secret manager.
+- Never expose a key in browser code, mobile binaries, logs, or URLs.
+- Use separate keys for separate deployments or integrations.
+- Revoke a key when it is no longer needed or may have leaked.
+
+OpenPMM displays a new secret once. Create a replacement if you lose it.

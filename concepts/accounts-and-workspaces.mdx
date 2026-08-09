@@ -1,0 +1,22 @@
+---
+title: "Accounts and workspaces"
+description: "Understand identities, tenant boundaries, and API-key access."
+---
+
+An **account** is your OpenPMM identity. You use it to sign in, join workspaces, and manage access.
+
+A **workspace** is the tenant boundary for your publishing data. It owns API keys, destinations, posts, assets, and sends. Every public API request runs within the workspace attached to its bearer token.
+
+## API-key scope
+
+An API key grants access to one workspace. It does not inherit access to every workspace your account can open in the dashboard.
+
+Call `GET /me` to inspect the account and workspace attached to a key before you perform work. See [Authentication](/reference/authentication) for an example.
+
+<Warning>
+  OpenPMM shows a new API-key secret once. Store it in a secret manager. If you lose it, create a replacement and revoke the old key.
+</Warning>
+
+## Stable identifiers
+
+Use the public workspace ID returned by the API and shown under **Workspace settings**. Do not infer identifiers from names or dashboard URLs.

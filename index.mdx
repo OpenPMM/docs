@@ -1,40 +1,38 @@
 ---
-title: "Open PMM: REST API for Product Management & Metrics"
+title: "OpenPMM API documentation"
 sidebarTitle: "Home"
-description: "Open PMM gives you a public REST API to manage products, track metrics, and automate workflows — connect in minutes with any HTTP client."
+description: "Connect social accounts and publish through one agent-friendly API."
 ---
 
-Open PMM is a public REST API platform that puts product management and metrics tracking in your hands. Whether you're integrating with an existing workflow, building automation, or exploring programmatic product operations, this documentation will walk you through everything you need — from authenticating your first request to consuming webhook events in production.
+OpenPMM gives your software one API for publishing to the social accounts you already own.
+You connect a destination once, then create, schedule, and inspect posts without implementing each provider separately.
+
+<Note>
+  OpenPMM is in limited access. The documented API is the public contract for available accounts. Features that are still in development are not included here.
+</Note>
+
+## Start here
 
 <CardGroup cols={2}>
-  <Card title="Quickstart" icon="rocket" href="/quickstart">
-    Make your first API call in under 5 minutes. No SDK required.
+  <Card title="Make your first API request" icon="rocket" href="/quickstart">
+    Create an API key and verify the workspace it belongs to.
   </Card>
-  <Card title="Authentication" icon="key" href="/authentication">
-    Generate an API key and learn how to authenticate every request.
+  <Card title="Understand posts and sends" icon="paper-plane" href="/concepts/posts-and-sends">
+    Learn where editable content ends and confirmed delivery begins.
   </Card>
-  <Card title="API Reference" icon="code" href="/api-reference/introduction">
-    Browse every endpoint, request parameter, and response schema.
+  <Card title="Publish a post" icon="arrow-up-right-from-square" href="/guides/publish-posts">
+    Validate a request, confirm it, and track the resulting send.
   </Card>
-  <Card title="Webhooks" icon="webhook" href="/guides/webhooks">
-    Subscribe to real-time events and push data to your systems.
+  <Card title="Explore the API" icon="brackets-curly" href="/reference/overview">
+    Browse authentication, pagination, errors, and endpoint definitions.
   </Card>
 </CardGroup>
 
-## How it works
+## The OpenPMM model
 
-<Steps>
-  <Step title="Get your API key">
-    Sign up for an Open PMM account and navigate to **Settings → API Keys** to generate your first key. You'll use this key to authenticate every request you make to the API.
-  </Step>
-  <Step title="Make your first call">
-    Pass your key as a Bearer token in the `Authorization` header and hit any endpoint. Start with `GET /v1/resources` to list your products and features — you'll have a live response in seconds.
-  </Step>
-  <Step title="Explore features">
-    Dig into metrics ingestion, event streaming, webhook subscriptions, and the forthcoming CLI for agent-driven workflows. The full surface area of Open PMM is available from day one.
-  </Step>
-</Steps>
+Every API key belongs to one **workspace**. A workspace contains **destinations**, which are the connected social accounts that can receive content. A **post** describes the content for one destination. Confirming one or more posts creates a **send**, the durable record of a publishing attempt.
 
-<Note>
-  Looking for the complete endpoint catalogue? Head to the **API Reference** tab in the top navigation for full request/response documentation on every route Open PMM exposes.
-</Note>
+<CardGroup cols={2}>
+  <Card title="Accounts and workspaces" icon="users" href="/concepts/accounts-and-workspaces" />
+  <Card title="Destinations" icon="share-nodes" href="/concepts/destinations" />
+</CardGroup>

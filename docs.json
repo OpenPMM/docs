@@ -1,104 +1,120 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "luma",
-  "name": "Open PMM",
+  "theme": "mint",
+  "name": "OpenPMM",
+  "description": "Documentation for the OpenPMM publishing API",
   "colors": {
-    "primary": "#ef7025",
-    "light": "#eec9bc",
-    "dark": "#4fa1ab"
+    "primary": "#C83F1D",
+    "light": "#FF9A3D",
+    "dark": "#D84420"
+  },
+  "appearance": {
+    "default": "light",
+    "strict": true
   },
   "favicon": "/favicon.svg",
   "logo": {
     "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
-  },
-  "navbar": {
-    "links": [
-      {
-        "label": "Support",
-        "href": "mailto:support@open-pmm.com"
-      }
-    ],
-    "primary": {
-      "type": "button",
-      "label": "Get API Key",
-      "href": "https://app.open-pmm.com/signup"
-    }
+    "dark": "/logo/dark.svg",
+    "href": "https://www.openpmm.com"
   },
   "navigation": {
     "tabs": [
       {
-        "tab": "Documentation",
+        "tab": "Guides",
         "groups": [
           {
-            "group": "Get Started",
+            "group": "Get started",
+            "pages": ["index", "quickstart"]
+          },
+          {
+            "group": "Core concepts",
             "pages": [
-              "introduction",
-              "quickstart",
-              "authentication"
+              "concepts/accounts-and-workspaces",
+              "concepts/destinations",
+              "concepts/posts-and-sends"
             ]
           },
           {
-            "group": "Core Concepts",
+            "group": "Publishing guides",
             "pages": [
-              "concepts/overview",
-              "concepts/data-model",
-              "concepts/pagination-filtering"
-            ]
-          },
-          {
-            "group": "Guides",
-            "pages": [
-              "guides/first-api-call",
-              "guides/managing-resources",
-              "guides/webhooks",
-              "guides/using-the-cli"
-            ]
-          },
-          {
-            "group": "CLI Reference",
-            "pages": [
-              "cli/overview",
-              "cli/commands"
-            ]
-          },
-          {
-            "group": "Help",
-            "pages": [
-              "troubleshooting",
-              "changelog"
+              "guides/connect-a-destination",
+              "guides/upload-assets",
+              "guides/publish-posts",
+              "guides/schedule-and-retry"
             ]
           }
         ]
       },
       {
-        "tab": "API Reference",
+        "tab": "API reference",
         "groups": [
           {
-            "group": "Overview",
+            "group": "Using the API",
             "pages": [
-              "api-reference/introduction",
-              "api-reference/authentication",
-              "api-reference/errors",
-              "api-reference/rate-limits"
+              "reference/overview",
+              "reference/authentication",
+              "reference/pagination",
+              "reference/idempotency",
+              "reference/errors"
             ]
           },
           {
             "group": "Endpoints",
-            "pages": [
-              "api-reference/endpoints/resources",
-              "api-reference/endpoints/metrics",
-              "api-reference/endpoints/events",
-              "api-reference/endpoints/webhooks"
-            ]
+            "openapi": "https://api.openpmm.com/v1/openapi.json"
           }
         ]
       }
-    ]
+    ],
+    "global": {
+      "anchors": [
+        {
+          "anchor": "OpenPMM",
+          "href": "https://www.openpmm.com",
+          "icon": "house"
+        },
+        {
+          "anchor": "Dashboard",
+          "href": "https://app.openpmm.com",
+          "icon": "grid-2"
+        }
+      ]
+    }
   },
+  "navbar": {
+    "links": [
+      {
+        "label": "GitHub",
+        "href": "https://github.com/OpenPMM/docs"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Open dashboard",
+      "href": "https://app.openpmm.com"
+    }
+  },
+  "api": {
+    "playground": {
+      "display": "simple"
+    }
+  },
+  "integrations": {
+    "telemetry": {
+      "enabled": false
+    }
+  },
+  "contextual": {
+    "options": ["copy", "view", "chatgpt", "claude", "cursor"]
+  },
+  "redirects": [
+    { "source": "/workflow", "destination": "/concepts/posts-and-sends" },
+    { "source": "/api-cli", "destination": "/reference/overview" },
+    { "source": "/agent-contract", "destination": "/reference/idempotency" }
+  ],
   "footer": {
     "socials": {
-      "github": "https://github.com/open-pmm"
+      "github": "https://github.com/OpenPMM/docs"
     }
   }
 }

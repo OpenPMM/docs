@@ -1,0 +1,41 @@
+---
+title: "Publish posts"
+description: "Validate content, confirm the request, and track the resulting send."
+---
+
+Publishing is an external side effect. Validate the complete request first, then submit the same content with explicit confirmation and an idempotency key.
+
+<Steps>
+  <Step title="Build one post per destination">
+    Each post needs a destination ID and a non-empty `body` array. A body array can represent a single post or a provider-supported thread.
+
+    ```json
+    {
+      "confirmed": true,
+      "when": "now",
+      "posts": [
+        {
+          "destination_id": "dst_example",
+          "headline": null,
+          "body": ["A release update from OpenPMM."],
+          "media": [],
+          "options": null
+        }
+      ]
+    }
+    ```
+  </Step>
+  <Step title="Validate without publishing">
+    Send the complete payload to the validation endpoint. The request includes `confirmed: true` because validation checks the publish-shaped contract, but this endpoint never creates a send.
+  </Step>
+  <Step title="Submit once">
+    Send the validated payload to the create-posts endpoint. Add a unique `Idempotency-Key` header and reuse that value only when retrying the same logical request.
+  </Step>
+  <Step title="Track the send group">
+    Store the returned send-group ID. Poll its resource or list send groups until every item reaches a terminal or attention-required state.
+  </Step>
+</Steps>
+
+<Warning>
+  Do not create a new idempotency key after a timeout until you reconcile the original request. The provider may already have accepted it.
+</Warning>
