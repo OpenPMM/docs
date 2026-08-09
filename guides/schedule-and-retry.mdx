@@ -1,0 +1,37 @@
+---
+title: "Schedule and retry"
+description: "Schedule posts and recover safely from uncertain outcomes."
+---
+
+Set `when` to an ISO 8601 timestamp to schedule a confirmed post. Use `time_zone` to preserve the person's scheduling context. OpenPMM stores the actual instant unambiguously.
+
+```json
+{
+  "confirmed": true,
+  "when": "2026-08-12T09:00:00+02:00",
+  "time_zone": "Europe/Berlin",
+  "posts": [
+    {
+      "destination_id": "dst_example",
+      "headline": null,
+      "body": ["Scheduled update"],
+      "media": [],
+      "options": null
+    }
+  ]
+}
+```
+
+## Update a scheduled post
+
+Fetch the current representation and its version. Send the version in `If-Match` when you update or reschedule it. If another actor changed the post first, OpenPMM rejects the stale write.
+
+## Retry safely
+
+- Reuse the original `Idempotency-Key` for the same logical request.
+- Inspect the send group after a network timeout.
+- Do not assume an ambiguous provider response means nothing was published.
+- Retry only operations that the endpoint marks as retryable.
+- Escalate items that need attention instead of creating duplicate posts.
+
+See [Idempotency](/reference/idempotency) for the request contract and [Errors](/reference/errors) for failure handling.

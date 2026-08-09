@@ -1,0 +1,21 @@
+---
+title: "Pagination"
+description: "Traverse list endpoints with opaque cursors."
+---
+
+List endpoints use cursor pagination.
+
+| Parameter | Meaning |
+| --- | --- |
+| `limit` | Maximum number of items to return |
+| `after` | Opaque cursor from the previous response |
+
+Pass the returned cursor unchanged. Do not parse it or construct your own value.
+
+```bash
+curl --request GET \
+  --url "https://api.openpmm.com/v1/workspaces/$OPENPMM_WORKSPACE_ID/posts?limit=25&after=$NEXT_CURSOR" \
+  --header "Authorization: Bearer $OPENPMM_API_KEY"
+```
+
+Stop when the response does not include a next cursor. Results may change while you paginate, so do not treat page numbers as stable positions.

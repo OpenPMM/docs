@@ -1,0 +1,29 @@
+---
+title: "Posts and sends"
+description: "Separate editable content from confirmed publishing work."
+---
+
+A **post** contains the content prepared for one destination. A **send** records the confirmed work to deliver that content.
+
+This boundary matters because publishing can create an external side effect.
+
+| Stage | Can you edit it? | Can it publish externally? |
+| --- | --- | --- |
+| Draft post | Yes | No |
+| Validated request | Change the request and validate again | No |
+| Confirmed post | No | Yes |
+| Send | No | It records the attempt and outcome |
+
+## Confirmation
+
+Requests that can publish must contain `confirmed: true`. OpenPMM rejects publish-shaped requests without that explicit confirmation.
+
+Use the validation endpoint before confirmation when content comes from a person, an agent, or another automated system. Validation checks the same shape without creating publishing work.
+
+## Send groups
+
+Submitting multiple posts together creates a send group. Use it to track the shared request and inspect each provider attempt without treating mutable content as delivery history.
+
+<Warning>
+  A timeout does not prove that publishing failed. Reconcile by idempotency key or send-group state before retrying.
+</Warning>

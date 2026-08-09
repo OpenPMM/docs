@@ -1,0 +1,26 @@
+---
+title: "Destinations"
+description: "Learn how connected social accounts become publishing targets."
+---
+
+A **destination** is a connected social account that can receive content. It combines a provider, an account identity, connection status, and publishing capabilities.
+
+Examples include a LinkedIn profile, a Mastodon account, or a Slack channel.
+
+## Connection lifecycle
+
+1. Create a connection session for a provider.
+2. Send the person connecting the account to the returned authorization URL.
+3. The provider redirects back to OpenPMM.
+4. OpenPMM creates or updates the destination.
+5. List destinations until the connected account appears.
+
+OpenPMM keeps provider access tokens on the server. Your integration receives destination IDs, not provider credentials.
+
+## Enabled and default destinations
+
+An enabled destination can receive new publishing work. A workspace may mark a destination as its default, but integrations should still send an explicit `destination_id` when the target matters.
+
+<Tip>
+  Store destination IDs in your own configuration. Display the provider and account label to people, but send the stable ID to the API.
+</Tip>

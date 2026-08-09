@@ -1,0 +1,40 @@
+---
+title: "Connect a destination"
+description: "Start an authorization session and detect the connected social account."
+---
+
+You can start a provider authorization flow through the API. OpenPMM stores the resulting provider credential and exposes a destination ID to your integration.
+
+<Steps>
+  <Step title="Choose a provider">
+    Use a provider returned by the public API. Mastodon also requires the instance origin, such as `https://mastodon.social`.
+  </Step>
+  <Step title="Create a connection session">
+    Send the provider to the workspace connection-session endpoint.
+
+    ```bash
+    curl --request POST \
+      --url "https://api.openpmm.com/v1/workspaces/$OPENPMM_WORKSPACE_ID/destination-connection-sessions" \
+      --header "Authorization: Bearer $OPENPMM_API_KEY" \
+      --header "Content-Type: application/json" \
+      --header "Idempotency-Key: $(uuidgen)" \
+      --data '{"provider":"linkedin"}'
+    ```
+  </Step>
+  <Step title="Open the authorization URL">
+    Redirect the person connecting the account to the returned `authorization_url`. Do not open provider authorization in an unattended worker.
+  </Step>
+  <Step title="Find the destination">
+    After authorization completes, list workspace destinations and store the new destination ID.
+
+    ```bash
+    curl --request GET \
+      --url "https://api.openpmm.com/v1/workspaces/$OPENPMM_WORKSPACE_ID/destinations" \
+      --header "Authorization: Bearer $OPENPMM_API_KEY"
+    ```
+  </Step>
+</Steps>
+
+<Note>
+  Provider access tokens never pass through your integration. OpenPMM stores them encrypted and uses them only for the connected destination.
+</Note>

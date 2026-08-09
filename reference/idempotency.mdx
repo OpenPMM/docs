@@ -1,0 +1,25 @@
+---
+title: "Idempotency"
+description: "Retry write requests without creating duplicate publishing work."
+---
+
+Operations marked idempotent require an `Idempotency-Key` header.
+
+```http
+Idempotency-Key: 2a4d3947-6ec2-4b88-96cb-c1cfb9a6b37f
+```
+
+Generate one unpredictable value for each logical operation. A UUID works well.
+
+## Retry rules
+
+- Reuse the same key when retrying the same method, path, and body.
+- Use a new key for different content or a different logical action.
+- Do not reuse one key across tenants or unrelated endpoints.
+- After a timeout, reconcile the original request before starting a new operation.
+
+OpenPMM rejects reuse when the request does not match the original operation.
+
+<Warning>
+  Idempotency prevents duplicate OpenPMM work. It does not make every provider outcome reversible.
+</Warning>
