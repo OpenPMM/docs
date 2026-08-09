@@ -1,13 +1,13 @@
 ---
-title: "Publish posts"
-description: "Validate content, confirm the request, and track the resulting send."
+title: "Create posts"
+description: "Validate a request, create posts, and check their status."
 ---
 
-Publishing is an external side effect. Validate the complete request first, then submit the same content with explicit confirmation and an idempotency key.
+Publishing creates content on a provider. Validate the complete request before you publish. Then send the same request with confirmation and an idempotency key.
 
 <Steps>
   <Step title="Build one post per destination">
-    Each post needs a destination ID and a non-empty `body` array. A body array can represent a single post or a provider-supported thread.
+    Each post needs a destination ID and a non-empty `body` array. For X, the array can contain a thread. For other channels, the array contains one item.
 
     ```json
     {
@@ -26,16 +26,16 @@ Publishing is an external side effect. Validate the complete request first, then
     ```
   </Step>
   <Step title="Validate without publishing">
-    Send the complete payload to the validation endpoint. The request includes `confirmed: true` because validation checks the publish-shaped contract, but this endpoint never creates a send.
+    Send the complete payload to `POST /workspaces/{workspace_id}/post-validations`. Keep `confirmed: true` in the request. The endpoint does not save data or contact a provider.
   </Step>
-  <Step title="Submit once">
-    Send the validated payload to the create-posts endpoint. Add a unique `Idempotency-Key` header and reuse that value only when retrying the same logical request.
+  <Step title="Create the post">
+    Send the validated payload to `POST /workspaces/{workspace_id}/posts`. Add a unique `Idempotency-Key` header.
   </Step>
-  <Step title="Track the send group">
-    Store the returned send-group ID. Poll its resource or list send groups until every item reaches a terminal or attention-required state.
+  <Step title="Check the post status">
+    The response contains a `posts` array. Store each post `id`. Use `GET /workspaces/{workspace_id}/posts/{post}` to get the current state.
   </Step>
 </Steps>
 
 <Warning>
-  Do not create a new idempotency key after a timeout until you reconcile the original request. The provider may already have accepted it.
+  A timeout does not mean that publishing failed. Retry the same request with the same idempotency key. A new key can create a duplicate post.
 </Warning>

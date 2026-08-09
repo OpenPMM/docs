@@ -1,9 +1,11 @@
 ---
 title: "Authentication"
-description: "Authenticate with a workspace-scoped bearer API key."
+description: "Authenticate with an account API key."
 ---
 
-Create API keys under **Workspace settings** → **API keys**. Every key belongs to one workspace.
+An API credential belongs to one account. It can have access to all workspaces or selected workspaces. The dashboard creates a selected-access credential from **Workspace settings** → **API keys**.
+
+OpenPMM shows the API key secret one time. Send the secret as a bearer token.
 
 ```bash
 curl --request GET \
@@ -22,6 +24,7 @@ Authorization: Bearer <api-key>
 - Store keys in a server-side secret manager.
 - Never expose a key in browser code, mobile binaries, logs, or URLs.
 - Use separate keys for separate deployments or integrations.
-- Revoke a key when it is no longer needed or may have leaked.
+- Revoke a key when you do not need it.
+- Revoke and replace a key when another person or system can have access to it.
 
-OpenPMM displays a new secret once. Create a replacement if you lose it.
+Call `GET /me` to get the credential environment, access mode, scopes, and expiry time. Call `GET /workspaces` to list the workspaces that the credential can use.

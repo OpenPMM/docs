@@ -1,9 +1,9 @@
 ---
 title: "Errors"
-description: "Handle stable error codes, request IDs, and ambiguous outcomes."
+description: "Use error codes and request IDs to handle a failed request."
 ---
 
-OpenPMM returns problem-detail JSON for API errors. Use the HTTP status for broad handling and the stable error code for application logic.
+OpenPMM returns an RFC 9457 problem response for an API error. Use the HTTP status for the error class. Use `code` for application logic.
 
 ```json
 {
@@ -18,20 +18,21 @@ OpenPMM returns problem-detail JSON for API errors. Use the HTTP status for broa
 
 ## What to log
 
-Log the HTTP status, stable `code`, and `request_id`. Do not log bearer tokens, provider credentials, or sensitive post content.
+Log the HTTP status, `code`, and `request_id`. Do not log API keys, provider credentials, or post content.
 
 ## Retry guidance
 
 | Status | Typical action |
 | --- | --- |
-| `400` or `422` | Fix the request before retrying |
-| `401` | Replace or correct the API key |
-| `403` | Check workspace scope and permissions |
-| `404` | Verify the public ID belongs to the current workspace |
-| `409` or `412` | Reconcile idempotency or fetch the latest version |
-| `429` | Respect `Retry-After` and back off |
-| `5xx` | Retry with backoff and the same idempotency key |
+| `400` or `422` | Correct the request before you retry |
+| `401` | Correct or replace the API key |
+| `403` | Check the credential scopes and workspace access |
+| `404` | Check the resource ID and workspace ID |
+| `409` | Check the resource state or idempotency key |
+| `412` | Get the resource again and use its current ETag |
+| `429` | Wait for the time in `Retry-After` |
+| `5xx` | Retry with a delay and the same idempotency key |
 
 <Warning>
-  A network timeout or provider error can have an ambiguous outcome. Inspect the send before creating new publishing work.
+  A network timeout or provider error can occur after publication. Get the post status before you create a new post.
 </Warning>

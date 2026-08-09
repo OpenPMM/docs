@@ -1,9 +1,9 @@
 ---
 title: "Schedule and retry"
-description: "Schedule posts and recover safely from uncertain outcomes."
+description: "Schedule a post, change its publication time, or retry it."
 ---
 
-Set `when` to an ISO 8601 timestamp to schedule a confirmed post. Use `time_zone` to preserve the person's scheduling context. OpenPMM stores the actual instant unambiguously.
+Set `when` to an ISO 8601 timestamp to schedule a post. The timestamp must include a UTC offset. Use `time_zone` to record the local time zone.
 
 ```json
 {
@@ -24,14 +24,16 @@ Set `when` to an ISO 8601 timestamp to schedule a confirmed post. Use `time_zone
 
 ## Update a scheduled post
 
-Fetch the current representation and its version. Send the version in `If-Match` when you update or reschedule it. If another actor changed the post first, OpenPMM rejects the stale write.
+Get the post and save the ETag response header. Send this ETag in `If-Match` when you cancel or reschedule the post. OpenPMM returns `412` if the post changed after it created the ETag.
+
+Send `confirmed: true` in the request body. Also send a new `Idempotency-Key` for the action.
 
 ## Retry safely
 
-- Reuse the original `Idempotency-Key` for the same logical request.
-- Inspect the send group after a network timeout.
-- Do not assume an ambiguous provider response means nothing was published.
-- Retry only operations that the endpoint marks as retryable.
-- Escalate items that need attention instead of creating duplicate posts.
+- Use the same `Idempotency-Key` when you retry the same request.
+- Get the post after a network timeout.
+- Do not assume that a provider error means that nothing was published.
+- Retry only when the error response has `retryable: true`.
+- Review a post with the `needs-attention` state. Do not create a duplicate post.
 
-See [Idempotency](/reference/idempotency) for the request contract and [Errors](/reference/errors) for failure handling.
+See [Idempotency](/reference/idempotency) for retry rules. See [Errors](/reference/errors) for error handling.

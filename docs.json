@@ -48,6 +48,7 @@
       },
       {
         "tab": "API reference",
+        "openapi": "https://api.openpmm.com/v1/openapi.json",
         "groups": [
           {
             "group": "Using the API",
@@ -60,8 +61,54 @@
             ]
           },
           {
-            "group": "Endpoints",
-            "openapi": "https://api.openpmm.com/v1/openapi.json"
+            "group": "Posts",
+            "pages": [
+              "POST /workspaces/{workspace_id}/posts",
+              "POST /workspaces/{workspace_id}/post-validations",
+              "GET /workspaces/{workspace_id}/posts",
+              "GET /workspaces/{workspace_id}/posts/{post}",
+              "GET /workspaces/{workspace_id}/send-groups/{send_group_id}",
+              "GET /workspaces/{workspace_id}/posts/{post}/attempts",
+              "GET /workspaces/{workspace_id}/posts/{post}/receipts",
+              "POST /workspaces/{workspace_id}/posts/{post}/cancel",
+              "POST /workspaces/{workspace_id}/posts/{post}/reschedule",
+              "POST /workspaces/{workspace_id}/posts/{post}/retry"
+            ]
+          },
+          {
+            "group": "Drafts",
+            "pages": [
+              "GET /workspaces/{workspace_id}/post-groups",
+              "GET /workspaces/{workspace_id}/post-groups/{group}",
+              "GET /workspaces/{workspace_id}/post-groups/{group}/drafts",
+              "GET /workspaces/{workspace_id}/post-groups/{group}/drafts/{channel}",
+              "DELETE /workspaces/{workspace_id}/post-groups/{group}/assets/{asset_id}"
+            ]
+          },
+          {
+            "group": "Assets",
+            "pages": [
+              "GET /workspaces/{workspace_id}/assets",
+              "GET /workspaces/{workspace_id}/assets/{asset_id}",
+              "DELETE /workspaces/{workspace_id}/assets/{asset_id}",
+              "POST /workspaces/{workspace_id}/asset-uploads",
+              "GET /workspaces/{workspace_id}/asset-uploads/{upload_id}",
+              "POST /workspaces/{workspace_id}/asset-uploads/{upload_id}/complete"
+            ]
+          },
+          {
+            "group": "Destinations",
+            "pages": [
+              "GET /workspaces/{workspace_id}/destinations",
+              "GET /workspaces/{workspace_id}/destinations/{destination_id}",
+              "PATCH /workspaces/{workspace_id}/destinations/{destination_id}",
+              "POST /workspaces/{workspace_id}/destination-connection-sessions",
+              "GET /workspaces/{workspace_id}/destination-connection-sessions/{session_id}"
+            ]
+          },
+          {
+            "group": "Account",
+            "pages": ["GET /me", "GET /account", "GET /workspaces"]
           }
         ]
       }

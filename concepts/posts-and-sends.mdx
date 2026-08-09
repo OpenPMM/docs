@@ -1,29 +1,30 @@
 ---
-title: "Posts and sends"
-description: "Separate editable content from confirmed publishing work."
+title: "Posts and publishing"
+description: "Learn how drafts, posts, and publishing states work."
 ---
 
-A **post** contains the content prepared for one destination. A **send** records the confirmed work to deliver that content.
+A **post** contains content for one destination. It also contains the current publishing state.
 
-This boundary matters because publishing can create an external side effect.
+Set `when` to control what OpenPMM creates:
 
-| Stage | Can you edit it? | Can it publish externally? |
+| `when` value | Result | Can contact a provider? |
 | --- | --- | --- |
-| Draft post | Yes | No |
-| Validated request | Change the request and validate again | No |
-| Confirmed post | No | Yes |
-| Send | No | It records the attempt and outcome |
+| `draft` | Editable channel drafts in a post group | No |
+| `now` | Posts that start publishing now | Yes |
+| ISO 8601 timestamp | Scheduled posts | Yes, at the scheduled time |
+
+The create response contains a `posts` array. Each post has a state such as `scheduled`, `processing`, `published`, or `failed`.
 
 ## Confirmation
 
-Requests that can publish must contain `confirmed: true`. OpenPMM rejects publish-shaped requests without that explicit confirmation.
+Requests that can publish must contain `confirmed: true`. OpenPMM rejects the request when confirmation is absent.
 
-Use the validation endpoint before confirmation when content comes from a person, an agent, or another automated system. Validation checks the same shape without creating publishing work.
+Use the validation endpoint before you create posts. Validation checks the same request but does not save data or contact a provider.
 
-## Send groups
+## Post submissions
 
-Submitting multiple posts together creates a send group. Use it to track the shared request and inspect each provider attempt without treating mutable content as delivery history.
+OpenPMM records posts that were created together. The API currently returns this record as a `send_group`. Use the post submission endpoint when you must inspect all posts from one confirmed request.
 
 <Warning>
-  A timeout does not prove that publishing failed. Reconcile by idempotency key or send-group state before retrying.
+  A timeout does not prove that publishing failed. Retry the same request with the same idempotency key. Do not create a new request until you check the post status.
 </Warning>
