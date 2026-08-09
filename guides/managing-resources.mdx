@@ -1,7 +1,7 @@
 ---
-title: "Create, Update, and Delete Open PMM Resources"
+title: "Create, Read, Update, and Delete Open PMM Resources"
 sidebarTitle: "Managing Resources"
-description: "Learn how to create, read, update, and delete resources using the Open PMM API. Includes field descriptions and example requests."
+description: "Learn how to create, read, update, and delete resources using the Open PMM REST API, with field descriptions, status values, and curl examples."
 ---
 
 Resources are the core entities in Open PMM. Every product, feature, initiative, and milestone you track is represented as a resource, giving you a unified data model across your entire product portfolio. This guide covers every operation in the resource lifecycle — from creation through deletion — with example curl commands and annotated request and response bodies.
@@ -70,7 +70,7 @@ curl -X POST https://api.open-pmm.com/v1/resources \
 }
 ```
 
-**Response — `200 OK`**
+**Response — `201 Created`**
 
 ```json
 {
@@ -227,13 +227,7 @@ curl -X DELETE https://api.open-pmm.com/v1/resources/res_04ef1a3b5c7dg2hi8jklmn4
   -H "Authorization: Bearer $OPEN_PMM_API_KEY"
 ```
 
-**Response — `204 No Content`**
-
-```json
-
-```
-
-If the resource has already been deleted, or if the `id` was never valid, the API returns `404 Not Found`.
+The API returns `204 No Content` with no response body when the deletion succeeds. If the resource has already been deleted or the `id` was never valid, the API returns `404 Not Found`.
 
 ## Next steps
 

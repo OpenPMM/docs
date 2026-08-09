@@ -1,10 +1,14 @@
 ---
-title: "Open PMM CLI Command Reference"
+title: "Open PMM CLI Commands: Full Reference for All Resources"
 sidebarTitle: "Commands"
 description: "Full reference for all Open PMM CLI commands: resources, metrics, events, and webhooks. Includes flags, arguments, and example usage."
 ---
 
 This page documents every command available in the Open PMM CLI, organised by resource group. Each section covers the exact usage syntax, all accepted flags, and a working example you can adapt to your own workflows. For installation and configuration instructions, see [CLI Overview](/cli/overview).
+
+<Note>
+  The Open PMM CLI is coming soon. The commands and flags documented here reflect the planned interface.
+</Note>
 
 ## Resources
 
@@ -208,7 +212,7 @@ Permanently deletes a resource and all associated data. This action is irreversi
 # Delete with confirmation prompt
 pmm resources delete res_04ab2
 
-# Delete non-interactively in a CI script
+# Delete non-interactively in a script
 pmm resources delete res_04ab2 --confirm
 ```
 

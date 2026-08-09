@@ -1,10 +1,10 @@
 ---
-title: "Open PMM CLI: Command-Line API Access"
+title: "Open PMM CLI: Terminal Access to the Open PMM REST API"
 sidebarTitle: "Overview"
 description: "The Open PMM CLI lets you interact with the API from your terminal, automate resource management, and build agent-driven workflows."
 ---
 
-The Open PMM CLI brings the full power of the Open PMM API to your terminal. Whether you are scripting repetitive resource management tasks, integrating Open PMM into CI/CD pipelines, or building AI agent workflows that need structured access to product metrics and events, the CLI gives you a fast, scriptable interface without writing a single line of application code.
+The Open PMM CLI brings the full power of the Open PMM API to your terminal. Whether you are scripting repetitive resource management tasks or building AI agent workflows that need structured access to product metrics and events, the CLI gives you a fast, scriptable interface without writing a single line of application code.
 
 <Note>
   The Open PMM CLI is in active development and is coming soon. The commands and flags documented here reflect the planned interface. Sign up for early access to be notified when the first release is available.
@@ -16,7 +16,7 @@ The CLI is a standalone binary that wraps the Open PMM REST API. Every resource,
 
 Key use cases include:
 
-- **Scripting and automation** — integrate Open PMM into shell scripts, Makefiles, and CI/CD workflows to create or update resources on deploy.
+- **Scripting and automation** — integrate Open PMM into shell scripts and Makefiles to create or update resources on demand.
 - **AI agent workflows** — expose structured API access to LLM-based agents that need to read and write product data programmatically.
 - **Local development** — quickly inspect resources, replay events, and validate webhook configurations without leaving your terminal.
 
@@ -80,7 +80,7 @@ Once saved, every subsequent command uses these values automatically.
 
 ### Environment variable
 
-Set `OPEN_PMM_API_KEY` to skip the config file entirely. This is the recommended approach for CI/CD environments and containerised workloads:
+Set `OPEN_PMM_API_KEY` to skip the config file entirely. This is the recommended approach for automated and containerised workloads:
 
 ```bash
 export OPEN_PMM_API_KEY="pmm_live_your_key_here"

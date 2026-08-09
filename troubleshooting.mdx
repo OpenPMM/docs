@@ -1,5 +1,5 @@
 ---
-title: "Troubleshoot Common Open PMM API Issues"
+title: "Troubleshoot Common Open PMM API Issues and Errors"
 sidebarTitle: "Troubleshooting"
 description: "Solutions for the most common Open PMM API problems: auth errors, rate limits, malformed requests, webhook delivery failures, and more."
 ---
@@ -129,13 +129,13 @@ When integrating with the Open PMM API, you may encounter a handful of recurring
 
   1. **Check your Node.js version.** The Open PMM CLI requires Node.js 18 or later. Run `node --version` and upgrade if needed.
 
-  2. **Locate the install directory.** Run `npm root -g` to find where global packages are installed, then confirm that the parent `bin` directory is included in your `PATH`.
+  2. **Locate the install directory.** Run `npm config get prefix` to find where global packages are installed, then confirm that the `bin` subdirectory of that path is included in your `PATH`.
 
   3. **Add the bin directory to your PATH** (if it is missing):
 
      ```bash
      # Example for macOS/Linux — add to ~/.zshrc or ~/.bashrc
-     export PATH="$(npm bin -g):$PATH"
+     export PATH="$(npm config get prefix)/bin:$PATH"
      ```
 
      Then reload your shell with `source ~/.zshrc` (or the equivalent for your shell).

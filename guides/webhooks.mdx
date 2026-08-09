@@ -1,7 +1,7 @@
 ---
-title: "Receive Real-Time Events with Open PMM Webhooks"
+title: "Receive Real-Time Event Notifications with Open PMM Webhooks"
 sidebarTitle: "Webhooks"
-description: "Set up Open PMM webhooks to receive HTTP notifications when resources change, metrics are recorded, or events occur in your account."
+description: "Set up Open PMM webhooks to receive signed HTTP notifications when resources change, metrics are recorded, or events occur in your account."
 ---
 
 Webhooks let your application respond to activity in Open PMM the moment it happens, without polling the API. When a relevant change occurs — a resource is updated, a metric is recorded, or an event is created — Open PMM sends an HTTP `POST` request to a URL you specify, carrying a signed JSON payload that describes exactly what changed.
@@ -52,7 +52,7 @@ You subscribe to one or more event types when registering a webhook endpoint. Op
       }'
     ```
 
-    **Response — `200 OK`**
+    **Response — `201 Created`**
 
     ```json
     {

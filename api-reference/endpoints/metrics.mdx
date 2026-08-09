@@ -1,12 +1,12 @@
 ---
-title: "Metrics API — Record and Retrieve Metrics"
+title: "Metrics API — Record and Query Numeric Product Metrics"
 sidebarTitle: "Metrics"
-description: "Reference for the Open PMM Metrics endpoints. Record numeric metric values against resources and query metric history with filters."
+description: "Reference for Open PMM Metrics endpoints. Record timestamped numeric values against resources and retrieve metric history with filters and pagination."
 ---
 
 Metrics track numeric values associated with your resources over time. Use them to record any quantifiable signal that matters to your product — engagement scores, daily active users, revenue figures, error rates, or custom KPIs. Each metric record is a timestamped data point linked to a specific resource, giving you a queryable time-series history for every item in your workspace.
 
-## GET /v1/metrics
+## GET /metrics
 
 Retrieve a paginated list of metric records. Filter by resource to pull the history for a specific product or feature, and sort by field to surface the most recent or highest-value entries first.
 
@@ -71,7 +71,7 @@ Retrieve a paginated list of metric records. Filter by resource to pull the hist
 <CodeGroup>
 ```bash cURL
 curl -G https://api.open-pmm.com/v1/metrics \
-  -H "Authorization: Bearer <key>" \
+  -H "Authorization: Bearer <api-key>" \
   -d resource_id=res_03kz4m1o5r6s7t8u9v0w1x2y \
   -d limit=2 \
   -d sort=-recorded_at
@@ -107,7 +107,7 @@ curl -G https://api.open-pmm.com/v1/metrics \
 
 ---
 
-## POST /v1/metrics
+## POST /metrics
 
 Record a new metric value against a resource. Provide `resource_id`, `name`, and `value` at minimum. If you do not supply `recorded_at`, the server uses the current UTC time.
 
@@ -172,7 +172,7 @@ Record a new metric value against a resource. Provide `resource_id`, `name`, and
 <CodeGroup>
 ```bash cURL
 curl -X POST https://api.open-pmm.com/v1/metrics \
-  -H "Authorization: Bearer <key>" \
+  -H "Authorization: Bearer <api-key>" \
   -H "Content-Type: application/json" \
   -d '{
     "resource_id": "res_03kz4m1o5r6s7t8u9v0w1x2y",
@@ -181,71 +181,6 @@ curl -X POST https://api.open-pmm.com/v1/metrics \
     "unit": "%",
     "recorded_at": "2024-05-15T00:00:00Z"
   }'
-```
-
-```json Response
-{
-  "data": {
-    "id": "met_03cd4e5f6g7h8i9j0k1l2m3n",
-    "resource_id": "res_03kz4m1o5r6s7t8u9v0w1x2y",
-    "name": "engagement_score",
-    "value": 87.4,
-    "unit": "%",
-    "recorded_at": "2024-05-15T00:00:00Z",
-    "created_at": "2024-05-15T11:42:00Z"
-  }
-}
-```
-</CodeGroup>
-
----
-
-## GET /v1/metrics/{id}
-
-Retrieve a single metric record by its ID.
-
-### Path Parameters
-
-<ParamField path="id" type="string" required>
-  The unique identifier of the metric record to retrieve.
-</ParamField>
-
-### Response Fields
-
-<ResponseField name="data" type="object">
-  The metric record object.
-
-  <Expandable title="Metric record object">
-    <ResponseField name="id" type="string">
-      Unique metric record identifier (UUID v4).
-    </ResponseField>
-    <ResponseField name="resource_id" type="string">
-      UUID of the resource this metric is linked to.
-    </ResponseField>
-    <ResponseField name="name" type="string">
-      Name of the metric.
-    </ResponseField>
-    <ResponseField name="value" type="number">
-      The recorded numeric value.
-    </ResponseField>
-    <ResponseField name="unit" type="string">
-      Unit label, or `null` if not provided.
-    </ResponseField>
-    <ResponseField name="recorded_at" type="string">
-      ISO 8601 timestamp of when the value was observed.
-    </ResponseField>
-    <ResponseField name="created_at" type="string">
-      ISO 8601 timestamp of when this record was created in Open PMM.
-    </ResponseField>
-  </Expandable>
-</ResponseField>
-
-### Example
-
-<CodeGroup>
-```bash cURL
-curl https://api.open-pmm.com/v1/metrics/met_03cd4e5f6g7h8i9j0k1l2m3n \
-  -H "Authorization: Bearer <key>"
 ```
 
 ```json Response

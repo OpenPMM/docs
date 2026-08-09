@@ -1,7 +1,7 @@
 ---
-title: "Open PMM REST API Reference"
+title: "Open PMM API Reference: Base URL, Versions, and Formats"
 sidebarTitle: "Introduction"
-description: "Complete reference for the Open PMM REST API. Base URL, versioning, content types, and how to read endpoint documentation."
+description: "Everything you need before your first Open PMM API request: base URL, versioning, JSON content types, and the standard response envelope format."
 ---
 
 The Open PMM REST API gives you programmatic access to all product management and metrics data in your account. Every feature available in the dashboard is also available through the API, so you can automate workflows, build integrations, and pull data into your own tools. This page explains the foundational concepts you need before making your first request.
@@ -10,11 +10,11 @@ The Open PMM REST API gives you programmatic access to all product management an
 
 All API requests target the following base URL:
 
-```
+```bash
 https://api.open-pmm.com/v1
 ```
 
-Every endpoint path in this reference is relative to this base URL. For example, the endpoint documented as `/products` is reached at `https://api.open-pmm.com/v1/products`.
+Every endpoint path in this reference is relative to this base URL. For example, the endpoint documented as `/resources` is reached at `https://api.open-pmm.com/v1/resources`.
 
 ## Versioning
 
@@ -31,7 +31,7 @@ The current API version is **v1**, embedded directly in the base URL path. Open 
 
 All request bodies must be JSON, and all responses are JSON. Set the `Content-Type` header on every request that includes a body:
 
-```
+```bash
 Content-Type: application/json
 Accept: application/json
 ```
@@ -45,7 +45,7 @@ Successful responses wrap the primary resource in a top-level `data` field. List
 ```json
 {
   "data": {
-    "id": "prod_01HZ9K2QR4WVBN3E7FX8",
+    "id": "res_01HZ9K2QR4WVBN3E7FX8",
     "name": "Analytics Suite",
     "createdAt": "2024-06-01T12:00:00Z"
   }
@@ -67,10 +67,10 @@ Errors use a separate `error` envelope. See the [Errors](/api-reference/errors) 
 
 ## Minimal Working Example
 
-The following curl command authenticates with your API key and retrieves your list of products. Replace `YOUR_API_KEY` with a real key from your dashboard:
+The following curl command authenticates with your API key and retrieves your list of resources. Replace `YOUR_API_KEY` with a real key from your dashboard:
 
 ```bash
-curl https://api.open-pmm.com/v1/products \
+curl https://api.open-pmm.com/v1/resources \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Accept: application/json"
 ```

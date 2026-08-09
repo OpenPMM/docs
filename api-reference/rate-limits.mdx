@@ -1,5 +1,5 @@
 ---
-title: "Open PMM API Rate Limits and Throttling"
+title: "Open PMM API Rate Limits: Throttling and Retry Handling"
 sidebarTitle: "Rate Limits"
 description: "Open PMM enforces rate limits per API key. Learn the limits, how to read rate limit headers, and how to handle 429 responses gracefully."
 ---
@@ -11,7 +11,7 @@ Open PMM enforces rate limits on all API keys to ensure fair usage and platform 
 | Operation Type | Limit |
 |---|---|
 | Read (`GET`) | 1,000 requests per minute |
-| Write (`POST`, `PUT`, `PATCH`, `DELETE`) | 200 requests per minute |
+| Write (`POST`, `PUT`, `DELETE`) | 200 requests per minute |
 
 Read and write budgets are tracked separately. Exhausting your write budget does not affect how many `GET` requests you can make, and vice versa.
 
@@ -56,7 +56,7 @@ Retry-After: 23
 Follow these practices to stay within your limits and keep integrations resilient:
 
 - **Cache `GET` responses.** Most read resources change infrequently. Cache responses locally for at least 30–60 seconds to reduce redundant requests.
-- **Batch writes where possible.** Use bulk endpoints (e.g., `POST /metrics/batch`) instead of issuing individual write requests in a loop.
+- **Batch writes where possible.** Group related write operations into as few requests as your use case allows instead of issuing individual requests in a tight loop.
 - **Read headers proactively.** Check `X-RateLimit-Remaining` on every response and slow down voluntarily before you hit zero, rather than waiting for a `429`.
 - **Implement exponential backoff.** When you do receive a `429`, wait at least `Retry-After` seconds before your next attempt, and increase the delay on successive failures.
 

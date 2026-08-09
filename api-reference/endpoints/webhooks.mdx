@@ -1,7 +1,7 @@
 ---
-title: "Webhooks API — Manage Notification Endpoints"
+title: "Webhooks API — Register and Manage Notification Endpoints"
 sidebarTitle: "Webhooks"
-description: "Reference for the Open PMM Webhooks API. Register, list, and delete webhook endpoints that receive real-time event notifications."
+description: "Reference for the Open PMM Webhooks API. Register HTTPS endpoints to receive real-time signed event notifications, then retrieve or remove subscriptions."
 ---
 
 Webhooks let you receive real-time HTTP POST notifications whenever events occur in Open PMM, without polling the API. When you register a webhook, you supply your HTTPS endpoint URL and the list of event types you want to subscribe to. Open PMM delivers a signed JSON payload to your endpoint within seconds of each matching event. For a complete walkthrough of registering, verifying, and handling webhook deliveries, see the [Webhooks setup guide](/guides/webhooks).
@@ -38,9 +38,19 @@ Verify every incoming delivery by recomputing the signature on your server and c
 
 ---
 
-## GET /v1/webhooks
+## GET /webhooks
 
 Retrieve a paginated list of all webhooks registered in your workspace.
+
+### Query Parameters
+
+<ParamField query="limit" type="integer">
+  Maximum number of webhooks to return per page. Defaults to `20`. Maximum is `100`.
+</ParamField>
+
+<ParamField query="cursor" type="string">
+  Opaque pagination cursor returned in the previous response's `next_cursor` field. Omit to start from the beginning.
+</ParamField>
 
 ### Response Fields
 
@@ -82,7 +92,7 @@ Retrieve a paginated list of all webhooks registered in your workspace.
 <CodeGroup>
 ```bash cURL
 curl https://api.open-pmm.com/v1/webhooks \
-  -H "Authorization: Bearer <key>"
+  -H "Authorization: Bearer <api-key>"
 ```
 
 ```json Response
@@ -105,7 +115,7 @@ curl https://api.open-pmm.com/v1/webhooks \
 
 ---
 
-## POST /v1/webhooks
+## POST /webhooks
 
 Register a new webhook endpoint. Provide your HTTPS URL and the event types you want to subscribe to. Optionally supply a `secret` to enable HMAC signature verification on deliveries.
 
@@ -162,7 +172,7 @@ Register a new webhook endpoint. Provide your HTTPS URL and the event types you 
 <CodeGroup>
 ```bash cURL
 curl -X POST https://api.open-pmm.com/v1/webhooks \
-  -H "Authorization: Bearer <key>" \
+  -H "Authorization: Bearer <api-key>" \
   -H "Content-Type: application/json" \
   -d '{
     "url": "https://example.com/hooks/open-pmm",
@@ -188,7 +198,7 @@ curl -X POST https://api.open-pmm.com/v1/webhooks \
 
 ---
 
-## GET /v1/webhooks/{id}
+## GET /webhooks/{id}
 
 Retrieve a single registered webhook by its ID.
 
@@ -234,7 +244,7 @@ Retrieve a single registered webhook by its ID.
 <CodeGroup>
 ```bash cURL
 curl https://api.open-pmm.com/v1/webhooks/wh_02qr3s4t5u6v7w8x9y0z1a2b \
-  -H "Authorization: Bearer <key>"
+  -H "Authorization: Bearer <api-key>"
 ```
 
 ```json Response
@@ -253,7 +263,7 @@ curl https://api.open-pmm.com/v1/webhooks/wh_02qr3s4t5u6v7w8x9y0z1a2b \
 
 ---
 
-## DELETE /v1/webhooks/{id}
+## DELETE /webhooks/{id}
 
 Permanently delete a registered webhook. Open PMM immediately stops delivering payloads to the associated URL.
 
@@ -273,13 +283,7 @@ Returns HTTP `204 No Content` on success with an empty response body.
 
 ### Example
 
-<CodeGroup>
 ```bash cURL
 curl -X DELETE https://api.open-pmm.com/v1/webhooks/wh_02qr3s4t5u6v7w8x9y0z1a2b \
-  -H "Authorization: Bearer <key>"
+  -H "Authorization: Bearer <api-key>"
 ```
-
-```json Response
-// 204 No Content — empty body
-```
-</CodeGroup>

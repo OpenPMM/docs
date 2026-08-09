@@ -1,7 +1,7 @@
 ---
-title: "Make Your First Open PMM API Call"
+title: "Make Your First Open PMM REST API Call in Minutes"
 sidebarTitle: "First API Call"
-description: "Step-by-step guide to making your first authenticated request to the Open PMM API, verify your setup, and explore the response structure."
+description: "Step-by-step guide to making your first authenticated request to the Open PMM API, verifying your setup, and understanding the response structure."
 ---
 
 The Open PMM API gives you programmatic access to all your product management data. This guide walks you through authenticating, listing resources, and creating your first resource — all from the command line using curl. By the end, you'll have confirmed your credentials work and understand what a typical API response looks like.
@@ -104,7 +104,7 @@ Before you begin, make sure you have the following:
       }'
     ```
 
-    A successful creation returns a `200 OK` response containing the full resource object:
+    A successful creation returns a `201 Created` response containing the full resource object:
 
     ```json
     {

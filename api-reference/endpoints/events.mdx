@@ -1,12 +1,12 @@
 ---
-title: "Events API — Ingest and Query Product Events"
+title: "Events API — Ingest and Query Discrete Product Events"
 sidebarTitle: "Events"
-description: "Reference for the Open PMM Events API. Ingest custom product events and query event history by type, resource, or time range."
+description: "Reference for the Open PMM Events API. Ingest custom product events with structured payloads and query history by type, resource, or time range."
 ---
 
 Events capture significant occurrences in your product's lifecycle — feature launches, milestone completions, production incidents, experiment conclusions, or any other moment worth recording. Unlike metrics, which track continuous numeric values, events are discrete occurrences with an arbitrary `payload` that carries structured context. You can link events to a resource or ingest them as standalone records and query them across type, resource, and time range.
 
-## GET /v1/events
+## GET /events
 
 Retrieve a paginated list of events. Narrow results with the filter parameters and use `occurred_after` / `occurred_before` to query a specific time window.
 
@@ -76,7 +76,7 @@ Retrieve a paginated list of events. Narrow results with the filter parameters a
 <CodeGroup>
 ```bash cURL
 curl -G https://api.open-pmm.com/v1/events \
-  -H "Authorization: Bearer <key>" \
+  -H "Authorization: Bearer <api-key>" \
   -d type=feature.launched \
   -d resource_id=res_03kz4m1o5r6s7t8u9v0w1x2y \
   -d occurred_after=2024-05-01T00:00:00Z \
@@ -119,7 +119,7 @@ curl -G https://api.open-pmm.com/v1/events \
 
 ---
 
-## POST /v1/events
+## POST /events
 
 Ingest a new event. Provide `type` at minimum. Attach an optional `payload` for structured context, link the event to a resource via `resource_id`, and set `occurred_at` to backfill historical events.
 
@@ -177,7 +177,7 @@ Ingest a new event. Provide `type` at minimum. Attach an optional `payload` for 
 <CodeGroup>
 ```bash cURL
 curl -X POST https://api.open-pmm.com/v1/events \
-  -H "Authorization: Bearer <key>" \
+  -H "Authorization: Bearer <api-key>" \
   -H "Content-Type: application/json" \
   -d '{
     "type": "milestone.completed",
@@ -211,7 +211,7 @@ curl -X POST https://api.open-pmm.com/v1/events \
 
 ---
 
-## GET /v1/events/{id}
+## GET /events/{id}
 
 Retrieve a single event by its ID.
 
@@ -253,7 +253,7 @@ Retrieve a single event by its ID.
 <CodeGroup>
 ```bash cURL
 curl https://api.open-pmm.com/v1/events/evt_03op4q5r6s7t8u9v0w1x2y3z \
-  -H "Authorization: Bearer <key>"
+  -H "Authorization: Bearer <api-key>"
 ```
 
 ```json Response

@@ -1,7 +1,7 @@
 ---
-title: "Authenticate with the Open PMM API"
+title: "Open PMM API Authentication: Bearer Tokens and Scopes"
 sidebarTitle: "Authentication"
-description: "Open PMM uses Bearer token authentication. Learn how to generate an API key, pass it in requests, and handle auth errors."
+description: "Open PMM uses Bearer token authentication. Learn how to generate an API key, pass it securely in every request, and handle auth errors."
 ---
 
 Every request to the Open PMM API must include a valid API key. Open PMM uses the industry-standard Bearer token scheme — you generate a key from your dashboard, then pass it in the `Authorization` header of each HTTP request. There are no session cookies, no OAuth redirects for server-to-server calls, and no SDK required.
@@ -21,7 +21,7 @@ Every request to the Open PMM API must include a valid API key. Open PMM uses th
 
 Include your key as a Bearer token in the `Authorization` header on every request.
 
-```
+```http
 Authorization: Bearer <your-api-key>
 ```
 

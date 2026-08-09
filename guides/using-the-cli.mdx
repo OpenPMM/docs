@@ -1,7 +1,7 @@
 ---
-title: "Use the Open PMM CLI for Agent Workflows"
+title: "Use the Open PMM CLI to Manage Resources and Metrics"
 sidebarTitle: "Using the CLI"
-description: "Install and configure the Open PMM CLI to interact with the API from the command line or automate workflows with AI agents."
+description: "Install and configure the Open PMM CLI to create resources, record metrics, and log events from your terminal or automate workflows with AI agents."
 ---
 
 The Open PMM CLI brings the full power of the API to your terminal, letting you create and query resources, record metrics, and log events without writing a single line of code. It is also designed as a first-class tool for agent-driven automation — structured JSON output, predictable exit codes, and composable commands make it straightforward to pipe CLI output directly into an AI agent's context.
@@ -23,12 +23,12 @@ Choose the installation method that best fits your environment.
   brew install open-pmm/tap/pmm
   ```
 
-  ```bash Direct binary (Linux / macOS)
-  # Download the latest binary for your platform
+  ```bash Linux / macOS
+  # Download and run the install script
   curl -fsSL https://releases.open-pmm.com/cli/install.sh | bash
   ```
 
-  ```bash Direct binary (Windows)
+  ```powershell Windows
   # Run in PowerShell
   irm https://releases.open-pmm.com/cli/install.ps1 | iex
   ```
@@ -54,7 +54,7 @@ pmm auth login
 
 **Option 2 — Environment variable**
 
-Set `OPEN_PMM_API_KEY` before running any command. This takes precedence over the stored credential and is the preferred approach for CI/CD pipelines and agent workflows.
+Set `OPEN_PMM_API_KEY` before running any command. This takes precedence over the stored credential and is the preferred approach for automated and agent workflows.
 
 ```bash
 export OPEN_PMM_API_KEY=your_key_here
@@ -99,7 +99,6 @@ pmm auth whoami
     | Command | Description |
     |---|---|
     | `pmm metrics list` | List recorded metrics. Supports `--resource-id` filter. |
-    | `pmm metrics get <id>` | Fetch a single metric record by ID. |
     | `pmm metrics record` | Record a new metric value against a resource. |
 
     ```bash
@@ -120,7 +119,6 @@ pmm auth whoami
     | Command | Description |
     |---|---|
     | `pmm events list` | List events. Supports `--resource-id` and `--type` filters. |
-    | `pmm events get <id>` | Fetch a single event by ID. |
     | `pmm events create` | Log a new event against a resource. |
 
     ```bash

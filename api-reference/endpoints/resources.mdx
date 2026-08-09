@@ -1,12 +1,12 @@
 ---
-title: "Resources API — CRUD Endpoints for Open PMM"
+title: "Resources API — Create, List, and Manage Resources"
 sidebarTitle: "Resources"
-description: "Full reference for the Open PMM Resources endpoints. Create, list, get, update, and delete resources with request and response examples."
+description: "Reference for Open PMM Resources endpoints. Create, list, retrieve, update, and delete the products, features, and initiatives you track metrics against."
 ---
 
 Resources are the core organizational unit in Open PMM. They represent products, features, initiatives, or milestones — anything you want to track metrics and events against. Every metric record and product event links back to a resource, so defining your resource hierarchy is typically the first step when integrating with the API.
 
-## GET /v1/resources
+## GET /resources
 
 Retrieve a paginated list of resources in your workspace. Use the query parameters to filter by status or type, sort the results, and page through large sets with a cursor.
 
@@ -75,7 +75,7 @@ Retrieve a paginated list of resources in your workspace. Use the query paramete
 <CodeGroup>
 ```bash cURL
 curl -G https://api.open-pmm.com/v1/resources \
-  -H "Authorization: Bearer <key>" \
+  -H "Authorization: Bearer <api-key>" \
   -d limit=2 \
   -d "filter[status]=active" \
   -d "filter[type]=feature" \
@@ -115,7 +115,7 @@ curl -G https://api.open-pmm.com/v1/resources \
 
 ---
 
-## POST /v1/resources
+## POST /resources
 
 Create a new resource. Supply a `name` and `type` at minimum; all other fields are optional.
 
@@ -172,7 +172,7 @@ Create a new resource. Supply a `name` and `type` at minimum; all other fields a
 <CodeGroup>
 ```bash cURL
 curl -X POST https://api.open-pmm.com/v1/resources \
-  -H "Authorization: Bearer <key>" \
+  -H "Authorization: Bearer <api-key>" \
   -H "Content-Type: application/json" \
   -d '{
     "name": "Mobile Push Notifications",
@@ -205,7 +205,7 @@ curl -X POST https://api.open-pmm.com/v1/resources \
 
 ---
 
-## GET /v1/resources/{id}
+## GET /resources/{id}
 
 Retrieve a single resource by its ID.
 
@@ -250,7 +250,7 @@ Retrieve a single resource by its ID.
 <CodeGroup>
 ```bash cURL
 curl https://api.open-pmm.com/v1/resources/res_03kz4m1o5r6s7t8u9v0w1x2y \
-  -H "Authorization: Bearer <key>"
+  -H "Authorization: Bearer <api-key>"
 ```
 
 ```json Response
@@ -273,7 +273,7 @@ curl https://api.open-pmm.com/v1/resources/res_03kz4m1o5r6s7t8u9v0w1x2y \
 
 ---
 
-## PUT /v1/resources/{id}
+## PUT /resources/{id}
 
 Update an existing resource. Send only the fields you want to change — any field you omit keeps its current value.
 
@@ -304,7 +304,7 @@ Update an existing resource. Send only the fields you want to change — any fie
 ### Response Fields
 
 <ResponseField name="data" type="object">
-  The updated resource object, identical in shape to the [GET /v1/resources/{id}](#get-v1-resources-id) response.
+  The updated resource object, identical in shape to the [GET /resources/{id}](#get-resourcesid) response.
 </ResponseField>
 
 ### Example
@@ -312,7 +312,7 @@ Update an existing resource. Send only the fields you want to change — any fie
 <CodeGroup>
 ```bash cURL
 curl -X PUT https://api.open-pmm.com/v1/resources/res_03kz4m1o5r6s7t8u9v0w1x2y \
-  -H "Authorization: Bearer <key>" \
+  -H "Authorization: Bearer <api-key>" \
   -H "Content-Type: application/json" \
   -d '{
     "status": "active",
@@ -345,7 +345,7 @@ curl -X PUT https://api.open-pmm.com/v1/resources/res_03kz4m1o5r6s7t8u9v0w1x2y \
 
 ---
 
-## DELETE /v1/resources/{id}
+## DELETE /resources/{id}
 
 Permanently delete a resource.
 
@@ -365,13 +365,7 @@ Returns HTTP `204 No Content` on success with an empty response body.
 
 ### Example
 
-<CodeGroup>
 ```bash cURL
 curl -X DELETE https://api.open-pmm.com/v1/resources/res_03kz4m1o5r6s7t8u9v0w1x2y \
-  -H "Authorization: Bearer <key>"
+  -H "Authorization: Bearer <api-key>"
 ```
-
-```json Response
-// 204 No Content — empty body
-```
-</CodeGroup>
