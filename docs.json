@@ -12,12 +12,8 @@
     "default": "light",
     "strict": true
   },
-  "favicon": "/favicon.svg",
-  "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg",
-    "href": "https://www.openpmm.com"
-  },
+  "favicon": "/favicon.ico",
+  "logo": "/logo/openpmm.png",
   "navigation": {
     "tabs": [
       {
@@ -129,15 +125,9 @@
     }
   },
   "navbar": {
-    "links": [
-      {
-        "label": "GitHub",
-        "href": "https://github.com/OpenPMM/docs"
-      }
-    ],
     "primary": {
       "type": "button",
-      "label": "Open dashboard",
+      "label": "Login",
       "href": "https://app.openpmm.com"
     }
   },
@@ -158,10 +148,5 @@
     { "source": "/workflow", "destination": "/concepts/posts-and-sends" },
     { "source": "/api-cli", "destination": "/reference/overview" },
     { "source": "/agent-contract", "destination": "/reference/idempotency" }
-  ],
-  "footer": {
-    "socials": {
-      "github": "https://github.com/OpenPMM/docs"
-    }
-  }
+  ]
 }
