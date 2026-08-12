@@ -35,7 +35,7 @@ The 500 MiB limit is an OpenPMM limit. Some providers accept a larger file, but 
 A readable video is always a valid asset. A destination limit that the video does not obey blocks the post, but it does not delete the asset. The asset stays in the workspace library, and you can use it for a different destination.
 
 <Note>
-  OpenPMM publishes the file that you uploaded. It does not change your video or your image.
+  OpenPMM publishes the file that you uploaded for most destinations. For Bluesky, OpenPMM removes image metadata before upload. It does not change video files.
 </Note>
 
 ## Blockers and advice
@@ -117,6 +117,9 @@ Use `property` and `required` to see what to correct. Use `actual` for the value
   </Card>
   <Card title="LinkedIn" icon="linkedin" href="/media/linkedin">
     One video, or up to 20 images. MP4 video only.
+  </Card>
+  <Card title="Bluesky" icon="bluesky" href="/media/bluesky">
+    Publish text with up to four sanitized images.
   </Card>
   <Card title="Facebook" icon="facebook" href="/media/facebook">
     One video for a Reel. Images for a feed post.
