@@ -1,0 +1,74 @@
+---
+title: "Authenticate the CLI"
+sidebarTitle: "Authentication"
+description: "Configure an OpenPMM API key and explicit workspace context."
+---
+
+The CLI uses an OpenPMM API key. It does not use browser cookies or your
+password.
+
+## Use an environment variable
+
+Use the environment for automation and one-time `npx` commands:
+
+```bash
+export OPENPMM_API_KEY=opm_live_...
+openpmm auth status --json
+```
+
+The environment has priority over a stored credential.
+
+## Store a local credential
+
+Send the key through stdin. The CLI does not accept an API key as a flag,
+positional argument, or URL.
+
+```bash
+printf '%s' "$OPENPMM_API_KEY" | openpmm auth login --with-token
+unset OPENPMM_API_KEY
+openpmm auth status
+```
+
+The CLI stores the key in a file that only your operating-system user can
+read. `openpmm auth logout` removes the local copy for the active API origin.
+It does not revoke the key.
+
+Create, rotate, and revoke API keys in the OpenPMM portal. These operations
+require a recent browser session.
+
+<Warning>
+  Treat an API key like a password. Do not put it in source control, command arguments, URLs, screenshots, or logs.
+</Warning>
+
+## Select a workspace
+
+Every tenant command requires a public workspace ID:
+
+```bash
+openpmm workspaces list --json
+openpmm posts list --workspace ws_01JABCDEF
+```
+
+Set a workspace for several commands:
+
+```bash
+export OPENPMM_WORKSPACE=ws_01JABCDEF
+openpmm destinations list --json
+```
+
+`--workspace` has priority over `OPENPMM_WORKSPACE`. The CLI does not choose
+the first workspace and does not store a hidden last-used workspace.
+
+## Select an API origin
+
+The production API is the default. Use `--api-base-url` or
+`OPENPMM_API_BASE_URL` for an approved staging or self-hosted deployment.
+
+```bash
+openpmm workspaces list \
+  --api-base-url https://api.openpmm.com/v1 \
+  --json
+```
+
+The CLI validates the origin and `/v1` path. It refuses private `/api/...`
+routes and URLs that contain credentials.

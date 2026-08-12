@@ -1,0 +1,58 @@
+---
+title: "Manage assets and connections"
+sidebarTitle: "Assets and connections"
+description: "Upload assets and manage provider and Slack connections with the CLI."
+---
+
+## Upload an asset
+
+The CLI creates an upload session, sends the file directly to its short-lived
+storage URL, and completes the upload through `/v1`. It does not send the API
+key to the storage URL.
+
+```bash
+openpmm assets upload ./launch.webp \
+  --workspace ws_01JABCDEF \
+  --json
+```
+
+## Download an asset
+
+Download URLs are short-lived. The CLI refuses to overwrite an existing local
+file.
+
+```bash
+openpmm assets download ast_01JABCDEF \
+  --workspace ws_01JABCDEF \
+  --output ./launch.webp
+```
+
+## Manage provider connections
+
+```bash
+openpmm connections list --workspace ws_01JABCDEF --json
+openpmm connections connect --workspace ws_01JABCDEF --provider youtube
+openpmm connections sessions show dcs_... --workspace ws_01JABCDEF
+openpmm connections refresh --workspace ws_01JABCDEF
+openpmm connections disconnect con_42 --workspace ws_01JABCDEF --yes
+```
+
+Provider consent completes in a browser. `connections connect` starts the
+session and returns its authorization URL. Use `connections sessions show` to
+observe completion, expiry, or failure.
+
+## Manage Slack notifications
+
+```bash
+openpmm notifications slack connect --workspace ws_01JABCDEF
+openpmm notifications slack sessions show dcs_... --workspace ws_01JABCDEF
+openpmm notifications slack channels --workspace ws_01JABCDEF --json
+openpmm notifications update \
+  --workspace ws_01JABCDEF \
+  --slack-channel C0123456789
+openpmm notifications slack test --workspace ws_01JABCDEF --yes
+openpmm notifications slack disconnect --workspace ws_01JABCDEF --yes
+```
+
+Slack consent completes in a browser. Sending a test and disconnecting Slack
+require `--yes`.

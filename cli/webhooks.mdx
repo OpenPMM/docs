@@ -1,0 +1,55 @@
+---
+title: "Manage webhooks"
+sidebarTitle: "Webhooks"
+description: "Manage webhook endpoints and verify signed payloads with the CLI."
+---
+
+<Warning>
+  Webhook commands are available in the public CLI source. They will ship in `@openpmm/cli` 0.1.0 after the webhook API reaches production.
+</Warning>
+
+## Manage endpoints
+
+```bash
+openpmm webhooks list --workspace ws_01JABCDEF --json
+
+openpmm webhooks create \
+  --workspace ws_01JABCDEF \
+  --name production \
+  --url https://example.com/openpmm/events \
+  --events post.published,post.failed \
+  --json
+
+openpmm webhooks show wh_... --workspace ws_01JABCDEF --json
+openpmm webhooks update wh_... --workspace ws_01JABCDEF --enabled false
+openpmm webhooks test wh_... --workspace ws_01JABCDEF --json
+openpmm webhooks delete wh_... --workspace ws_01JABCDEF --yes
+```
+
+`webhooks create` returns its signing secret one time. It rejects `--quiet`
+and `--jsonl` because those modes could discard the secret.
+
+Rotate a signing secret when it may be exposed:
+
+```bash
+openpmm webhooks rotate-secret wh_... \
+  --workspace ws_01JABCDEF \
+  --json
+```
+
+Store the returned secret immediately. The command returns it one time.
+
+## Verify a payload locally
+
+Save the exact request body bytes. Do not parse and serialize the payload
+before verification.
+
+```bash
+OPENPMM_WEBHOOK_SECRET=whsec_... openpmm webhooks verify \
+  --signature 't=...,v1=...' \
+  --file ./payload.json
+```
+
+`webhooks verify` runs locally and does not require an API key. It rejects a
+signature outside a five-minute tolerance by default. Use `--secret-file`
+when you keep the signing secret in a protected file.
