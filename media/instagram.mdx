@@ -33,9 +33,28 @@ A post and a Story accept an image. A Reel accepts a video.
 
 Instagram recommends a 9:16 vertical video. OpenPMM gives advice for a different aspect ratio, but it does not block the post.
 
-## Images
+## Image limits
 
-OpenPMM accepts a PNG, JPEG, WebP, or GIF image up to 500 MiB. Instagram has no additional image limit in OpenPMM.
+| Property | Limit |
+| --- | --- |
+| Format | JPEG. Instagram accepts no other image format. |
+| File size | 8 MB maximum |
+| Aspect ratio | 4:5 to 1.91:1 for a post and for a carousel |
+| Width | Instagram scales an image to between 320 px and 1,440 px |
+| Colour space | Instagram converts an image to sRGB |
+
+OpenPMM converts a PNG or a WebP image to JPEG for you, and makes the file
+smaller when it is above 8 MB. See [Convert media](/guides/convert-media).
+
+An aspect ratio outside the 4:5 to 1.91:1 range needs a crop or a pad. OpenPMM
+does not do this for you, because it changes what the image shows. Use another
+file, or remove the destination.
+
+A Story has no aspect ratio limit. Instagram recommends 9:16 to prevent a crop
+or a blank space.
+
+Instagram crops every image in a carousel to match the first image. The default
+is 1:1.
 
 ## Provider documentation
 

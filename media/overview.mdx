@@ -18,24 +18,24 @@ Use this page for the general rules. Use the destination pages for the exact lim
 
 The 500 MiB limit is an OpenPMM limit. Some providers accept a larger file, but OpenPMM does not. Send the exact `content_type` and `byte_size` of the file when you create the upload. For the three upload steps, see [Upload assets](/guides/upload-assets).
 
-## How OpenPMM checks a video
+## How OpenPMM checks a file
 
 <Steps>
-  <Step title="After the upload">
-    OpenPMM reads the technical properties of the video one time. Examples are the duration, the dimensions, the frame rate, the codecs, and the audio layout.
+  <Step title="When you attach the file">
+    OpenPMM reads the technical properties one time. For a video these are the duration, the dimensions, the frame rate, the codecs, and the audio layout. For an image these are the format, the dimensions, the aspect ratio, the transparency, the stored rotation, and the frame count. OpenPMM gives you the result immediately. You do not have to save or publish the post first.
   </Step>
   <Step title="When you validate an asset">
-    Send `POST /workspaces/{workspace_id}/assets/{asset_id}/video-validations`. Include destination IDs or channel names. OpenPMM returns the media problems.
+    Send `POST /workspaces/{workspace_id}/assets/{asset_id}/validations`. Include destination IDs or channel names. OpenPMM returns the media problems for an image or for a video.
   </Step>
   <Step title="Before publication">
-    OpenPMM checks the video again when you publish or schedule the post. A blocked post gets a `422` response, and OpenPMM sends no request to the provider.
+    OpenPMM checks the file again when you publish or schedule the post. A blocked post gets a `422` response, and OpenPMM sends no request to the provider.
   </Step>
 </Steps>
 
-A readable video is always a valid asset. A destination limit that the video does not obey blocks the post, but it does not delete the asset. The asset stays in the workspace library, and you can use it for a different destination.
+A readable file is always a valid asset. A destination limit that the file does not obey blocks the post, but it does not delete the asset. The asset stays in the workspace library, and you can use it for a different destination.
 
 <Note>
-  OpenPMM publishes the file that you uploaded for most destinations. For Bluesky, OpenPMM removes image metadata before upload. It does not change video files.
+  OpenPMM publishes the file that you uploaded, unless you ask OpenPMM to convert it. A conversion always keeps the original. For Bluesky, OpenPMM removes image metadata before upload. OpenPMM does not change video files. See [Convert media](/guides/convert-media).
 </Note>
 
 ## Blockers and advice
@@ -59,6 +59,16 @@ Each media rule has an owner. The owner tells you where to make the correction.
 
 Two destinations report their own limits. TikTok gives the maximum video duration for your creator account. A Mastodon instance gives its own file types and size limits. OpenPMM reads these values from the destination before publication. If a value is not available, OpenPMM tells you in the response and keeps the other checks.
 
+## What OpenPMM can repair
+
+Each media problem has a `repair_kind`:
+
+| Value | Meaning |
+| --- | --- |
+| `technical` | The format, the file size, the pixel count, or the stored rotation. OpenPMM can change these without changing what the file shows. When `can_convert` is `true`, use [Convert media](/guides/convert-media). |
+| `editorial` | The aspect ratio, the transparency, or the animation. A change here changes what the file shows, so OpenPMM never makes it for you. |
+| `none` | No change repairs the problem. Use another file, or remove the destination. |
+
 If a destination value is not current, OpenPMM reports the problem as advice and does not block the post. The destination can then still refuse the file.
 
 ## Read a media problem
@@ -67,17 +77,18 @@ A blocked request returns a problem response. Each entry in `errors` names one d
 
 ```json
 {
-  "type": "https://docs.openpmm.com/errors/video_incompatible",
+  "type": "https://docs.openpmm.com/errors/media_incompatible",
   "title": "Request failed",
   "status": 422,
   "detail": "The video frame rate is outside tiktok’s limits.",
   "instance": "urn:openpmm:request:req_01JABCDEF",
-  "code": "video_incompatible",
+  "code": "media_incompatible",
   "request_id": "req_01JABCDEF",
   "retryable": false,
   "errors": [
     {
       "code": "video_frame_rate_invalid",
+      "media_kind": "video",
       "detail": "The video frame rate is outside tiktok’s limits.",
       "asset_id": "ast_01JABCDEF",
       "channel": "tiktok",
@@ -91,7 +102,9 @@ A blocked request returns a problem response. Each entry in `errors` names one d
         "unit": "fps",
         "owner": "provider"
       },
-      "severity": "blocker"
+      "severity": "blocker",
+      "repair_kind": "technical",
+      "can_convert": true
     }
   ]
 }

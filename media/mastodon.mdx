@@ -21,13 +21,21 @@ OpenPMM applies these values from the instance:
 
 Mastodon documents no fixed video contract, so OpenPMM has no static video limit for this channel. The OpenPMM 500 MiB upload limit still applies.
 
+## Image limits
+
+A Mastodon server reports its own image limits. OpenPMM reads these values from
+the destination:
+
+| Property | Source |
+| --- | --- |
+| Format | `supported_mime_types` |
+| File size | `image_size_limit` |
+| Pixels | `image_matrix_limit` |
+
+OpenPMM converts an image and makes the file smaller to obey the values that the
+server reports. See [Convert media](/guides/convert-media).
+
 ## Missing values
-
-An instance does not always report every value. If a value is not available, OpenPMM keeps the other checks and reports the missing value in the response. Your instance can then still refuse the file.
-
-<Tip>
-  Refresh the provider connection after your instance changes its limits. OpenPMM then uses the new values for the next check.
-</Tip>
 
 ## Provider documentation
 

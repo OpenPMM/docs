@@ -30,9 +30,21 @@ A Facebook feed post accepts images only.
   OpenPMM applies these limits when `placement` is `reel`. Select the placement before you validate the post. A different placement has a different contract, and OpenPMM cannot apply the Reel limits to it.
 </Note>
 
-## Images
+## Image limits
 
-OpenPMM accepts a PNG, JPEG, WebP, or GIF image up to 500 MiB. Facebook has no additional image limit in OpenPMM.
+| Property | Limit |
+| --- | --- |
+| Format | JPEG, PNG, or GIF |
+| File size | 4 MB maximum |
+
+Facebook can make a PNG above 1 MB look pixelated. OpenPMM gives advice for
+this, but it does not block the post.
+
+Facebook documents no dimension limit and no aspect ratio limit for an image.
+Facebook makes an image smaller itself and removes the location metadata.
+
+OpenPMM converts a WebP image and makes the file smaller when it is above 4 MB.
+See [Convert media](/guides/convert-media).
 
 ## Provider documentation
 

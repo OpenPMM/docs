@@ -28,9 +28,22 @@ An X post accepts up to four assets.
 
 X recommends the H.264 video codec. OpenPMM gives advice for a different codec, but it does not block the post.
 
-## Images
+## Image limits
 
-OpenPMM accepts a PNG, JPEG, WebP, or GIF image up to 500 MiB. X has no additional image limit in OpenPMM.
+| Property | Limit |
+| --- | --- |
+| Format | JPEG, PNG, GIF, or WebP |
+| File size | 5 MB maximum for a photo |
+| Animated GIF file size | 15 MB maximum |
+| Animated GIF dimensions | 1,280 x 1,080 px maximum |
+| Animated GIF frames | 350 maximum |
+| Animated GIF pixels | Width x height x frames must be 300,000,000 or less |
+
+X documents no dimension limit for a photo. OpenPMM cannot check a limit that
+the provider does not document.
+
+OpenPMM makes a photo smaller when it is above 5 MB. OpenPMM does not change an
+animated GIF, because that would remove the animation.
 
 ## Limits that OpenPMM cannot check
 

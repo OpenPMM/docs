@@ -21,7 +21,10 @@
         "groups": [
           {
             "group": "Get started",
-            "pages": ["index", "quickstart"]
+            "pages": [
+              "index",
+              "quickstart"
+            ]
           },
           {
             "group": "Core concepts",
@@ -36,6 +39,7 @@
             "pages": [
               "guides/connect-a-destination",
               "guides/upload-assets",
+              "guides/convert-media",
               "guides/publish-posts",
               "guides/schedule-and-retry"
             ]
@@ -62,7 +66,10 @@
         "groups": [
           {
             "group": "Get started",
-            "pages": ["cli/overview", "cli/authentication"]
+            "pages": [
+              "cli/overview",
+              "cli/authentication"
+            ]
           },
           {
             "group": "Workflows",
@@ -74,7 +81,9 @@
           },
           {
             "group": "Automation",
-            "pages": ["cli/automation-and-safety"]
+            "pages": [
+              "cli/automation-and-safety"
+            ]
           }
         ]
       },
@@ -94,7 +103,9 @@
           },
           {
             "group": "Account",
-            "pages": ["GET /account"]
+            "pages": [
+              "GET /account"
+            ]
           },
           {
             "group": "Team",
@@ -136,7 +147,9 @@
             "pages": [
               "GET /workspaces/{workspace_id}/assets",
               "GET /workspaces/{workspace_id}/assets/{asset_id}",
-              "POST /workspaces/{workspace_id}/assets/{asset_id}/video-validations",
+              "POST /workspaces/{workspace_id}/assets/{asset_id}/validations",
+              "POST /workspaces/{workspace_id}/assets/{asset_id}/conversions",
+              "GET /workspaces/{workspace_id}/assets/{asset_id}/conversions/{conversion_id}",
               "DELETE /workspaces/{workspace_id}/assets/{asset_id}",
               "POST /workspaces/{workspace_id}/asset-uploads",
               "GET /workspaces/{workspace_id}/asset-uploads/{upload_id}",
@@ -215,11 +228,26 @@
     }
   },
   "contextual": {
-    "options": ["copy", "view", "chatgpt", "claude", "cursor"]
+    "options": [
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "cursor"
+    ]
   },
   "redirects": [
-    { "source": "/workflow", "destination": "/concepts/posts-and-sends" },
-    { "source": "/api-cli", "destination": "/cli/overview" },
-    { "source": "/agent-contract", "destination": "/reference/idempotency" }
+    {
+      "source": "/workflow",
+      "destination": "/concepts/posts-and-sends"
+    },
+    {
+      "source": "/api-cli",
+      "destination": "/cli/overview"
+    },
+    {
+      "source": "/agent-contract",
+      "destination": "/reference/idempotency"
+    }
   ]
 }
