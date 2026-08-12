@@ -180,6 +180,18 @@
               "GET /workspaces/{workspace_id}/slack-channels",
               "POST /workspaces/{workspace_id}/slack-notification-tests"
             ]
+          },
+          {
+            "group": "Webhooks",
+            "pages": [
+              "GET /workspaces/{workspace_id}/webhook-endpoints",
+              "POST /workspaces/{workspace_id}/webhook-endpoints",
+              "GET /workspaces/{workspace_id}/webhook-endpoints/{endpoint_id}",
+              "PATCH /workspaces/{workspace_id}/webhook-endpoints/{endpoint_id}",
+              "DELETE /workspaces/{workspace_id}/webhook-endpoints/{endpoint_id}",
+              "POST /workspaces/{workspace_id}/webhook-endpoints/{endpoint_id}/rotate-secret",
+              "POST /workspaces/{workspace_id}/webhook-endpoints/{endpoint_id}/test"
+            ]
           }
         ]
       }
