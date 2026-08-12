@@ -1,0 +1,71 @@
+---
+title: "Draft and publish"
+sidebarTitle: "Draft and publish"
+description: "Create, edit, validate, and publish a stored post group with the CLI."
+---
+
+Use a post group to store related channel drafts. Validate it before you
+publish.
+
+## Create a draft
+
+```bash
+openpmm post-groups create launch-2026-08 \
+  --workspace ws_01JABCDEF \
+  --channel x \
+  --body 'First post in the thread' \
+  --body 'Second post in the thread' \
+  --json
+```
+
+## Edit a channel
+
+The CLI gets the current ETag before it changes a draft. Use `--etag` when you
+must pin a version that you reviewed earlier.
+
+```bash
+openpmm post-groups drafts update launch-2026-08 x \
+  --workspace ws_01JABCDEF \
+  --body 'Updated first post' \
+  --body 'Updated second post'
+```
+
+## Validate the post group
+
+Validation does not publish content:
+
+```bash
+openpmm post-groups validate launch-2026-08 \
+  --workspace ws_01JABCDEF \
+  --file validation.json \
+  --json
+```
+
+`--dry-run` is an alias for public validation on `posts create` and
+`post-groups publish`. It does not send a publishing request.
+
+## Publish the post group
+
+The publish command validates the current post group, binds the returned
+destinations and confirmation hash, and publishes with one idempotency key.
+
+```bash
+openpmm post-groups publish launch-2026-08 \
+  --workspace ws_01JABCDEF \
+  --yes \
+  --json
+```
+
+<Warning>
+  Publishing can create external posts. The CLI exits with code `10` before it sends the request unless you pass `--yes`.
+</Warning>
+
+Use `--file request.json` or `--file -` for a complete request. Provider
+options, including YouTube options, stay inside the generic per-channel
+options object. There is no separate provider publishing command.
+
+## Recover an uncertain request
+
+The CLI safely retries reads and mutations that have an idempotency key. It
+does not silently retry an unsafe request with an uncertain result. Reuse
+`--idempotency-key` to recover the stored result after a timeout.

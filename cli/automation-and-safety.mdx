@@ -1,0 +1,67 @@
+---
+title: "Automate with the CLI"
+sidebarTitle: "Automation and safety"
+description: "Use stable output, exit codes, confirmations, and retries in automation."
+---
+
+The CLI does not require interactive prompts. Every command works in a shell
+script or CI job.
+
+## Select an output mode
+
+- `--json` and `-json` write one stable JSON document.
+- `--jsonl` writes one object per line for list commands.
+- `--quiet` writes identifiers only.
+- stdout contains results only.
+- stderr contains diagnostics, warnings, and request IDs.
+- `NO_COLOR` disables color. The first release does not emit color.
+
+List commands follow cursors automatically unless you pass `--after`.
+`--limit` bounds the total item count. `--page-size` controls the API page
+size.
+
+Every JSON success contains `data` and `meta`. Metadata includes `request_id`,
+`operation_id`, and a generated or supplied `idempotency_key`. JSON errors
+contain `code`, `message`, `status`, `request_id`, `retryable`, and `details`.
+
+```bash
+openpmm posts list --workspace ws_01JABCDEF --json \
+  | jq '.data.items[] | .id'
+
+openpmm posts list --workspace ws_01JABCDEF --jsonl \
+  | while read -r post; do
+      printf '%s\n' "$post" | jq -r '.id'
+    done
+```
+
+## Confirm risky actions
+
+Publishing, retrying, disconnecting, and deleting require `--yes`. Without it,
+the CLI exits with code `10` before it sends the mutation.
+
+Conditional changes get the current ETag automatically. Use `--etag` to pin a
+version that you reviewed earlier.
+
+## Handle exit codes
+
+| Code | Meaning |
+| ---: | --- |
+| `0` | Success |
+| `1` | Unclassified CLI or remote failure |
+| `2` | Invalid command, flag, or local input |
+| `3` | Authentication failure |
+| `4` | Authorization or scope failure |
+| `5` | Resource not found or inaccessible |
+| `6` | Conflict, stale ETag, or invalid resource state |
+| `7` | Validation or provider preflight failure |
+| `8` | Rate limited or temporarily unavailable after safe retries |
+| `9` | Ambiguous or partial external outcome that needs review |
+| `10` | Confirmation required |
+
+## Protect credentials and content
+
+The CLI does not write API keys, provider tokens, signed media URLs, post copy,
+cookies, or user email addresses to diagnostics or telemetry.
+
+If an API key may be exposed, revoke it in the OpenPMM portal and replace it in
+every automation. `openpmm auth logout` does not revoke the key.

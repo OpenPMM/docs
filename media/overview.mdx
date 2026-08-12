@@ -1,0 +1,139 @@
+---
+title: "Media guidelines"
+sidebarTitle: "Overview"
+description: "Learn the video and image limits that OpenPMM applies for each destination."
+---
+
+Each provider has its own media rules. One destination accepts a video, and another destination refuses the same video. OpenPMM compares your media with the rules of every selected destination before it publishes the post.
+
+Use this page for the general rules. Use the destination pages for the exact limits.
+
+## What you can upload
+
+| Asset kind | Content | File types | Maximum size |
+| --- | --- | --- | --- |
+| `reel` | Video | MP4, MOV, WebM | 500 MiB |
+| `card` | Image | PNG, JPEG, WebP, GIF | 500 MiB |
+| `poster` | Image for a video | PNG, JPEG, WebP, GIF | 500 MiB |
+
+The 500 MiB limit is an OpenPMM limit. Some providers accept a larger file, but OpenPMM does not. Send the exact `content_type` and `byte_size` of the file when you create the upload. For the three upload steps, see [Upload assets](/guides/upload-assets).
+
+## How OpenPMM checks a video
+
+<Steps>
+  <Step title="After the upload">
+    OpenPMM reads the technical properties of the video one time. Examples are the duration, the dimensions, the frame rate, the codecs, and the audio layout.
+  </Step>
+  <Step title="When you validate">
+    Send `POST /workspaces/{workspace_id}/post-validations` for a new request, or `POST /workspaces/{workspace_id}/post-groups/{group}/post-validations` for a stored draft. OpenPMM returns the media problems and does not publish the post.
+  </Step>
+  <Step title="Before publication">
+    OpenPMM checks the video again when you publish or schedule the post. A blocked post gets a `422` response, and OpenPMM sends no request to the provider.
+  </Step>
+</Steps>
+
+A readable video is always a valid asset. A destination limit that the video does not obey blocks the post, but it does not delete the asset. The asset stays in the workspace library, and you can use it for a different destination.
+
+<Note>
+  OpenPMM publishes the file that you uploaded. It does not change your video or your image.
+</Note>
+
+## Blockers and advice
+
+OpenPMM gives a `severity` to each media problem:
+
+- A **blocker** stops the post for that destination. Correct the file, or remove the destination.
+- A **recommendation** is advice. The post can publish, but the provider recommends a different value.
+
+OpenPMM cannot read some rules from a file. Two examples are a closed group of pictures (GOP) and the verification status of a YouTube account. OpenPMM gives advice for these rules and does not block the post.
+
+## Who owns a limit
+
+Each media rule has an owner. The owner tells you where to make the correction.
+
+| Owner | Meaning |
+| --- | --- |
+| `openpmm` | An OpenPMM product limit. The 500 MiB upload limit is an example. |
+| `provider` | A limit in the public documentation of the provider. |
+| `destination` | A limit that your connected account or your instance reports. |
+
+Two destinations report their own limits. TikTok gives the maximum video duration for your creator account. A Mastodon instance gives its own file types and size limits. OpenPMM reads these values from the destination before publication. If a value is not available, OpenPMM tells you in the response and keeps the other checks.
+
+If a destination value is not current, OpenPMM reports the problem as advice and does not block the post. The destination can then still refuse the file.
+
+## Read a media problem
+
+A blocked request returns a problem response. Each entry in `errors` names one destination and one property.
+
+```json
+{
+  "type": "https://docs.openpmm.com/errors/video_incompatible",
+  "title": "Request failed",
+  "status": 422,
+  "detail": "The video frame rate is outside tiktok’s limits.",
+  "instance": "urn:openpmm:request:req_01JABCDEF",
+  "code": "video_incompatible",
+  "request_id": "req_01JABCDEF",
+  "retryable": false,
+  "errors": [
+    {
+      "code": "video_frame_rate_invalid",
+      "detail": "The video frame rate is outside tiktok’s limits.",
+      "asset_id": "ast_01JABCDEF",
+      "channel": "tiktok",
+      "destination_label": "Brand account",
+      "property": "frame_rate",
+      "actual": { "kind": "number", "value": 120, "unit": "fps" },
+      "required": {
+        "kind": "range",
+        "min": 23,
+        "max": 60,
+        "unit": "fps",
+        "owner": "provider"
+      },
+      "severity": "blocker"
+    }
+  ]
+}
+```
+
+Use `property` and `required` to see what to correct. Use `actual` for the value in your file. Use `asset_id`, `channel`, and `destination_label` to find the media and the destination. For the general error rules, see [Errors](/reference/errors).
+
+## What to do when a check fails
+
+1. Read the `property`, the `actual` value, and the `required` value.
+2. Replace the file with a file that obeys the limit, or remove the destination from the post.
+3. Validate the post again.
+
+<Warning>
+  A provider can still refuse media after the checks pass. Rights, moderation, and account rules are examples. Get the post status after publication.
+</Warning>
+
+## Destination guidelines
+
+<CardGroup cols={2}>
+  <Card title="X" icon="x-twitter" href="/media/x">
+    Up to four assets. Short video with strict dimensions.
+  </Card>
+  <Card title="LinkedIn" icon="linkedin" href="/media/linkedin">
+    One video, or up to 20 images. MP4 video only.
+  </Card>
+  <Card title="Facebook" icon="facebook" href="/media/facebook">
+    One video for a Reel. Images for a feed post.
+  </Card>
+  <Card title="Instagram" icon="instagram" href="/media/instagram">
+    One video for a Reel or a Story. Up to 10 images for a post.
+  </Card>
+  <Card title="Threads" icon="threads" href="/media/threads">
+    Up to 20 assets. MP4 fast start for video.
+  </Card>
+  <Card title="TikTok" icon="tiktok" href="/media/tiktok">
+    Exactly one video. Your creator account adds a duration limit.
+  </Card>
+  <Card title="YouTube" icon="youtube" href="/media/youtube">
+    Exactly one video. Shorts have their own limits.
+  </Card>
+  <Card title="Mastodon" icon="mastodon" href="/media/mastodon">
+    Your instance reports the media limits.
+  </Card>
+</CardGroup>

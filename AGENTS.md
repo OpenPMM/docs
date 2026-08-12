@@ -27,9 +27,27 @@
 
 Do not substitute internal model names for these terms in explanatory content.
 
+## Simplified Technical English
+
+Write every public page in ASD-STE100 Simplified Technical English. This is a
+requirement, not a preference.
+
+- Use one idea for each sentence. Keep a descriptive sentence to 20 words or
+  fewer, and an instruction to 20 words or fewer.
+- Use the active voice. Use the passive voice only when the actor is unknown.
+- Use the simple present tense. Do not use a gerund or a participle as a verb.
+  Write "OpenPMM checks the file", not "OpenPMM is checking the file".
+- Use one word for one meaning. Do not use a synonym for variety.
+- Use articles ("the", "a") and complete sentences. Do not use telegraphic text.
+- Prefer short, common words. Write "make sure" instead of "ensure", and "use"
+  instead of "utilize".
+- Do not use Latin abbreviations. Write "for example" instead of "e.g.".
+- Give a number and a unit for each limit. For example, write "60 fps maximum".
+- Do not use idioms, humor, or marketing adjectives.
+- Give a warning or a caution before the step that it applies to.
+
 ## Style preferences
 
-- Use ASD-STE100 Simplified Technical English for all public copy.
 - Use active voice and second person ("you").
 - Use short sentences. Give each sentence one idea.
 - Use one approved term for each object. Do not use a synonym to add variety.
@@ -49,11 +67,30 @@ Do not substitute internal model names for these terms in explanatory content.
 - Do not document private `/api` routes.
 - Do not present the internal CLI as a public product until it ships.
 - Never include real API keys, tokens, provider credentials, workspace IDs, or customer data.
+- Do not leak internal technical details. Examples are module names, database
+  tables and columns, queue and worker names, command-line tools, file paths,
+  and internal error classes. Describe what the customer sees and does.
+- Do not write about a plan, a phase, or a future feature. Do not use "yet",
+  "soon", "for now", or "in a future release". Document the current behavior in
+  the simple present tense.
+- Verify each value against the shipped code or the live OpenAPI document
+  before you publish it. Do not copy a limit from a plan document.
+
+## Media guidelines pages
+
+- `media/overview.mdx` holds the general rules. One page for each channel holds
+  the exact limits, and the overview links to them with a `CardGroup`.
+- Give the owner of each limit: OpenPMM, the provider, or the destination.
+- State an OpenPMM product limit that is lower than the provider limit. The
+  500 MiB upload limit is an example.
+- Link to the first-party provider document at the end of each channel page.
+- Update these pages when the channel limits in the product change.
 
 ## API navigation
 
 `docs.json` sets the production OpenAPI URL on the `API reference` tab. It
-lists each endpoint explicitly under Posts, Drafts, Assets, Destinations, or
-Account. Keep each `METHOD /path` entry in exactly one group. Update this list
-when the public API adds, removes, or moves an endpoint. Do not add an
-`Endpoints` wrapper around these groups.
+lists each endpoint explicitly in a task-oriented group. Keep each
+`METHOD /path` entry in exactly one group. Update this list when the public API
+adds, removes, or moves an endpoint. Do not add an `Endpoints` wrapper around
+these groups. Mintlify treats the explicit `pages` arrays as an allow-list, so
+an omitted operation does not appear in the published API reference.

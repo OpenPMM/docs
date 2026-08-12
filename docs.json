@@ -12,12 +12,8 @@
     "default": "light",
     "strict": true
   },
-  "favicon": "/favicon.svg",
-  "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg",
-    "href": "https://www.openpmm.com"
-  },
+  "favicon": "/favicon.ico",
+  "logo": "/logo/openpmm.png",
   "navigation": {
     "tabs": [
       {
@@ -43,6 +39,41 @@
               "guides/publish-posts",
               "guides/schedule-and-retry"
             ]
+          },
+          {
+            "group": "Media guidelines",
+            "pages": [
+              "media/overview",
+              "media/x",
+              "media/linkedin",
+              "media/facebook",
+              "media/instagram",
+              "media/threads",
+              "media/tiktok",
+              "media/youtube",
+              "media/mastodon"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "CLI",
+        "groups": [
+          {
+            "group": "Get started",
+            "pages": ["cli/overview", "cli/authentication"]
+          },
+          {
+            "group": "Workflows",
+            "pages": [
+              "cli/drafts-and-publishing",
+              "cli/assets-and-connections",
+              "cli/webhooks"
+            ]
+          },
+          {
+            "group": "Automation",
+            "pages": ["cli/automation-and-safety"]
           }
         ]
       },
@@ -61,11 +92,37 @@
             ]
           },
           {
+            "group": "Account",
+            "pages": ["GET /me", "GET /account"]
+          },
+          {
+            "group": "Team",
+            "pages": [
+              "GET /account/members",
+              "DELETE /account/members/{user_id}",
+              "GET /account/invitations",
+              "POST /account/invitations",
+              "DELETE /account/invitations/{invitation_id}",
+              "POST /account/invitations/{invitation_id}/resend"
+            ]
+          },
+          {
+            "group": "Workspaces",
+            "pages": [
+              "GET /workspaces",
+              "POST /workspaces",
+              "GET /workspaces/{workspace_id}",
+              "PATCH /workspaces/{workspace_id}",
+              "DELETE /workspaces/{workspace_id}"
+            ]
+          },
+          {
             "group": "Posts",
             "pages": [
               "POST /workspaces/{workspace_id}/posts",
               "POST /workspaces/{workspace_id}/post-validations",
               "GET /workspaces/{workspace_id}/posts",
+              "GET /workspaces/{workspace_id}/post-feed",
               "GET /workspaces/{workspace_id}/posts/{post}",
               "GET /workspaces/{workspace_id}/send-groups/{send_group_id}",
               "GET /workspaces/{workspace_id}/posts/{post}/attempts",
@@ -80,8 +137,17 @@
             "pages": [
               "GET /workspaces/{workspace_id}/post-groups",
               "GET /workspaces/{workspace_id}/post-groups/{group}",
+              "PATCH /workspaces/{workspace_id}/post-groups/{group}",
+              "DELETE /workspaces/{workspace_id}/post-groups/{group}",
               "GET /workspaces/{workspace_id}/post-groups/{group}/drafts",
               "GET /workspaces/{workspace_id}/post-groups/{group}/drafts/{channel}",
+              "PUT /workspaces/{workspace_id}/post-groups/{group}/drafts/{channel}",
+              "PATCH /workspaces/{workspace_id}/post-groups/{group}/drafts/{channel}",
+              "DELETE /workspaces/{workspace_id}/post-groups/{group}/drafts/{channel}",
+              "PUT /workspaces/{workspace_id}/post-groups/{group}/drafts/{channel}/assets/{asset_id}",
+              "DELETE /workspaces/{workspace_id}/post-groups/{group}/drafts/{channel}/assets/{asset_id}",
+              "POST /workspaces/{workspace_id}/post-groups/{group}/post-validations",
+              "POST /workspaces/{workspace_id}/post-groups/{group}/posts",
               "DELETE /workspaces/{workspace_id}/post-groups/{group}/assets/{asset_id}"
             ]
           },
@@ -102,13 +168,44 @@
               "GET /workspaces/{workspace_id}/destinations",
               "GET /workspaces/{workspace_id}/destinations/{destination_id}",
               "PATCH /workspaces/{workspace_id}/destinations/{destination_id}",
+              "PUT /workspaces/{workspace_id}/facebook-page",
               "POST /workspaces/{workspace_id}/destination-connection-sessions",
               "GET /workspaces/{workspace_id}/destination-connection-sessions/{session_id}"
             ]
           },
           {
-            "group": "Account",
-            "pages": ["GET /me", "GET /account", "GET /workspaces"]
+            "group": "Connections",
+            "pages": [
+              "GET /workspaces/{workspace_id}/provider-connections",
+              "GET /workspaces/{workspace_id}/provider-connections/{connection_id}",
+              "POST /workspaces/{workspace_id}/provider-connections/refresh",
+              "POST /workspaces/{workspace_id}/provider-connections/{connection_id}/disconnect"
+            ]
+          },
+          {
+            "group": "Notifications",
+            "pages": [
+              "GET /workspaces/{workspace_id}/notification-settings",
+              "PATCH /workspaces/{workspace_id}/notification-settings",
+              "GET /workspaces/{workspace_id}/post-groups/{group}/notifications",
+              "POST /workspaces/{workspace_id}/slack-connection-sessions",
+              "GET /workspaces/{workspace_id}/slack-connection-sessions/{session_id}",
+              "DELETE /workspaces/{workspace_id}/slack-connection",
+              "GET /workspaces/{workspace_id}/slack-channels",
+              "POST /workspaces/{workspace_id}/slack-notification-tests"
+            ]
+          },
+          {
+            "group": "Webhooks",
+            "pages": [
+              "GET /workspaces/{workspace_id}/webhook-endpoints",
+              "POST /workspaces/{workspace_id}/webhook-endpoints",
+              "GET /workspaces/{workspace_id}/webhook-endpoints/{endpoint_id}",
+              "PATCH /workspaces/{workspace_id}/webhook-endpoints/{endpoint_id}",
+              "DELETE /workspaces/{workspace_id}/webhook-endpoints/{endpoint_id}",
+              "POST /workspaces/{workspace_id}/webhook-endpoints/{endpoint_id}/rotate-secret",
+              "POST /workspaces/{workspace_id}/webhook-endpoints/{endpoint_id}/test"
+            ]
           }
         ]
       }
@@ -129,15 +226,9 @@
     }
   },
   "navbar": {
-    "links": [
-      {
-        "label": "GitHub",
-        "href": "https://github.com/OpenPMM/docs"
-      }
-    ],
     "primary": {
       "type": "button",
-      "label": "Open dashboard",
+      "label": "Login",
       "href": "https://app.openpmm.com"
     }
   },
@@ -156,12 +247,7 @@
   },
   "redirects": [
     { "source": "/workflow", "destination": "/concepts/posts-and-sends" },
-    { "source": "/api-cli", "destination": "/reference/overview" },
+    { "source": "/api-cli", "destination": "/cli/overview" },
     { "source": "/agent-contract", "destination": "/reference/idempotency" }
-  ],
-  "footer": {
-    "socials": {
-      "github": "https://github.com/OpenPMM/docs"
-    }
-  }
+  ]
 }
