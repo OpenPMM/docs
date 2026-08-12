@@ -1,0 +1,37 @@
+---
+title: "TikTok media guidelines"
+sidebarTitle: "TikTok"
+description: "See the video limits that OpenPMM applies for a TikTok destination."
+---
+
+TikTok accepts one video for each post. Your creator account adds its own duration limit. Read [Media guidelines](/media/overview) for the general rules.
+
+## Media per post
+
+A TikTok post needs exactly one video. It does not accept an image.
+
+## Video limits
+
+| Property | Limit |
+| --- | --- |
+| File type | MP4, MOV, or WebM |
+| Video codec | H.264, HEVC, VP8, or VP9 |
+| Duration | 10 minutes maximum |
+| Frame rate | 23 to 60 fps |
+| Width | 360 to 4,096 px |
+| Height | 360 to 4,096 px |
+| File size | 500 MiB. TikTok permits 4 GiB, but the OpenPMM limit is lower. |
+
+## Creator account limit
+
+TikTok gives a maximum video duration for each creator account. This value can be lower than 10 minutes. OpenPMM reads the value from TikTok before publication and applies it.
+
+If TikTok does not give the value, OpenPMM keeps the other checks and reports the missing value in the response. TikTok can then still refuse a video that is too long for the account.
+
+## Video cover
+
+`videoCoverTimestampMs` selects the cover frame. The value must be 0 or more, and it must not be more than the duration of the video.
+
+## Provider documentation
+
+[TikTok Content Posting API media transfer guide](https://developers.tiktok.com/doc/content-posting-api-media-transfer-guide)

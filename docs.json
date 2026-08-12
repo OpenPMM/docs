@@ -39,6 +39,20 @@
               "guides/publish-posts",
               "guides/schedule-and-retry"
             ]
+          },
+          {
+            "group": "Media guidelines",
+            "pages": [
+              "media/overview",
+              "media/x",
+              "media/linkedin",
+              "media/facebook",
+              "media/instagram",
+              "media/threads",
+              "media/tiktok",
+              "media/youtube",
+              "media/mastodon"
+            ]
           }
         ]
       },
