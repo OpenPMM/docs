@@ -4,6 +4,8 @@ sidebarTitle: "Home"
 description: "Connect social accounts and create posts with one API."
 ---
 
+{/* API reference navigation is validated against the live production OpenAPI document. */}
+
 Use OpenPMM to connect social accounts and create posts through one API.
 You do not need a separate integration for each provider.
 
@@ -18,10 +20,10 @@ You do not need a separate integration for each provider.
     Create an API key and list the workspaces that it can use.
   </Card>
   <Card title="Understand posts and publishing" icon="paper-plane" href="/concepts/posts-and-sends">
-    Learn how drafts, posts, and publishing states work.
+    Learn how one Post moves from a draft to a published state.
   </Card>
   <Card title="Create a post" icon="arrow-up-right-from-square" href="/guides/publish-posts">
-    Validate a request, publish it, and check the post status.
+    Create a draft, publish it, and check the Post status.
   </Card>
   <Card title="Check the media limits" icon="photo-film" href="/media/overview">
     See the video and image limits for each destination.
@@ -39,7 +41,7 @@ You do not need a separate integration for each provider.
 
 ## The OpenPMM model
 
-An **account** owns API credentials and workspaces. A **workspace** contains destinations, assets, drafts, and posts. A **destination** is a connected social account. A **post** contains content for one destination and its publishing status.
+An **account** owns API credentials and workspaces. A **workspace** contains destinations, assets, and Posts. A **destination** contains provider connection state and a publishable target. A **Post** contains content and its publishing state.
 
 <CardGroup cols={2}>
   <Card title="Accounts and workspaces" icon="users" href="/concepts/accounts-and-workspaces" />

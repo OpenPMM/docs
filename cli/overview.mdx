@@ -56,11 +56,18 @@ node src/openpmm.js --help
 export OPENPMM_API_KEY=opm_live_...
 export OPENPMM_WORKSPACE=ws_01JABCDEF
 
-openpmm post-groups create launch \
+openpmm posts create \
+  --when draft \
+  --group launch \
   --channel x \
   --body 'Draft copy'
-openpmm post-groups validate launch --json
-openpmm post-groups publish launch --yes --json
+openpmm posts list --view drafts --json
+openpmm posts publish \
+  --post post_01JABCDEF \
+  --post-version 1 \
+  --destination dst_01JABCDEF \
+  --yes \
+  --json
 ```
 
 Run `openpmm --help` to see the command tree. Run

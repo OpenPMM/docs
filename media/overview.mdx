@@ -24,8 +24,8 @@ The 500 MiB limit is an OpenPMM limit. Some providers accept a larger file, but 
   <Step title="After the upload">
     OpenPMM reads the technical properties of the video one time. Examples are the duration, the dimensions, the frame rate, the codecs, and the audio layout.
   </Step>
-  <Step title="When you validate">
-    Send `POST /workspaces/{workspace_id}/post-validations` for a new request, or `POST /workspaces/{workspace_id}/post-groups/{group}/post-validations` for a stored draft. OpenPMM returns the media problems and does not publish the post.
+  <Step title="When you validate an asset">
+    Send `POST /workspaces/{workspace_id}/assets/{asset_id}/video-validations`. Include destination IDs or channel names. OpenPMM returns the media problems.
   </Step>
   <Step title="Before publication">
     OpenPMM checks the video again when you publish or schedule the post. A blocked post gets a `422` response, and OpenPMM sends no request to the provider.
