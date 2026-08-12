@@ -31,12 +31,14 @@ Destinations include provider connection state and publishable targets.
 ```bash
 openpmm destinations list --workspace ws_01JABCDEF --json
 openpmm destinations connect --workspace ws_01JABCDEF --provider youtube
+openpmm destinations connect --workspace ws_01JABCDEF --provider bluesky --account alice.bsky.social
 openpmm destinations sessions show dcs_... --workspace ws_01JABCDEF
 openpmm destinations refresh --workspace ws_01JABCDEF
 openpmm destinations disconnect dst_... --workspace ws_01JABCDEF --yes
 ```
 
 Provider consent completes in a browser. The connection command returns its authorization URL.
+Bluesky requires `--account` with a handle or DID. Mastodon requires `--instance-origin`.
 
 ## Manage Slack notifications
 
