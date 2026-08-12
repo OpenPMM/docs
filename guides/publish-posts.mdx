@@ -1,21 +1,21 @@
 ---
 title: "Create posts"
-description: "Validate a request, create posts, and check their status."
+description: "Create a draft Post, publish it, and check its status."
 ---
 
-Publishing creates content on a provider. Validate the complete request before you publish. Then send the same request with confirmation and an idempotency key.
+Publishing creates content on a provider. Review the draft before you publish it.
 
 <Steps>
-  <Step title="Build one post per destination">
-    Each post needs a destination ID and a non-empty `body` array. For X, the array can contain a thread. For other channels, the array contains one item.
+  <Step title="Create a draft Post">
+    Create one Post for each channel. A draft uses a channel instead of a destination.
 
     ```json
     {
-      "confirmed": true,
-      "when": "now",
+      "when": "draft",
+      "group": "launch-2026-08",
       "posts": [
         {
-          "destination_id": "dst_example",
+          "channel": "x",
           "headline": null,
           "body": ["A release update from OpenPMM."],
           "media": [],
@@ -24,18 +24,38 @@ Publishing creates content on a provider. Validate the complete request before y
       ]
     }
     ```
+
+    Send this body to `POST /workspaces/{workspace_id}/posts`.
   </Step>
-  <Step title="Validate without publishing">
-    Send the complete payload to `POST /workspaces/{workspace_id}/post-validations`. Keep `confirmed: true` in the request. The endpoint does not save data or contact a provider.
+  <Step title="Store the Post version">
+    Store the returned Post `id` and `version`. Use them when you publish the draft.
   </Step>
-  <Step title="Create the post">
-    Send the validated payload to `POST /workspaces/{workspace_id}/posts`. Add a unique `Idempotency-Key` header.
+  <Step title="Publish the same Post">
+    Send the draft Post and its destination to `POST /workspaces/{workspace_id}/posts/publish`.
+    If the group contains multiple draft Posts, include every Post in this request.
+
+    ```json
+    {
+      "confirmed": true,
+      "when": "now",
+      "time_zone": "UTC",
+      "posts": [
+        {
+          "id": "post_01JABCDEF",
+          "version": 1,
+          "destination_id": "dst_01JABCDEF"
+        }
+      ]
+    }
+    ```
+
+    Add a unique `Idempotency-Key` header.
   </Step>
-  <Step title="Check the post status">
-    The response contains a `posts` array. Store each post `id`. Use `GET /workspaces/{workspace_id}/posts/{post}` to get the current state.
+  <Step title="Check the Post status">
+    Use `GET /workspaces/{workspace_id}/posts/{post}`. The response includes delivery status and receipts.
   </Step>
 </Steps>
 
 <Warning>
-  A timeout does not mean that publishing failed. Retry the same request with the same idempotency key. A new key can create a duplicate post.
+  A timeout does not prove that publishing failed. Retry with the same idempotency key.
 </Warning>

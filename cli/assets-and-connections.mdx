@@ -1,14 +1,12 @@
 ---
-title: "Manage assets and connections"
-sidebarTitle: "Assets and connections"
-description: "Upload assets and manage provider and Slack connections with the CLI."
+title: "Manage assets and destinations"
+sidebarTitle: "Assets and destinations"
+description: "Upload assets and manage destinations and Slack notifications with the CLI."
 ---
 
 ## Upload an asset
 
-The CLI creates an upload session, sends the file directly to its short-lived
-storage URL, and completes the upload through `/v1`. It does not send the API
-key to the storage URL.
+The CLI sends the file to a short-lived storage URL. It does not send the API key to that URL.
 
 ```bash
 openpmm assets upload ./launch.webp \
@@ -18,8 +16,7 @@ openpmm assets upload ./launch.webp \
 
 ## Download an asset
 
-Download URLs are short-lived. The CLI refuses to overwrite an existing local
-file.
+The CLI refuses to overwrite an existing local file.
 
 ```bash
 openpmm assets download ast_01JABCDEF \
@@ -27,32 +24,29 @@ openpmm assets download ast_01JABCDEF \
   --output ./launch.webp
 ```
 
-## Manage provider connections
+## Manage destinations
+
+Destinations include provider connection state and publishable targets.
 
 ```bash
-openpmm connections list --workspace ws_01JABCDEF --json
-openpmm connections connect --workspace ws_01JABCDEF --provider youtube
-openpmm connections sessions show dcs_... --workspace ws_01JABCDEF
-openpmm connections refresh --workspace ws_01JABCDEF
-openpmm connections disconnect con_42 --workspace ws_01JABCDEF --yes
+openpmm destinations list --workspace ws_01JABCDEF --json
+openpmm destinations connect --workspace ws_01JABCDEF --provider youtube
+openpmm destinations sessions show dcs_... --workspace ws_01JABCDEF
+openpmm destinations refresh --workspace ws_01JABCDEF
+openpmm destinations disconnect dst_... --workspace ws_01JABCDEF --yes
 ```
 
-Provider consent completes in a browser. `connections connect` starts the
-session and returns its authorization URL. Use `connections sessions show` to
-observe completion, expiry, or failure.
+Provider consent completes in a browser. The connection command returns its authorization URL.
 
 ## Manage Slack notifications
 
 ```bash
-openpmm notifications slack connect --workspace ws_01JABCDEF
-openpmm notifications slack sessions show dcs_... --workspace ws_01JABCDEF
-openpmm notifications slack channels --workspace ws_01JABCDEF --json
-openpmm notifications update \
-  --workspace ws_01JABCDEF \
-  --slack-channel C0123456789
-openpmm notifications slack test --workspace ws_01JABCDEF --yes
-openpmm notifications slack disconnect --workspace ws_01JABCDEF --yes
+openpmm slack connect --workspace ws_01JABCDEF
+openpmm slack sessions show dcs_... --workspace ws_01JABCDEF
+openpmm slack channels --workspace ws_01JABCDEF --json
+openpmm slack update --workspace ws_01JABCDEF --slack-channel C0123456789
+openpmm slack test --workspace ws_01JABCDEF --yes
+openpmm slack disconnect --workspace ws_01JABCDEF --yes
 ```
 
-Slack consent completes in a browser. Sending a test and disconnecting Slack
-require `--yes`.
+Sending a test and disconnecting Slack require `--yes`.

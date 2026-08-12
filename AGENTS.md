@@ -14,16 +14,12 @@
 - **Account** is a person's OpenPMM identity.
 - **API credential** is an account-owned bearer key. It can have access to all
   workspaces or selected workspaces.
-- **Workspace** is the tenant boundary for destinations, assets, drafts, and
-  posts.
-- **Destination** is a connected social account that can receive content.
+- **Workspace** is the tenant boundary for destinations, assets, and Posts.
+- **Destination** contains provider connection state and a publishing target.
 - **Post** is one channel's content and publishing state. Publishing changes
   the state of the post; it does not create a second customer object.
-- **Post group** contains related channel drafts. Use this term only when you
-  document the `/post-groups` resource.
-- **Post submission** describes posts that were created together. The current
-  wire object is `send_group`; use that exact name only when you document its
-  path or response.
+- **Post submission** describes Posts that were published together. It appears
+  inside each submitted Post.
 
 Do not substitute internal model names for these terms in explanatory content.
 
@@ -56,8 +52,7 @@ requirement, not a preference.
 - Use sentence case for headings.
 - Bold UI elements: Click **Settings**.
 - Use code formatting for file names, commands, paths, parameters, and code references.
-- Distinguish drafts from posts that can publish. State clearly when an action
-  can publish externally.
+- A draft is a Post state. State clearly when an action can publish externally.
 - Use exact, tested examples. Prefer read-only examples in introductory content.
 
 ## Content boundaries

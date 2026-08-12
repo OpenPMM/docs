@@ -93,7 +93,7 @@
           },
           {
             "group": "Account",
-            "pages": ["GET /me", "GET /account"]
+            "pages": ["GET /account"]
           },
           {
             "group": "Team",
@@ -120,35 +120,14 @@
             "group": "Posts",
             "pages": [
               "POST /workspaces/{workspace_id}/posts",
-              "POST /workspaces/{workspace_id}/post-validations",
               "GET /workspaces/{workspace_id}/posts",
-              "GET /workspaces/{workspace_id}/post-feed",
               "GET /workspaces/{workspace_id}/posts/{post}",
-              "GET /workspaces/{workspace_id}/send-groups/{send_group_id}",
-              "GET /workspaces/{workspace_id}/posts/{post}/attempts",
-              "GET /workspaces/{workspace_id}/posts/{post}/receipts",
+              "PATCH /workspaces/{workspace_id}/posts/{post}",
+              "DELETE /workspaces/{workspace_id}/posts/{post}",
+              "POST /workspaces/{workspace_id}/posts/publish",
               "POST /workspaces/{workspace_id}/posts/{post}/cancel",
               "POST /workspaces/{workspace_id}/posts/{post}/reschedule",
               "POST /workspaces/{workspace_id}/posts/{post}/retry"
-            ]
-          },
-          {
-            "group": "Drafts",
-            "pages": [
-              "GET /workspaces/{workspace_id}/post-groups",
-              "GET /workspaces/{workspace_id}/post-groups/{group}",
-              "PATCH /workspaces/{workspace_id}/post-groups/{group}",
-              "DELETE /workspaces/{workspace_id}/post-groups/{group}",
-              "GET /workspaces/{workspace_id}/post-groups/{group}/drafts",
-              "GET /workspaces/{workspace_id}/post-groups/{group}/drafts/{channel}",
-              "PUT /workspaces/{workspace_id}/post-groups/{group}/drafts/{channel}",
-              "PATCH /workspaces/{workspace_id}/post-groups/{group}/drafts/{channel}",
-              "DELETE /workspaces/{workspace_id}/post-groups/{group}/drafts/{channel}",
-              "PUT /workspaces/{workspace_id}/post-groups/{group}/drafts/{channel}/assets/{asset_id}",
-              "DELETE /workspaces/{workspace_id}/post-groups/{group}/drafts/{channel}/assets/{asset_id}",
-              "POST /workspaces/{workspace_id}/post-groups/{group}/post-validations",
-              "POST /workspaces/{workspace_id}/post-groups/{group}/posts",
-              "DELETE /workspaces/{workspace_id}/post-groups/{group}/assets/{asset_id}"
             ]
           },
           {
@@ -156,6 +135,7 @@
             "pages": [
               "GET /workspaces/{workspace_id}/assets",
               "GET /workspaces/{workspace_id}/assets/{asset_id}",
+              "POST /workspaces/{workspace_id}/assets/{asset_id}/video-validations",
               "DELETE /workspaces/{workspace_id}/assets/{asset_id}",
               "POST /workspaces/{workspace_id}/asset-uploads",
               "GET /workspaces/{workspace_id}/asset-uploads/{upload_id}",
@@ -168,26 +148,17 @@
               "GET /workspaces/{workspace_id}/destinations",
               "GET /workspaces/{workspace_id}/destinations/{destination_id}",
               "PATCH /workspaces/{workspace_id}/destinations/{destination_id}",
-              "PUT /workspaces/{workspace_id}/facebook-page",
+              "POST /workspaces/{workspace_id}/destinations/refresh",
+              "POST /workspaces/{workspace_id}/destinations/{destination_id}/disconnect",
               "POST /workspaces/{workspace_id}/destination-connection-sessions",
               "GET /workspaces/{workspace_id}/destination-connection-sessions/{session_id}"
             ]
           },
           {
-            "group": "Connections",
-            "pages": [
-              "GET /workspaces/{workspace_id}/provider-connections",
-              "GET /workspaces/{workspace_id}/provider-connections/{connection_id}",
-              "POST /workspaces/{workspace_id}/provider-connections/refresh",
-              "POST /workspaces/{workspace_id}/provider-connections/{connection_id}/disconnect"
-            ]
-          },
-          {
-            "group": "Notifications",
+            "group": "Slack Notifications",
             "pages": [
               "GET /workspaces/{workspace_id}/notification-settings",
               "PATCH /workspaces/{workspace_id}/notification-settings",
-              "GET /workspaces/{workspace_id}/post-groups/{group}/notifications",
               "POST /workspaces/{workspace_id}/slack-connection-sessions",
               "GET /workspaces/{workspace_id}/slack-connection-sessions/{session_id}",
               "DELETE /workspaces/{workspace_id}/slack-connection",

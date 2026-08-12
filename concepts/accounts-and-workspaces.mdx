@@ -5,7 +5,7 @@ description: "Learn how accounts, API credentials, and workspaces control access
 
 An **account** is your OpenPMM identity. It owns API credentials and workspaces.
 
-A **workspace** is the tenant boundary for publishing data. It contains destinations, assets, drafts, and posts.
+A **workspace** is the tenant boundary for publishing data. It contains destinations, assets, and Posts.
 
 ## API-key scope
 
@@ -16,7 +16,7 @@ An API credential belongs to one account. Its access mode is `all` or `selected`
 
 When you create a key in workspace settings, OpenPMM assigns that workspace to the credential.
 
-Call `GET /me` to get the access mode and scopes. Call `GET /workspaces` to list the available workspaces. Call `GET /account` to get the account.
+Call `GET /account` to get the account and the API credential context. Call `GET /workspaces` to list the available workspaces.
 
 <Warning>
   OpenPMM shows a new API key one time. Store it in a secret manager. If you lose the key, create a replacement and revoke the old key.
