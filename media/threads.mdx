@@ -33,9 +33,18 @@ A Threads post accepts up to 20 assets.
 
 Threads recommends a 9:16 vertical video. OpenPMM gives advice for a different aspect ratio, but it does not block the post.
 
-## Images
+## Image limits
 
-OpenPMM accepts a PNG, JPEG, WebP, or GIF image up to 500 MiB. Threads has no additional image limit in OpenPMM.
+| Property | Limit |
+| --- | --- |
+| Format | JPEG or PNG |
+| File size | 8 MB maximum |
+| Aspect ratio | 10:1 maximum |
+| Width | Threads scales an image to between 320 px and 1,440 px |
+| Colour space | Threads converts an image to sRGB |
+
+OpenPMM converts a WebP or a GIF image, and makes the file smaller when it is
+above 8 MB. See [Convert media](/guides/convert-media).
 
 ## Limits that OpenPMM cannot check
 

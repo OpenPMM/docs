@@ -29,8 +29,14 @@ LinkedIn documents other encoding values as advice. OpenPMM does not block the p
 | --- | --- |
 | File types | JPEG, PNG, or GIF |
 | Pixel count | Less than 36,152,320 pixels. Multiply the width by the height. |
+| Animated GIF frames | 250 maximum |
 
-LinkedIn does not accept a WebP image. OpenPMM must also know the width and the height of the image before publication.
+LinkedIn documents no file size limit for an image. OpenPMM cannot check a
+limit that the provider does not document.
+
+LinkedIn does not accept a WebP image. OpenPMM converts a WebP image, and makes
+an image smaller when it has too many pixels. See
+[Convert media](/guides/convert-media).
 
 ## Provider documentation
 

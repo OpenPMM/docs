@@ -5,7 +5,7 @@ description: "Upload a media file and add it to a post."
 
 OpenPMM uses three steps to upload a file. Create an upload, send the file to the returned URL, and complete the upload.
 
-Read the [media guidelines](/media/overview) before you upload a video. Each destination has its own video limits.
+Read the [media guidelines](/media/overview) before you upload. Each destination has its own image limits and video limits.
 
 <Steps>
   <Step title="Begin the upload">
@@ -29,6 +29,15 @@ Read the [media guidelines](/media/overview) before you upload a video. Each des
 </Steps>
 
 Store the returned asset `id`. Add the ID to the post `media` array.
+
+## Check the asset
+
+Send `POST /workspaces/{workspace_id}/assets/{asset_id}/validations` with your
+destination IDs. OpenPMM answers with every problem for every destination, for
+an image and for a video. Do this before you publish.
+
+An issue with `can_convert: true` is one that OpenPMM can repair for you. See
+[Convert media](/guides/convert-media).
 
 <Warning>
   The upload URL expires at `expires_at`. Create a new upload after this time.

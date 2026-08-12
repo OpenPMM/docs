@@ -14,6 +14,35 @@ openpmm assets upload ./launch.webp \
   --json
 ```
 
+## Check an asset against its destinations
+
+```bash
+openpmm assets validate ast_01JABCDEF \
+  --workspace ws_01JABCDEF \
+  --destination dst_01JABCDEF \
+  --json
+```
+
+Use `--channel` instead of `--destination` to check the documented provider
+limits without a connected account.
+
+## Convert an image
+
+OpenPMM makes a new file that obeys the limits of the given destinations, and
+keeps your original. See [Convert media](/guides/convert-media).
+
+```bash
+openpmm assets convert ast_01JABCDEF \
+  --workspace ws_01JABCDEF \
+  --destination dst_01JABCDEF \
+  --json
+
+openpmm asset-conversions show rendition_01JABCDEF \
+  --workspace ws_01JABCDEF \
+  --asset ast_01JABCDEF \
+  --json
+```
+
 ## Download an asset
 
 The CLI refuses to overwrite an existing local file.
