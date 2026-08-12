@@ -1,0 +1,75 @@
+---
+title: "OpenPMM CLI"
+sidebarTitle: "Overview"
+description: "Use the public OpenPMM API from a terminal, script, or coding agent."
+---
+
+The OpenPMM CLI is the first-party client for the public `/v1` API. Use it
+from a terminal, shell script, CI job, or coding agent.
+
+The CLI has no database, provider credential, worker, or deployment access. It
+does not call private application routes.
+
+<Warning>
+  The source for `@openpmm/cli` 0.1.0 is public. The package is not published to npm yet. The first release waits until the production API supports every CLI operation.
+</Warning>
+
+<CardGroup cols={2}>
+  <Card title="View source on GitHub" icon="github" href="https://github.com/OpenPMM/cli">
+    Audit the complete source, tests, and release workflow.
+  </Card>
+  <Card title="Authenticate the CLI" icon="key" href="/cli/authentication">
+    Configure an API key and select a workspace.
+  </Card>
+</CardGroup>
+
+## Install or run once
+
+After the first npm release, run the CLI without an installation:
+
+```bash
+npx -y @openpmm/cli --help
+```
+
+Or install the `openpmm` command globally:
+
+```bash
+npm install --global @openpmm/cli
+openpmm --version
+```
+
+Node.js 22 or newer is required.
+
+## Run the source preview
+
+You can run the audited source before the first npm release:
+
+```bash
+git clone https://github.com/OpenPMM/cli.git
+cd cli
+node src/openpmm.js --help
+```
+
+## Common workflow
+
+```bash
+export OPENPMM_API_KEY=opm_live_...
+export OPENPMM_WORKSPACE=ws_01JABCDEF
+
+openpmm post-groups create launch \
+  --channel x \
+  --body 'Draft copy'
+openpmm post-groups validate launch --json
+openpmm post-groups publish launch --yes --json
+```
+
+Run `openpmm --help` to see the command tree. Run
+`openpmm <command> --help` to see its API operation, scope, side effects,
+input forms, output modes, exit codes, and a copyable example.
+
+## Public compatibility contract
+
+Command names, flags, JSON fields, stdout and stderr behavior, and exit codes
+are public interfaces. Additive changes can ship in a minor release. Breaking
+changes require a major release and a documented deprecation when a safe
+compatibility path exists.

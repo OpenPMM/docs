@@ -53,7 +53,8 @@ Do not substitute internal model names for these terms in explanatory content.
 ## API navigation
 
 `docs.json` sets the production OpenAPI URL on the `API reference` tab. It
-lists each endpoint explicitly under Posts, Drafts, Assets, Destinations, or
-Account. Keep each `METHOD /path` entry in exactly one group. Update this list
-when the public API adds, removes, or moves an endpoint. Do not add an
-`Endpoints` wrapper around these groups.
+lists each endpoint explicitly in a task-oriented group. Keep each
+`METHOD /path` entry in exactly one group. Update this list when the public API
+adds, removes, or moves an endpoint. Do not add an `Endpoints` wrapper around
+these groups. Mintlify treats the explicit `pages` arrays as an allow-list, so
+an omitted operation does not appear in the published API reference.
