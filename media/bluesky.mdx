@@ -23,6 +23,8 @@ Links, hashtags, and resolvable mentions become Bluesky rich-text facets. If a m
 
 OpenPMM removes image metadata before upload. This step can change the file size. If the sanitized image is too large, OpenPMM does not create the Bluesky post.
 
+OpenPMM checks the file type and the file size when you attach the image. It converts a GIF, and makes an image smaller when it is above 2,000,000 bytes. See [Convert media](/guides/convert-media). Bluesky shows a still image, so OpenPMM does not convert an animated image.
+
 ## Content labels
 
 You can add the `porn`, `sexual`, `nudity`, or `graphic-media` self-label. Add every label that applies before publication.
