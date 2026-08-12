@@ -27,6 +27,21 @@ openpmm assets download ast_01JABCDEF \
   --output ./launch.webp
 ```
 
+## Validate a video
+
+Validate an uploaded video against a connected destination:
+
+```bash
+openpmm assets validate-video ast_01JABCDEF \
+  --workspace ws_01JABCDEF \
+  --destination dst_01JABCDEF \
+  --json
+```
+
+Repeat `--destination` to validate the video against more than one destination.
+Use `--channel x` instead when you only need static provider limits. The command
+requires the `assets:read` scope. It does not publish or convert the video.
+
 ## Manage provider connections
 
 ```bash

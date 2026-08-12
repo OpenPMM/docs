@@ -28,6 +28,25 @@ OpenPMM uses three steps to upload a file. Create an upload, send the file to th
 
 Store the returned asset `id`. Add the ID to the post `media` array.
 
+## Validate a video
+
+Validate an uploaded video before you publish it. Send destination identifiers
+to include current destination limits. Send channel names when you only need
+static provider limits.
+
+```json
+{
+  "destination_ids": ["dst_01JABCDEF"]
+}
+```
+
+Call `POST /workspaces/{workspace_id}/assets/{asset_id}/video-validations`.
+The response lists each unmet requirement. Each issue includes the actual
+value, required value, rule owner, and suggested action. A blocking issue stops
+publication to the affected destination.
+
+OpenPMM keeps the original video. Phase 1 does not convert the video.
+
 <Warning>
   The upload URL expires at `expires_at`. Create a new upload after this time.
 </Warning>
