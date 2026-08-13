@@ -72,12 +72,16 @@ Bluesky requires `--account` with a handle or DID. Mastodon requires `--instance
 ## Manage Slack notifications
 
 ```bash
-openpmm slack connect --workspace ws_01JABCDEF
-openpmm slack sessions show dcs_... --workspace ws_01JABCDEF
+openpmm slack connect
+openpmm slack sessions show dcs_...
 openpmm slack channels --workspace ws_01JABCDEF --json
 openpmm slack update --workspace ws_01JABCDEF --slack-channel C0123456789
 openpmm slack test --workspace ws_01JABCDEF --yes
-openpmm slack disconnect --workspace ws_01JABCDEF --yes
+openpmm slack disconnect --yes
 ```
 
-Sending a test and disconnecting Slack require `--yes`.
+The Slack connection belongs to the Account and is shared by every Workspace.
+Each Workspace selects its own notification channel. Connecting and checking a
+connection session do not require `--workspace`. Disconnecting clears the
+channel setting for every Workspace. Sending a test and disconnecting Slack
+require `--yes`.
