@@ -3,28 +3,56 @@ title: "Upload assets"
 description: "Upload a media file and add it to a post."
 ---
 
-OpenPMM uses three steps to upload a file. Create an upload, send the file to the returned URL, and complete the upload.
+OpenPMM uses a multipart upload for each file. Each part is 8 MiB, except the final part.
 
 Read the [media guidelines](/media/overview) before you upload. Each destination has its own image limits and video limits.
 
 <Steps>
   <Step title="Begin the upload">
-    Send the file data. Use the exact byte size and media type.
+    Calculate the CRC64NVME checksum for each part. Send the checksums in part order.
 
     ```json
     {
       "kind": "card",
       "file_name": "launch-card.png",
       "content_type": "image/png",
-      "byte_size": 248031
+      "byte_size": 248031,
+      "parts": [
+        {
+          "part_number": 1,
+          "checksum_crc64nvme": "rosUhgp5mIg="
+        }
+      ]
     }
     ```
+
+    OpenPMM returns one `upload_url` for each part. It also returns the required headers for each URL.
   </Step>
   <Step title="Upload the bytes">
-    Send the file to `upload_url`. Include all values from `required_headers`. Do not send the OpenPMM API key to this URL.
+    Send each part to its `upload_url`. Include all values from `required_headers`.
+
+    Do not send the OpenPMM API key to an upload URL. Save the `ETag` response header for each part.
+
+    You can retry a failed part with the same URL. A retry replaces the earlier data for that part number.
   </Step>
   <Step title="Complete the upload">
-    Call `POST /workspaces/{workspace_id}/asset-uploads/{upload_id}/complete`. This request does not have a JSON body. OpenPMM checks the file and returns the asset.
+    Calculate the CRC64NVME checksum for the full file. Send the checksum, size, and completed parts.
+
+    ```json
+    {
+      "byte_size": 248031,
+      "checksum_crc64nvme": "rosUhgp5mIg=",
+      "parts": [
+        {
+          "part_number": 1,
+          "etag": "\"part-etag\"",
+          "checksum_crc64nvme": "rosUhgp5mIg="
+        }
+      ]
+    }
+    ```
+
+    Call `POST /workspaces/{workspace_id}/asset-uploads/{upload_id}/complete`. OpenPMM checks the stored file and returns the asset.
   </Step>
 </Steps>
 
@@ -43,5 +71,5 @@ An issue with `can_convert: true` is one that OpenPMM repairs automatically
 when you publish or schedule the Post. See [Convert media](/guides/convert-media).
 
 <Warning>
-  The upload URL expires at `expires_at`. Create a new upload after this time.
+  The upload URLs expire at `expires_at`. Create a new upload after this time.
 </Warning>
