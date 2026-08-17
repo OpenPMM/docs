@@ -11,9 +11,13 @@ count. A conversion makes a new file that obeys these limits.
 OpenPMM always keeps your original file. A conversion adds a file; it does not
 replace one.
 
+In the app, OpenPMM converts an image automatically when you attach it to a
+destination. The API converts it when you publish or schedule the Post. You do
+not confirm a safe conversion.
+
 ## What OpenPMM converts
 
-OpenPMM makes only the changes that keep the content the same:
+OpenPMM makes these safe technical changes:
 
 | Change | Example |
 | --- | --- |
@@ -22,6 +26,7 @@ OpenPMM makes only the changes that keep the content the same:
 | The pixel count | A very large image becomes smaller for LinkedIn. |
 | The stored rotation | A rotation tag becomes the actual pixels. |
 | The metadata | OpenPMM removes the camera and location metadata. |
+| The transparency | Transparent pixels become white when the destination requires JPEG. |
 
 OpenPMM keeps the aspect ratio for every one of these changes.
 
@@ -31,13 +36,17 @@ These changes change what the image shows, so you make them yourself:
 
 - **A crop or a pad.** Instagram accepts an aspect ratio between 4:5 and
   1.91:1. A 9:16 image or a 3:1 banner needs a crop or a pad.
-- **A background colour.** An image with transparent areas needs a background
-  colour before it can become a JPEG.
 - **The animation.** OpenPMM does not make an animated GIF into a still image.
 
 For these, use another file, or remove the destination.
 
-## Convert an image
+## Convert an image before publication
+
+You usually do not need this operation. OpenPMM creates the required file when
+you publish or schedule the Post.
+
+Use the conversion operation when you want to create and inspect the file
+before publication.
 
 <Steps>
   <Step title="Find the problem">
@@ -62,8 +71,8 @@ openpmm assets convert ast_01JABCDEF \
   --json
 ```
 
-In the app, the media dialog shows a **Convert image** button when a conversion
-resolves every problem.
+In the app, OpenPMM converts the image when you attach it. The dialog only shows
+a problem that needs your decision or a conversion retry.
 
 ## What a conversion gives you
 
@@ -101,7 +110,6 @@ OpenPMM answers `422` with a reason:
 | Reason | What to do |
 | --- | --- |
 | The image is animated. | Use a still image, or remove the destination. |
-| The image has transparent areas. | Use an image with a background, or remove the destination. |
 | The destinations accept no common format. | Publish to fewer destinations. |
 | The destination publishes video only. | Attach a video for that destination. |
 
