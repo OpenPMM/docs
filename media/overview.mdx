@@ -35,7 +35,7 @@ The 500 MiB limit is an OpenPMM limit. Some providers accept a larger file, but 
 A readable file is always a valid asset. A destination limit that the file does not obey blocks the post, but it does not delete the asset. The asset stays in the workspace library, and you can use it for a different destination.
 
 <Note>
-  OpenPMM publishes the file that you uploaded, unless you ask OpenPMM to convert it. A conversion always keeps the original. For Bluesky, OpenPMM removes image metadata before upload. OpenPMM does not change video files. See [Convert media](/guides/convert-media).
+  OpenPMM converts an image automatically when a destination needs a safe technical change. A conversion always keeps the original. OpenPMM makes transparent pixels white when the destination requires JPEG. For Bluesky, OpenPMM removes image metadata before upload. OpenPMM does not change video files. See [Convert media](/guides/convert-media).
 </Note>
 
 ## Blockers and advice
@@ -65,8 +65,8 @@ Each media problem has a `repair_kind`:
 
 | Value | Meaning |
 | --- | --- |
-| `technical` | The format, the file size, the pixel count, or the stored rotation. OpenPMM can change these without changing what the file shows. When `can_convert` is `true`, use [Convert media](/guides/convert-media). |
-| `editorial` | The aspect ratio, the transparency, or the animation. A change here changes what the file shows, so OpenPMM never makes it for you. |
+| `technical` | The format, the file size, the pixel count, the stored rotation, or a white background. OpenPMM repairs these automatically when `can_convert` is `true`. |
+| `editorial` | The aspect ratio or the animation. A change here needs your decision, so OpenPMM never makes it for you. |
 | `none` | No change repairs the problem. Use another file, or remove the destination. |
 
 If a destination value is not current, OpenPMM reports the problem as advice and does not block the post. The destination can then still refuse the file.
