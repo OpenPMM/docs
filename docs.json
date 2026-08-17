@@ -39,7 +39,7 @@
             "pages": [
               "guides/connect-a-destination",
               "guides/upload-assets",
-              "guides/convert-media",
+              "guides/media-compatibility",
               "guides/publish-posts",
               "guides/schedule-and-retry"
             ]
@@ -161,8 +161,6 @@
               "GET /workspaces/{workspace_id}/assets",
               "GET /workspaces/{workspace_id}/assets/{asset_id}",
               "POST /workspaces/{workspace_id}/assets/{asset_id}/validations",
-              "POST /workspaces/{workspace_id}/assets/{asset_id}/conversions",
-              "GET /workspaces/{workspace_id}/assets/{asset_id}/conversions/{conversion_id}",
               "DELETE /workspaces/{workspace_id}/assets/{asset_id}",
               "POST /workspaces/{workspace_id}/asset-uploads",
               "GET /workspaces/{workspace_id}/asset-uploads/{upload_id}",

@@ -1,0 +1,86 @@
+---
+title: "Check media compatibility"
+sidebarTitle: "Media compatibility"
+description: "Learn how OpenPMM checks media and prepares safe image changes."
+---
+
+Each destination has different media limits. OpenPMM checks each file against
+the limits of its selected destinations.
+
+The normal workflow is upload, then schedule or publish. You do not prepare a
+second file before publication.
+
+OpenPMM keeps the original file. It uses the original when that file meets all
+requirements.
+
+## Automatic image preparation
+
+OpenPMM makes safe technical image changes automatically. The app makes these
+changes when you attach the image. The API makes them when you schedule or
+publish the Post.
+
+OpenPMM can make these changes:
+
+| Change | Example |
+| --- | --- |
+| The format | A PNG becomes a JPEG for Instagram. |
+| The file size | A 6 MB image becomes smaller for Facebook. |
+| The pixel count | A large image becomes smaller for LinkedIn. |
+| The stored rotation | A rotation tag becomes the actual pixels. |
+| The metadata | OpenPMM removes camera and location metadata. |
+| The transparency | Transparent pixels become white when a destination requires JPEG. |
+
+OpenPMM keeps the aspect ratio for each automatic change. OpenPMM reuses a
+prepared image when the same requirements apply.
+
+OpenPMM records the exact file when you confirm the Post. A later requirement
+change does not change a confirmed Post.
+
+## Changes that need your decision
+
+OpenPMM does not crop, pad, trim, or remove animation automatically. These
+changes can alter the content.
+
+Use another file or remove the affected destination when one of these changes
+is necessary.
+
+OpenPMM does not change video files. Use a compatible video file for each
+selected destination.
+
+## Check an asset before publication
+
+Validation is optional. Use it when you want to check an asset before you add
+it to a publication request.
+
+Send `POST /workspaces/{workspace_id}/assets/{asset_id}/validations`. Include
+destination IDs or channel names.
+
+The response has one `status`:
+
+| Status | Meaning |
+| --- | --- |
+| `compatible_original` | The original file meets the selected requirements. |
+| `auto_convertible` | OpenPMM prepares the image automatically during publication. |
+| `editorial_decision_required` | A crop, pad, trim, or animation change needs your decision. |
+| `incompatible` | OpenPMM cannot prepare the file automatically. |
+
+Each issue gives the actual value, the required value, and the rule owner.
+
+```bash
+openpmm assets validate ast_01JABCDEF \
+  --workspace ws_01JABCDEF \
+  --destination dst_01JABCDEF \
+  --json
+```
+
+## Respond to a blocked request
+
+OpenPMM returns status `422` before it sends media to a provider. Read each
+issue to find the affected asset and destination.
+
+If automatic image preparation fails, the response code is
+`media_conversion_failed`. Retry when the response says `retryable: true`.
+Otherwise, replace the image.
+
+Use another file, edit the file, or remove the destination. Then send the
+confirmed publication request again.
