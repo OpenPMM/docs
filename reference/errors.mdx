@@ -49,6 +49,11 @@ Each item in `errors` has a `code` and a `detail`. An item that refers to a
 member of the request also has a `pointer`. The `pointer` value is a JSON
 Pointer to that member.
 
+Destination-specific Post errors can occur during Create Post or Publish Post.
+They use `publisher_validation_failed` with HTTP status `422`. For example, a
+missing Instagram `options` object points to `/posts/0/options`. These errors
+are not retryable until you correct the request.
+
 ## What to log
 
 Log the HTTP status, `code`, and `request_id`. Do not log API keys, provider credentials, or post content.

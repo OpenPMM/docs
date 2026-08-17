@@ -21,6 +21,22 @@ openpmm posts create \
 
 Store the returned Post `id` and `version`.
 
+For a direct or scheduled Post, use `--destination` instead of `--channel`.
+Put provider-specific settings in `--options`. For example:
+
+```bash
+openpmm posts create \
+  --workspace ws_01JABCDEF \
+  --destination dst_01JABCDEF \
+  --body 'Instagram caption' \
+  --options '{"channel":"instagram","type":"post"}' \
+  --yes \
+  --json
+```
+
+OpenPMM checks these settings during the create request. If a required setting
+is missing, the CLI reports a non-retryable `422` validation error.
+
 ## Edit a Post
 
 The CLI gets the current ETag before it changes a draft.

@@ -65,6 +65,14 @@ Publishing creates content on a provider. Review the draft before you publish it
   A timeout does not prove that publishing failed. Retry with the same idempotency key.
 </Warning>
 
+<Note>
+  A direct or scheduled Post uses `destination_id` instead of `channel`. Put
+  destination-specific settings in `options`. For example, an Instagram Post
+  needs `{ "channel": "instagram", "type": "post" }`. OpenPMM checks these
+  settings during Create Post and Publish Post. If a required setting is
+  missing, the API returns `publisher_validation_failed` with status `422`.
+</Note>
+
 If one destination reaches a provider publishing limit, only that destination's
 Post fails. OpenPMM continues the other destination Posts. Use confirmed manual
 Retry later for the affected Post.
