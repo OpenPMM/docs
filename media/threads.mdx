@@ -1,0 +1,55 @@
+---
+title: "Threads media guidelines"
+sidebarTitle: "Threads"
+description: "See the video and image limits that OpenPMM applies for a Threads destination."
+---
+
+Threads has the most detailed video contract of the Meta channels. Read [Media guidelines](/media/overview) for the general rules.
+
+## Media per post
+
+A Threads post accepts up to 20 assets.
+
+## Video limits
+
+| Property | Limit |
+| --- | --- |
+| Container | MP4 or MOV |
+| Video codec | H.264 or HEVC |
+| Duration | More than 0 seconds, and 300 seconds maximum |
+| Frame rate | 23 to 60 fps |
+| Width | 1,920 px maximum |
+| Aspect ratio | 0.01:1 to 10:1 |
+| Video bitrate | 100 Mbps maximum |
+| Pixel format | YUV 4:2:0 |
+| Scan type | Progressive |
+| File size | 500 MiB. Threads permits 1 GiB, but the OpenPMM limit is lower. |
+| Audio codec | AAC |
+| Audio sample rate | 48 kHz maximum |
+| Audio channels | Mono or stereo |
+| Audio bitrate | 128 kbps maximum |
+| MP4 layout | Fast start. The file index must be before the video data. |
+| Edit list | Not accepted |
+
+Threads recommends a 9:16 vertical video. OpenPMM gives advice for a different aspect ratio, but it does not block the post.
+
+## Image limits
+
+| Property | Limit |
+| --- | --- |
+| Format | JPEG or PNG |
+| File size | 8 MB maximum |
+| Aspect ratio | 10:1 maximum |
+| Width | Threads scales an image to between 320 px and 1,440 px |
+| Colour space | Threads converts an image to sRGB |
+
+OpenPMM converts a WebP or a GIF image, and makes the file smaller when it is
+above 8 MB. See [Convert media](/guides/convert-media).
+
+## Limits that OpenPMM cannot check
+
+Threads documents a closed group of pictures (GOP). OpenPMM cannot read this property from the file. Make sure that your encoder writes a closed GOP.
+
+## Provider documentation
+
+[Threads posts and media specifications](https://developers.facebook.com/docs/threads/posts)

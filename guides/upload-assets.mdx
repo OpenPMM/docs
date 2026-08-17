@@ -5,6 +5,8 @@ description: "Upload a media file and add it to a post."
 
 OpenPMM uses three steps to upload a file. Create an upload, send the file to the returned URL, and complete the upload.
 
+Read the [media guidelines](/media/overview) before you upload. Each destination has its own image limits and video limits.
+
 <Steps>
   <Step title="Begin the upload">
     Send the file data. Use the exact byte size and media type.
@@ -28,24 +30,17 @@ OpenPMM uses three steps to upload a file. Create an upload, send the file to th
 
 Store the returned asset `id`. Add the ID to the post `media` array.
 
-## Validate a video
+## Check the asset
 
-Validate an uploaded video before you publish it. Send destination identifiers
-to include current destination limits. Send channel names when you only need
-static provider limits.
+Send `POST /workspaces/{workspace_id}/assets/{asset_id}/validations` with your
+destination IDs. OpenPMM answers with every problem for every destination, for
+an image and for a video. Do this before you publish.
 
-```json
-{
-  "destination_ids": ["dst_01JABCDEF"]
-}
-```
+Each problem gives the actual value, required value, rule owner, and recommended action.
+A blocker prevents publication to the affected destination.
 
-Call `POST /workspaces/{workspace_id}/assets/{asset_id}/video-validations`.
-The response lists each unmet requirement. Each issue includes the actual
-value, required value, rule owner, and suggested action. A blocking issue stops
-publication to the affected destination.
-
-OpenPMM keeps the original video. Phase 1 does not convert the video.
+An issue with `can_convert: true` is one that OpenPMM can repair for you. See
+[Convert media](/guides/convert-media).
 
 <Warning>
   The upload URL expires at `expires_at`. Create a new upload after this time.

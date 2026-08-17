@@ -1,71 +1,59 @@
 ---
 title: "Draft and publish"
 sidebarTitle: "Draft and publish"
-description: "Create, edit, validate, and publish a stored post group with the CLI."
+description: "Create, edit, and publish Posts with the CLI."
 ---
 
-Use a post group to store related channel drafts. Validate it before you
-publish.
+A draft is a Post with the `draft` state. Publishing changes the same Post.
 
 ## Create a draft
 
 ```bash
-openpmm post-groups create launch-2026-08 \
+openpmm posts create \
   --workspace ws_01JABCDEF \
+  --when draft \
+  --group launch-2026-08 \
   --channel x \
   --body 'First post in the thread' \
   --body 'Second post in the thread' \
   --json
 ```
 
-## Edit a channel
+Store the returned Post `id` and `version`.
 
-The CLI gets the current ETag before it changes a draft. Use `--etag` when you
-must pin a version that you reviewed earlier.
+## Edit a Post
+
+The CLI gets the current ETag before it changes a draft.
 
 ```bash
-openpmm post-groups drafts update launch-2026-08 x \
+openpmm posts update post_01JABCDEF \
   --workspace ws_01JABCDEF \
   --body 'Updated first post' \
   --body 'Updated second post'
 ```
 
-## Validate the post group
+Use `--etag` to change the version that you reviewed.
 
-Validation does not publish content:
+## Publish a Post
 
-```bash
-openpmm post-groups validate launch-2026-08 \
-  --workspace ws_01JABCDEF \
-  --file validation.json \
-  --json
-```
-
-`--dry-run` is an alias for public validation on `posts create` and
-`post-groups publish`. It does not send a publishing request.
-
-## Publish the post group
-
-The publish command validates the current post group, binds the returned
-destinations and confirmation hash, and publishes with one idempotency key.
+<Warning>
+  Publishing can create external posts. Pass `--yes` to send the request.
+</Warning>
 
 ```bash
-openpmm post-groups publish launch-2026-08 \
+openpmm posts publish \
   --workspace ws_01JABCDEF \
+  --post post_01JABCDEF \
+  --post-version 2 \
+  --destination dst_01JABCDEF \
   --yes \
   --json
 ```
 
-<Warning>
-  Publishing can create external posts. The CLI exits with code `10` before it sends the request unless you pass `--yes`.
-</Warning>
-
-Use `--file request.json` or `--file -` for a complete request. Provider
-options, including YouTube options, stay inside the generic per-channel
-options object. There is no separate provider publishing command.
+Use `--at 2026-08-13T12:00:00Z` to schedule the Post. If a group contains
+multiple draft Posts, publish all of them together with `--file request.json`.
 
 ## Recover an uncertain request
 
-The CLI safely retries reads and mutations that have an idempotency key. It
-does not silently retry an unsafe request with an uncertain result. Reuse
-`--idempotency-key` to recover the stored result after a timeout.
+The CLI safely retries a request that has an idempotency key.
+Reuse `--idempotency-key` after a timeout.

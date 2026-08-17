@@ -1,30 +1,31 @@
 ---
 title: "Posts and publishing"
-description: "Learn how drafts, posts, and publishing states work."
+description: "Learn how Post state controls editing and publishing."
 ---
 
-A **post** contains content for one destination. It also contains the current publishing state.
+A **Post** contains content for one channel. It also contains the publishing state.
 
-Set `when` to control what OpenPMM creates:
-
-| `when` value | Result | Can contact a provider? |
+| State or action | Result | Can contact a provider? |
 | --- | --- | --- |
-| `draft` | Editable channel drafts in a post group | No |
-| `now` | Posts that start publishing now | Yes |
-| ISO 8601 timestamp | Scheduled posts | Yes, at the scheduled time |
+| Create with `when: "draft"` | An editable Post | No |
+| Publish with `when: "now"` | The same Post starts publishing | Yes |
+| Publish with a timestamp | The same Post becomes scheduled | At the scheduled time |
 
-The create response contains a `posts` array. Each post has a state such as `scheduled`, `processing`, `published`, or `failed`.
+The Post keeps the same `id` when you publish it.
+Use `version` and the ETag to prevent changes to an old draft version.
+Publish every draft Post in a group together. This keeps the group consistent.
+
+## Post details
+
+`GET /workspaces/{workspace_id}/posts/{post}` returns the complete Post status.
+The response includes the submission metadata and publication receipts.
+The response also includes the latest error and the delivery attempt count.
 
 ## Confirmation
 
-Requests that can publish must contain `confirmed: true`. OpenPMM rejects the request when confirmation is absent.
-
-Use the validation endpoint before you create posts. Validation checks the same request but does not save data or contact a provider.
-
-## Post submissions
-
-OpenPMM records posts that were created together. The API currently returns this record as a `send_group`. Use the post submission endpoint when you must inspect all posts from one confirmed request.
+Requests that can publish must contain `confirmed: true`.
+OpenPMM validates the Post before it changes the state.
 
 <Warning>
-  A timeout does not prove that publishing failed. Retry the same request with the same idempotency key. Do not create a new request until you check the post status.
+  A timeout does not prove that publishing failed. Retry with the same idempotency key.
 </Warning>

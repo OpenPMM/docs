@@ -7,7 +7,18 @@ Use a connection session to authorize a provider account. OpenPMM stores the pro
 
 <Steps>
   <Step title="Choose a provider">
-    Use a provider value from the endpoint reference. For Mastodon, also send the instance origin. For example, use `https://mastodon.social`.
+    Use a provider value from the endpoint reference. For Mastodon, also send the instance origin. For Bluesky, also send the account handle or DID.
+  </Step>
+  <Step title="Connect Bluesky">
+    Bluesky OAuth requires the hosted OpenPMM service with its HTTPS public URL. A local HTTP development origin cannot act as this confidential OAuth client.
+    Set `account_identifier` to the handle or DID that must authorize OpenPMM. The DID becomes the stable destination identity. A handle change does not create a new destination.
+
+    ```bash
+    openpmm destinations connect \
+      --workspace "$OPENPMM_WORKSPACE_ID" \
+      --provider bluesky \
+      --account alice.bsky.social
+    ```
   </Step>
   <Step title="Create a connection session">
     Send the provider to the connection-session endpoint.
@@ -47,5 +58,5 @@ Use a connection session to authorize a provider account. OpenPMM stores the pro
 </Steps>
 
 <Note>
-  OpenPMM does not return provider access tokens to your application. It stores the tokens in encrypted form.
+  OpenPMM does not return provider credentials to your application. It stores OAuth tokens and Bluesky DPoP session keys in encrypted form.
 </Note>

@@ -1,0 +1,51 @@
+---
+title: "Facebook media guidelines"
+sidebarTitle: "Facebook"
+description: "See the video and image limits that OpenPMM applies for a Facebook destination."
+---
+
+Facebook has two placements, and each placement has its own media rules. Set `placement` in the Facebook post options. Read [Media guidelines](/media/overview) for the general rules.
+
+## Media per post
+
+| Placement | Media |
+| --- | --- |
+| `reel` | Exactly one video |
+| `feed` | Up to 10 images |
+
+A Facebook feed post accepts images only.
+
+## Reel video limits
+
+| Property | Limit |
+| --- | --- |
+| Duration | 4 to 60 seconds |
+| Frame rate | 23 to 60 fps |
+| Width | 540 px minimum |
+| Height | 960 px minimum |
+| Aspect ratio | 9:16 |
+| File size | 500 MiB |
+
+<Note>
+  OpenPMM applies these limits when `placement` is `reel`. Select the placement before you validate the post. A different placement has a different contract, and OpenPMM cannot apply the Reel limits to it.
+</Note>
+
+## Image limits
+
+| Property | Limit |
+| --- | --- |
+| Format | JPEG, PNG, or GIF |
+| File size | 4 MB maximum |
+
+Facebook can make a PNG above 1 MB look pixelated. OpenPMM gives advice for
+this, but it does not block the post.
+
+Facebook documents no dimension limit and no aspect ratio limit for an image.
+Facebook makes an image smaller itself and removes the location metadata.
+
+OpenPMM converts a WebP image and makes the file smaller when it is above 4 MB.
+See [Convert media](/guides/convert-media).
+
+## Provider documentation
+
+[Facebook Reels publishing](https://www.postman.com/meta/facebook/folder/simabyk/reels-publishing)

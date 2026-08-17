@@ -1,14 +1,12 @@
 ---
-title: "Manage assets and connections"
-sidebarTitle: "Assets and connections"
-description: "Upload assets and manage provider and Slack connections with the CLI."
+title: "Manage assets and destinations"
+sidebarTitle: "Assets and destinations"
+description: "Upload assets and manage destinations and Slack notifications with the CLI."
 ---
 
 ## Upload an asset
 
-The CLI creates an upload session, sends the file directly to its short-lived
-storage URL, and completes the upload through `/v1`. It does not send the API
-key to the storage URL.
+The CLI sends the file to a short-lived storage URL. It does not send the API key to that URL.
 
 ```bash
 openpmm assets upload ./launch.webp \
@@ -16,10 +14,38 @@ openpmm assets upload ./launch.webp \
   --json
 ```
 
+## Check an asset against its destinations
+
+```bash
+openpmm assets validate ast_01JABCDEF \
+  --workspace ws_01JABCDEF \
+  --destination dst_01JABCDEF \
+  --json
+```
+
+Use `--channel` instead of `--destination` to check the documented provider
+limits without a connected account.
+
+## Convert an image
+
+OpenPMM makes a new file that obeys the limits of the given destinations, and
+keeps your original. See [Convert media](/guides/convert-media).
+
+```bash
+openpmm assets convert ast_01JABCDEF \
+  --workspace ws_01JABCDEF \
+  --destination dst_01JABCDEF \
+  --json
+
+openpmm asset-conversions show rendition_01JABCDEF \
+  --workspace ws_01JABCDEF \
+  --asset ast_01JABCDEF \
+  --json
+```
+
 ## Download an asset
 
-Download URLs are short-lived. The CLI refuses to overwrite an existing local
-file.
+The CLI refuses to overwrite an existing local file.
 
 ```bash
 openpmm assets download ast_01JABCDEF \
@@ -27,47 +53,35 @@ openpmm assets download ast_01JABCDEF \
   --output ./launch.webp
 ```
 
-## Validate a video
+## Manage destinations
 
-Validate an uploaded video against a connected destination:
-
-```bash
-openpmm assets validate-video ast_01JABCDEF \
-  --workspace ws_01JABCDEF \
-  --destination dst_01JABCDEF \
-  --json
-```
-
-Repeat `--destination` to validate the video against more than one destination.
-Use `--channel x` instead when you only need static provider limits. The command
-requires the `assets:read` scope. It does not publish or convert the video.
-
-## Manage provider connections
+Destinations include provider connection state and publishable targets.
 
 ```bash
-openpmm connections list --workspace ws_01JABCDEF --json
-openpmm connections connect --workspace ws_01JABCDEF --provider youtube
-openpmm connections sessions show dcs_... --workspace ws_01JABCDEF
-openpmm connections refresh --workspace ws_01JABCDEF
-openpmm connections disconnect con_42 --workspace ws_01JABCDEF --yes
+openpmm destinations list --workspace ws_01JABCDEF --json
+openpmm destinations connect --workspace ws_01JABCDEF --provider youtube
+openpmm destinations connect --workspace ws_01JABCDEF --provider bluesky --account alice.bsky.social
+openpmm destinations sessions show dcs_... --workspace ws_01JABCDEF
+openpmm destinations refresh --workspace ws_01JABCDEF
+openpmm destinations disconnect dst_... --workspace ws_01JABCDEF --yes
 ```
 
-Provider consent completes in a browser. `connections connect` starts the
-session and returns its authorization URL. Use `connections sessions show` to
-observe completion, expiry, or failure.
+Provider consent completes in a browser. The connection command returns its authorization URL.
+Bluesky requires `--account` with a handle or DID. Mastodon requires `--instance-origin`.
 
 ## Manage Slack notifications
 
 ```bash
-openpmm notifications slack connect --workspace ws_01JABCDEF
-openpmm notifications slack sessions show dcs_... --workspace ws_01JABCDEF
-openpmm notifications slack channels --workspace ws_01JABCDEF --json
-openpmm notifications update \
-  --workspace ws_01JABCDEF \
-  --slack-channel C0123456789
-openpmm notifications slack test --workspace ws_01JABCDEF --yes
-openpmm notifications slack disconnect --workspace ws_01JABCDEF --yes
+openpmm slack connect
+openpmm slack sessions show dcs_...
+openpmm slack channels --workspace ws_01JABCDEF --json
+openpmm slack update --workspace ws_01JABCDEF --slack-channel C0123456789
+openpmm slack test --workspace ws_01JABCDEF --yes
+openpmm slack disconnect --yes
 ```
 
-Slack consent completes in a browser. Sending a test and disconnecting Slack
+The Slack connection belongs to the Account and is shared by every Workspace.
+Each Workspace selects its own notification channel. Connecting and checking a
+connection session do not require `--workspace`. Disconnecting clears the
+channel setting for every Workspace. Sending a test and disconnecting Slack
 require `--yes`.

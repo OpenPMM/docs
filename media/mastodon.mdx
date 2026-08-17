@@ -1,0 +1,42 @@
+---
+title: "Mastodon media guidelines"
+sidebarTitle: "Mastodon"
+description: "See how OpenPMM applies the media limits that your Mastodon instance reports."
+---
+
+A Mastodon instance owns its media limits. Two instances can have different limits. OpenPMM reads the limits from your connected instance. Read [Media guidelines](/media/overview) for the general rules.
+
+## Limits from your instance
+
+OpenPMM applies these values from the instance:
+
+| Property | Applies to |
+| --- | --- |
+| Maximum media attachments | The number of assets in one post |
+| Accepted file types | Video and image assets |
+| Maximum video size | Video assets |
+| Maximum video frame rate | Video assets |
+| Maximum video pixels | Video assets. Multiply the width by the height. |
+| Maximum image size | Image assets |
+
+Mastodon documents no fixed video contract, so OpenPMM has no static video limit for this channel. The OpenPMM 500 MiB upload limit still applies.
+
+## Image limits
+
+A Mastodon server reports its own image limits. OpenPMM reads these values from
+the destination:
+
+| Property | Source |
+| --- | --- |
+| Format | `supported_mime_types` |
+| File size | `image_size_limit` |
+| Pixels | `image_matrix_limit` |
+
+OpenPMM converts an image and makes the file smaller to obey the values that the
+server reports. See [Convert media](/guides/convert-media).
+
+## Missing values
+
+## Provider documentation
+
+[Mastodon instance configuration](https://docs.joinmastodon.org/entities/Instance/#configuration)

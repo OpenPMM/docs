@@ -1,0 +1,61 @@
+---
+title: "Instagram media guidelines"
+sidebarTitle: "Instagram"
+description: "See the video and image limits that OpenPMM applies for an Instagram destination."
+---
+
+An Instagram post always needs media. Set `type` in the Instagram post options. Read [Media guidelines](/media/overview) for the general rules.
+
+## Media per post
+
+| Type | Media |
+| --- | --- |
+| `post` | 1 to 10 images |
+| `reel` | Exactly one video |
+| `story` | Exactly one asset |
+
+A post and a Story accept an image. A Reel accepts a video.
+
+## Video limits
+
+| Property | Limit |
+| --- | --- |
+| Container | MP4 or MOV |
+| Video codec | H.264 or HEVC |
+| Duration | 3 seconds to 15 minutes |
+| Frame rate | 23 to 60 fps |
+| Width | 1,920 px maximum |
+| Video bitrate | 25 Mbps maximum |
+| File size | 500 MiB. Instagram permits 1 GiB, but the OpenPMM limit is lower. |
+| Audio codec | AAC |
+| Audio sample rate | 48 kHz maximum |
+| Audio channels | Mono or stereo |
+
+Instagram recommends a 9:16 vertical video. OpenPMM gives advice for a different aspect ratio, but it does not block the post.
+
+## Image limits
+
+| Property | Limit |
+| --- | --- |
+| Format | JPEG. Instagram accepts no other image format. |
+| File size | 8 MB maximum |
+| Aspect ratio | 4:5 to 1.91:1 for a post and for a carousel |
+| Width | Instagram scales an image to between 320 px and 1,440 px |
+| Colour space | Instagram converts an image to sRGB |
+
+OpenPMM converts a PNG or a WebP image to JPEG for you, and makes the file
+smaller when it is above 8 MB. See [Convert media](/guides/convert-media).
+
+An aspect ratio outside the 4:5 to 1.91:1 range needs a crop or a pad. OpenPMM
+does not do this for you, because it changes what the image shows. Use another
+file, or remove the destination.
+
+A Story has no aspect ratio limit. Instagram recommends 9:16 to prevent a crop
+or a blank space.
+
+Instagram crops every image in a carousel to match the first image. The default
+is 1:1.
+
+## Provider documentation
+
+[Instagram Reels publishing](https://www.postman.com/meta/instagram/folder/f95kq5e/reels-publishing)

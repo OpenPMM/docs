@@ -14,22 +14,36 @@
 - **Account** is a person's OpenPMM identity.
 - **API credential** is an account-owned bearer key. It can have access to all
   workspaces or selected workspaces.
-- **Workspace** is the tenant boundary for destinations, assets, drafts, and
-  posts.
-- **Destination** is a connected social account that can receive content.
+- **Workspace** is the tenant boundary for destinations, assets, and Posts.
+- **Destination** contains provider connection state and a publishing target.
 - **Post** is one channel's content and publishing state. Publishing changes
   the state of the post; it does not create a second customer object.
-- **Post group** contains related channel drafts. Use this term only when you
-  document the `/post-groups` resource.
-- **Post submission** describes posts that were created together. The current
-  wire object is `send_group`; use that exact name only when you document its
-  path or response.
+- **Post submission** describes Posts that were published together. It appears
+  inside each submitted Post.
 
 Do not substitute internal model names for these terms in explanatory content.
 
+## Simplified Technical English
+
+Write every public page in ASD-STE100 Simplified Technical English. This is a
+requirement, not a preference.
+
+- Use one idea for each sentence. Keep a descriptive sentence to 20 words or
+  fewer, and an instruction to 20 words or fewer.
+- Use the active voice. Use the passive voice only when the actor is unknown.
+- Use the simple present tense. Do not use a gerund or a participle as a verb.
+  Write "OpenPMM checks the file", not "OpenPMM is checking the file".
+- Use one word for one meaning. Do not use a synonym for variety.
+- Use articles ("the", "a") and complete sentences. Do not use telegraphic text.
+- Prefer short, common words. Write "make sure" instead of "ensure", and "use"
+  instead of "utilize".
+- Do not use Latin abbreviations. Write "for example" instead of "e.g.".
+- Give a number and a unit for each limit. For example, write "60 fps maximum".
+- Do not use idioms, humor, or marketing adjectives.
+- Give a warning or a caution before the step that it applies to.
+
 ## Style preferences
 
-- Use ASD-STE100 Simplified Technical English for all public copy.
 - Use active voice and second person ("you").
 - Use short sentences. Give each sentence one idea.
 - Use one approved term for each object. Do not use a synonym to add variety.
@@ -38,8 +52,7 @@ Do not substitute internal model names for these terms in explanatory content.
 - Use sentence case for headings.
 - Bold UI elements: Click **Settings**.
 - Use code formatting for file names, commands, paths, parameters, and code references.
-- Distinguish drafts from posts that can publish. State clearly when an action
-  can publish externally.
+- A draft is a Post state. State clearly when an action can publish externally.
 - Use exact, tested examples. Prefer read-only examples in introductory content.
 
 ## Content boundaries
@@ -49,6 +62,24 @@ Do not substitute internal model names for these terms in explanatory content.
 - Do not document private `/api` routes.
 - Do not present the internal CLI as a public product until it ships.
 - Never include real API keys, tokens, provider credentials, workspace IDs, or customer data.
+- Do not leak internal technical details. Examples are module names, database
+  tables and columns, queue and worker names, command-line tools, file paths,
+  and internal error classes. Describe what the customer sees and does.
+- Do not write about a plan, a phase, or a future feature. Do not use "yet",
+  "soon", "for now", or "in a future release". Document the current behavior in
+  the simple present tense.
+- Verify each value against the shipped code or the live OpenAPI document
+  before you publish it. Do not copy a limit from a plan document.
+
+## Media guidelines pages
+
+- `media/overview.mdx` holds the general rules. One page for each channel holds
+  the exact limits, and the overview links to them with a `CardGroup`.
+- Give the owner of each limit: OpenPMM, the provider, or the destination.
+- State an OpenPMM product limit that is lower than the provider limit. The
+  500 MiB upload limit is an example.
+- Link to the first-party provider document at the end of each channel page.
+- Update these pages when the channel limits in the product change.
 
 ## API navigation
 
