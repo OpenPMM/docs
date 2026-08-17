@@ -36,6 +36,9 @@ Send `POST /workspaces/{workspace_id}/assets/{asset_id}/validations` with your
 destination IDs. OpenPMM answers with every problem for every destination, for
 an image and for a video. Do this before you publish.
 
+Each problem gives the actual value, required value, rule owner, and recommended action.
+A blocker prevents publication to the affected destination.
+
 An issue with `can_convert: true` is one that OpenPMM repairs automatically
 when you publish or schedule the Post. See [Convert media](/guides/convert-media).
 
