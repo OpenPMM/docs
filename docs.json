@@ -173,9 +173,9 @@
             "pages": [
               "GET /workspaces/{workspace_id}/notification-settings",
               "PATCH /workspaces/{workspace_id}/notification-settings",
-              "POST /workspaces/{workspace_id}/slack-connection-sessions",
-              "GET /workspaces/{workspace_id}/slack-connection-sessions/{session_id}",
-              "DELETE /workspaces/{workspace_id}/slack-connection",
+              "POST /account/slack-connection-sessions",
+              "GET /account/slack-connection-sessions/{session_id}",
+              "DELETE /account/slack-connection",
               "GET /workspaces/{workspace_id}/slack-channels",
               "POST /workspaces/{workspace_id}/slack-notification-tests"
             ]
