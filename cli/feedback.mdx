@@ -1,0 +1,40 @@
+---
+title: "Send feedback"
+sidebarTitle: "Feedback"
+description: "Send product feedback for a Workspace with the OpenPMM CLI."
+---
+
+Use `feedback submit` to send product feedback for a Workspace. The API
+credential requires the `feedback:write` scope.
+
+```bash
+openpmm feedback submit \
+  --workspace ws_01JABCDEF \
+  --message 'The scheduled Posts view did not refresh.' \
+  --json
+```
+
+You can also provide a complete JSON request body:
+
+```json feedback.json
+{
+  "message": "The scheduled Posts view did not refresh."
+}
+```
+
+```bash
+openpmm feedback submit \
+  --workspace ws_01JABCDEF \
+  --file feedback.json \
+  --json
+```
+
+The command calls `POST /workspaces/{workspace_id}/feedback`. The CLI includes
+the Workspace, CLI environment, and request identifiers in the submission.
+
+OpenPMM uses the Account email of the API credential creator as the reply-to
+address. The command returns a feedback receipt after OpenPMM submits the
+email.
+
+The CLI creates an idempotency key for each new submission. Use
+`--idempotency-key <key>` to retry the same request after a timeout.

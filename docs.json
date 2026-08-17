@@ -45,6 +45,12 @@
             ]
           },
           {
+            "group": "Product feedback",
+            "pages": [
+              "guides/send-feedback"
+            ]
+          },
+          {
             "group": "Media guidelines",
             "pages": [
               "media/overview",
@@ -76,6 +82,7 @@
             "pages": [
               "cli/drafts-and-publishing",
               "cli/assets-and-connections",
+              "cli/feedback",
               "cli/webhooks"
             ]
           },
@@ -126,6 +133,12 @@
               "GET /workspaces/{workspace_id}",
               "PATCH /workspaces/{workspace_id}",
               "DELETE /workspaces/{workspace_id}"
+            ]
+          },
+          {
+            "group": "Feedback",
+            "pages": [
+              "POST /workspaces/{workspace_id}/feedback"
             ]
           },
           {
