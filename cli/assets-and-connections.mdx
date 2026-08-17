@@ -6,7 +6,9 @@ description: "Upload assets and manage destinations and Slack notifications with
 
 ## Upload an asset
 
-The CLI sends the file to a short-lived storage URL. It does not send the API key to that URL.
+The CLI calculates the required CRC64NVME checksums. It uploads the file in 8 MiB parts.
+
+The CLI retries a failed part. It does not send the API key to a storage URL.
 
 ```bash
 openpmm assets upload ./launch.webp \
@@ -26,10 +28,12 @@ openpmm assets validate ast_01JABCDEF \
 Use `--channel` instead of `--destination` to check the documented provider
 limits without a connected account.
 
-## Convert an image
+## Convert an image before publication
 
 OpenPMM makes a new file that obeys the limits of the given destinations, and
-keeps your original. See [Convert media](/guides/convert-media).
+keeps your original. Publishing and scheduling create the file automatically.
+Use this command when you want to inspect the file first. See
+[Convert media](/guides/convert-media).
 
 ```bash
 openpmm assets convert ast_01JABCDEF \
@@ -72,12 +76,16 @@ Bluesky requires `--account` with a handle or DID. Mastodon requires `--instance
 ## Manage Slack notifications
 
 ```bash
-openpmm slack connect --workspace ws_01JABCDEF
-openpmm slack sessions show dcs_... --workspace ws_01JABCDEF
+openpmm slack connect
+openpmm slack sessions show dcs_...
 openpmm slack channels --workspace ws_01JABCDEF --json
 openpmm slack update --workspace ws_01JABCDEF --slack-channel C0123456789
 openpmm slack test --workspace ws_01JABCDEF --yes
-openpmm slack disconnect --workspace ws_01JABCDEF --yes
+openpmm slack disconnect --yes
 ```
 
-Sending a test and disconnecting Slack require `--yes`.
+The Slack connection belongs to the Account and is shared by every Workspace.
+Each Workspace selects its own notification channel. Connecting and checking a
+connection session do not require `--workspace`. Disconnecting clears the
+channel setting for every Workspace. Sending a test and disconnecting Slack
+require `--yes`.
