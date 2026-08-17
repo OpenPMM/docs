@@ -22,6 +22,9 @@ Set `when` to an ISO 8601 timestamp to schedule a post. The timestamp must inclu
 }
 ```
 
+OpenPMM prepares safe image changes automatically when you schedule the Post.
+The original image stays in the Workspace.
+
 ## Update a scheduled post
 
 Get the post and save the ETag response header. Send this ETag in `If-Match` when you cancel or reschedule the post. OpenPMM returns `412` if the post changed after it created the ETag.

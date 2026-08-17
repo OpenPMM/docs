@@ -28,24 +28,8 @@ openpmm assets validate ast_01JABCDEF \
 Use `--channel` instead of `--destination` to check the documented provider
 limits without a connected account.
 
-## Convert an image before publication
-
-OpenPMM makes a new file that obeys the limits of the given destinations, and
-keeps your original. Publishing and scheduling create the file automatically.
-Use this command when you want to inspect the file first. See
-[Convert media](/guides/convert-media).
-
-```bash
-openpmm assets convert ast_01JABCDEF \
-  --workspace ws_01JABCDEF \
-  --destination dst_01JABCDEF \
-  --json
-
-openpmm asset-conversions show rendition_01JABCDEF \
-  --workspace ws_01JABCDEF \
-  --asset ast_01JABCDEF \
-  --json
-```
+Validation is optional. OpenPMM prepares safe image changes automatically when
+you schedule or publish. See [Media compatibility](/guides/media-compatibility).
 
 ## Download an asset
 

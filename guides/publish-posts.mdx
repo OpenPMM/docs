@@ -50,6 +50,9 @@ Publishing creates content on a provider. Review the draft before you publish it
     ```
 
     Add a unique `Idempotency-Key` header.
+
+    OpenPMM prepares safe image changes automatically. It returns status `422`
+    when a file needs your decision.
   </Step>
   <Step title="Check the Post status">
     Use `GET /workspaces/{workspace_id}/posts/{post}`. The response includes

@@ -62,13 +62,13 @@ Store the returned asset `id`. Add the ID to the post `media` array.
 
 Send `POST /workspaces/{workspace_id}/assets/{asset_id}/validations` with your
 destination IDs. OpenPMM answers with every problem for every destination, for
-an image and for a video. Do this before you publish.
+an image and for a video. This check is optional.
 
-Each problem gives the actual value, required value, rule owner, and recommended action.
+Each problem gives the actual value, the required value, and the rule owner.
 A blocker prevents publication to the affected destination.
 
-An issue with `can_convert: true` is one that OpenPMM repairs automatically
-when you publish or schedule the Post. See [Convert media](/guides/convert-media).
+The `auto_convertible` status means OpenPMM prepares the image automatically.
+See [Media compatibility](/guides/media-compatibility).
 
 <Warning>
   The upload URLs expire at `expires_at`. Create a new upload after this time.
