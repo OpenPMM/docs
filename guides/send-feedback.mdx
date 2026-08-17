@@ -1,0 +1,55 @@
+---
+title: "Send feedback"
+description: "Send product feedback from the dashboard, public API, or OpenPMM CLI."
+---
+
+OpenPMM sends your feedback to the product team. The email includes context
+that helps the team investigate the report.
+
+The context includes your Account email and the active Workspace details. A
+browser submission also includes the current path, locale, time zone, viewport,
+and user agent.
+
+OpenPMM uses your Account email as the reply-to address. The product team can
+reply to the email to contact you.
+
+## Use the dashboard
+
+1. Select **Feedback** above **Sign out** in the sidebar.
+2. Enter your feedback in the text field.
+3. Select **Submit Feedback**.
+
+OpenPMM shows **Feedback sent** after it sends the email. Select **Cancel** to
+close the dialog without a submission.
+
+## Use the public API
+
+Send a `POST` request to the Workspace feedback endpoint. The API credential
+requires the `feedback:write` scope.
+
+```bash
+curl --request POST \
+  --url https://api.openpmm.com/v1/workspaces/ws_01JABCDEF/feedback \
+  --header "Authorization: Bearer $OPENPMM_API_KEY" \
+  --header "Content-Type: application/json" \
+  --header "Idempotency-Key: $(uuidgen)" \
+  --data '{"message":"The scheduled Posts view did not refresh."}'
+```
+
+The API uses the Account email of the API credential creator as the reply-to
+address. The API returns a feedback receipt after it submits the email.
+
+Use the same idempotency key when you retry the same request. Use a new key
+when the message or Workspace changes.
+
+## Use the CLI
+
+```bash
+openpmm feedback submit \
+  --workspace ws_01JABCDEF \
+  --message 'The scheduled Posts view did not refresh.' \
+  --json
+```
+
+The CLI creates an idempotency key. You can pass `--idempotency-key <key>` when
+you must retry a request with the same key.
