@@ -52,10 +52,19 @@ Publishing creates content on a provider. Review the draft before you publish it
     Add a unique `Idempotency-Key` header.
   </Step>
   <Step title="Check the Post status">
-    Use `GET /workspaces/{workspace_id}/posts/{post}`. The response includes delivery status and receipts.
+    Use `GET /workspaces/{workspace_id}/posts/{post}`. The response includes
+    delivery status and receipts. A queued Post can also include `deferred` and
+    a future next-attempt time. The reason is `publishing_velocity` for a local
+    dispatch delay or `provider_cooldown` when OpenPMM is waiting before it
+    contacts that destination again. A failed Post stays failed while the
+    deferral reports when OpenPMM can try it again.
   </Step>
 </Steps>
 
 <Warning>
   A timeout does not prove that publishing failed. Retry with the same idempotency key.
 </Warning>
+
+If one destination reaches a provider publishing limit, only that destination's
+Post fails. OpenPMM continues the other destination Posts. Use confirmed manual
+Retry later for the affected Post.

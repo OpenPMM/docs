@@ -23,6 +23,8 @@ size.
 Every JSON success contains `data` and `meta`. Metadata includes `request_id`,
 `operation_id`, and a generated or supplied `idempotency_key`. JSON errors
 contain `code`, `message`, `status`, `request_id`, `retryable`, and `details`.
+A safety error can also contain `reason` and `retry_at`. Use `reason` to select
+the correct recovery action. Wait until `retry_at` when it is present.
 
 ```bash
 openpmm posts list --workspace ws_01JABCDEF --json \

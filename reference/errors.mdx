@@ -41,6 +41,10 @@ A problem response always has these fields.
 | `retryable` | `true` when you can send the same request again |
 | `errors` | The list of field errors. The list is empty when no field error applies |
 
+Some `429` responses also include `reason` and `retry_at`. Use `reason` to
+distinguish a request-rate limit from a publishing-safety limit. Use `retry_at`
+when it is present.
+
 Each item in `errors` has a `code` and a `detail`. An item that refers to a
 member of the request also has a `pointer`. The `pointer` value is a JSON
 Pointer to that member.
@@ -62,9 +66,33 @@ you send it again. The table gives the typical action for each status.
 | `404` | Check the resource ID and workspace ID |
 | `409` | Check the resource state or idempotency key |
 | `412` | Get the resource again and use its current ETag |
-| `429` | Wait for the time in `Retry-After` |
+| `429` | Read `code` and `reason`. Use `Retry-After` or `retry_at` when present. For `reason: backlog`, wait for existing posts to finish. |
 | `5xx` | Retry with a delay and the same idempotency key |
 
 <Warning>
   A network timeout or provider error can occur after publication. Get the post status before you create a new post.
 </Warning>
+
+## Request limits and publishing safety
+
+OpenPMM applies separate controls to HTTP requests and provider work.
+
+| Control | Stable code | What it protects | Action |
+| --- | --- | --- | --- |
+| Public API request limit | `public_rate_limited` | The authenticated `/v1` API | Wait for `Retry-After` |
+| Publishing admission limit | `publishing_admission_limited` | The amount of new provider work for an Account | Read `reason`. Wait when `retry_at` is present |
+| Account publishing pause | `publishing_account_paused` | Shared publishing infrastructure after repeated safety violations | Wait until `retry_at` |
+
+The `RateLimit` and `RateLimit-Policy` headers describe HTTP request allowance.
+They do not describe provider capacity or publishing units. Header items use
+neutral identifiers such as `requests`, `minute`, and `sustained`, followed by
+the numeric request limit and window. These identifiers are not provider names,
+product policy names, or versions.
+
+A publishing admission response rejects the complete new submission before
+OpenPMM stores a Post. The `reason` is `velocity`, `backlog`, or
+`account-paused`.
+
+Provider publishing limits apply to one destination. A Post can fail with
+`provider_publishing_limit` and automatic retry is disabled. Other destination
+Posts continue. Use a confirmed manual retry later.
