@@ -16,14 +16,16 @@ openpmm posts create \
   --channel x \
   --body 'First post in the thread' \
   --body 'Second post in the thread' \
+  --media-item '1:ast_01JABCDEF' \
   --json
 ```
 
 Store the returned Post `id` and `version`.
 
 Repeat `--body` to create an ordered self-reply chain for X, Bluesky, Mastodon,
-or Threads. OpenPMM attaches media to the opening post. The other channels
-accept one body item.
+or Threads. Repeat `--media-item <body-index>:<asset-id>` to attach media to a
+specific body item. The first body index is `0`. The other channels accept one
+body item.
 
 For a direct or scheduled Post, use `--destination` instead of `--channel`.
 Put provider-specific settings in `--options`. For example:
