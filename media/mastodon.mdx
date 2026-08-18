@@ -6,6 +6,13 @@ description: "See how OpenPMM applies the media limits that your Mastodon instan
 
 A Mastodon instance owns its media limits. Two instances can have different limits. OpenPMM reads the limits from your connected instance. Read [Media guidelines](/media/overview) for the general rules.
 
+## Self-reply chains
+
+Repeat the Post `body` value to publish a Mastodon thread. OpenPMM publishes
+the first status, then replies to the previous status for every later body
+item. Media attaches to the opening status. If publication stops part-way, a
+retry resumes at the first missing reply.
+
 ## Limits from your instance
 
 OpenPMM applies these values from the instance:
