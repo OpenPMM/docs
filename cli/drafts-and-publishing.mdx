@@ -107,6 +107,12 @@ openpmm posts move-in-queue \
 Use `--file request.json` to move multiple Posts in one atomic request.
 OpenPMM moves all requested Posts or does not move any Post.
 
+When a video needs a safe technical change, the command returns immediately
+and prints the Post with state `preparing`. The conversion continues in the
+background. Use `openpmm posts show post_01JABCDEF --workspace ws_01JABCDEF
+--json` to poll the Post. OpenPMM publishes or schedules it after preparation;
+you do not run `posts publish` again.
+
 ## Recover an uncertain request
 
 The CLI safely retries a request that has an idempotency key.

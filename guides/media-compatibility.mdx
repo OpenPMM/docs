@@ -1,7 +1,7 @@
 ---
 title: "Check media compatibility"
 sidebarTitle: "Media compatibility"
-description: "Learn how OpenPMM checks media and prepares safe image changes."
+description: "Learn how OpenPMM checks media and prepares safe image and video changes."
 ---
 
 Each destination has different media limits. OpenPMM checks each file against
@@ -36,6 +36,19 @@ prepared image when the same requirements apply.
 OpenPMM records the exact file when you confirm the Post. A later requirement
 change does not change a confirmed Post.
 
+## Automatic video preparation
+
+OpenPMM prepares a video in the background when a safe technical change can
+make it valid. Safe changes include an MP4 container, H.264 video, AAC audio,
+a lower frame rate, or smaller dimensions and file size. OpenPMM preserves the
+duration, aspect ratio, displayed orientation, and meaningful audio.
+
+Create Post and Publish Posts return `202 Accepted` when preparation is still
+running. The returned Post has the `preparing` state. Continue other work and
+use Get Post, or `openpmm posts show`, to read the current state. OpenPMM moves
+the Post to `ready` or `scheduled` after it verifies the prepared file. No
+second confirmation is necessary.
+
 ## Changes that need your decision
 
 OpenPMM does not crop, pad, trim, or remove animation automatically. These
@@ -44,8 +57,9 @@ changes can alter the content.
 Use another file or remove the affected destination when one of these changes
 is necessary.
 
-OpenPMM does not change video files. Use a compatible video file for each
-selected destination.
+OpenPMM does not trim, crop, pad, upscale, change playback speed, change the
+displayed orientation, or remove meaningful audio. Use another file when a
+video needs one of these editorial changes.
 
 ## Check an asset before publication
 
@@ -60,7 +74,7 @@ The response has one `status`:
 | Status | Meaning |
 | --- | --- |
 | `compatible_original` | The original file meets the selected requirements. |
-| `auto_convertible` | OpenPMM prepares the image automatically during publication. |
+| `auto_convertible` | OpenPMM prepares the image or video automatically during publication. |
 | `editorial_decision_required` | A crop, pad, trim, or animation change needs your decision. |
 | `incompatible` | OpenPMM cannot prepare the file automatically. |
 
@@ -78,9 +92,9 @@ openpmm assets validate ast_01JABCDEF \
 OpenPMM returns status `422` before it sends media to a provider. Read each
 issue to find the affected asset and destination.
 
-If automatic image preparation fails, the response code is
-`media_conversion_failed`. Retry when the response says `retryable: true`.
-Otherwise, replace the image.
+If background video preparation reaches a terminal failure, the Post moves to
+`needs-attention`. No provider request has occurred. Replace the video or retry
+when the error says that retry is safe.
 
 Use another file, edit the file, or remove the destination. Then send the
 confirmed publication request again.

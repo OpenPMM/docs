@@ -51,8 +51,10 @@ Publishing creates content on a provider. Review the draft before you publish it
 
     Add a unique `Idempotency-Key` header.
 
-    OpenPMM prepares safe image changes automatically. It returns status `422`
-    when a file needs your decision.
+    OpenPMM prepares safe image and video changes automatically. A video can
+    return `202 Accepted` with the Post in `preparing`. The work continues in
+    the background. OpenPMM returns status `422` when a file needs your
+    decision.
   </Step>
   <Step title="Check the Post status">
     Use `GET /workspaces/{workspace_id}/posts/{post}`. The response includes
@@ -61,6 +63,10 @@ Publishing creates content on a provider. Review the draft before you publish it
     dispatch delay or `provider_cooldown` when OpenPMM is waiting before it
     contacts that destination again. A failed Post stays failed while the
     deferral reports when OpenPMM can try it again.
+
+    A `preparing` Post has not reached a provider. Poll this operation until the
+    Post becomes `ready`, `scheduled`, or `needs-attention`. You do not confirm
+    the Post again.
   </Step>
 </Steps>
 
