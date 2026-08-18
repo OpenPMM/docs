@@ -53,6 +53,10 @@ node src/openpmm.js --help
 ## Common workflow
 
 ```bash
+openpmm signup create \
+  --email publisher@example.com \
+  --workspace-name "Product Marketing"
+
 export OPENPMM_API_KEY=opm_live_...
 export OPENPMM_WORKSPACE=ws_01JABCDEF
 
@@ -69,6 +73,9 @@ openpmm posts publish \
   --yes \
   --json
 ```
+
+The signup command does not need an API key. Open the returned `signup_url` and
+finish authentication in a browser. See [Create an account](/cli/signup).
 
 Run `openpmm --help` to see the command tree. Run
 `openpmm <command> --help` to see its API operation, scope, side effects,

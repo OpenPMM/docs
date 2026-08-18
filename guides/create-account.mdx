@@ -1,0 +1,46 @@
+---
+title: "Create an account from an agent"
+sidebarTitle: "Create an account"
+description: "Create a signup link, then verify the requested email address in a browser."
+---
+
+An agent can prepare your first OpenPMM Workspace. The user must finish
+authentication in a browser. The signup request does not need an API key.
+
+## Create a signup link
+
+Send the email address and Workspace name.
+
+```bash
+curl --request POST \
+  --url https://api.openpmm.com/v1/signup-intents \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "email": "publisher@example.com",
+    "workspace_name": "Product Marketing"
+  }'
+```
+
+The response contains a short-lived `signup_url` and its expiry time.
+
+```json
+{
+  "object": "signup_intent",
+  "signup_url": "https://app.openpmm.com/signup/...",
+  "expires_at": "2026-08-18T12:30:00.000Z"
+}
+```
+
+Open `signup_url` in a browser. Continue with Google or create an account with
+the requested email address and a password. The verified email address must
+match the signup request. If that address already has an OpenPMM identity,
+select **Sign in** on the signup page instead.
+
+<Note>
+  OpenPMM creates the Workspace only after email verification. The request does
+  not include an Account name or website URL because neither is part of the
+  customer-facing Workspace setup.
+</Note>
+
+After signup, create an API key in the OpenPMM application. Use the API key for
+all other public API operations.

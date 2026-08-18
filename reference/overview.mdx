@@ -13,7 +13,7 @@ The endpoint reference uses the OpenAPI document from the production API. OpenPM
 
 ## Conventions
 
-- Send the API key as a bearer token on each API request.
+- Send the API key as a bearer token on each API request except `POST /signup-intents`.
 - Send and receive JSON unless an upload endpoint gives different instructions.
 - Use IDs without changes.
 - Send `Idempotency-Key` when the endpoint requires it.
