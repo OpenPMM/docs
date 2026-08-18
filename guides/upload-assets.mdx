@@ -56,7 +56,19 @@ Read the [media guidelines](/media/overview) before you upload. Each destination
   </Step>
 </Steps>
 
-Store the returned asset `id`. Add the ID to the post `media` array.
+Store the returned asset `id`. Add the ID to the post `media` array for the
+opening post. Use `media_items` to select a body item in a self-reply chain:
+
+```json
+{
+  "body": ["Opening post", "Reply with an image"],
+  "media_items": [
+    { "asset_id": "ast_01JABCDEF", "item_index": 1 }
+  ]
+}
+```
+
+The first body item has the `item_index` value `0`.
 
 ## Check the asset
 
