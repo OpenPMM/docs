@@ -12,6 +12,10 @@ A post can contain at most 300 graphemes and 3,000 UTF-8 bytes. OpenPMM checks b
 
 Links, hashtags, and resolvable mentions become Bluesky rich-text facets. If a mention cannot resolve, publication stops before OpenPMM creates the post.
 
+Repeat the Post `body` value to publish a self-reply chain. Each reply points to
+the opening record as its root and to the previous record as its parent. Media
+attaches to the opening record.
+
 ## Images
 
 | Property | Limit |
@@ -44,7 +48,9 @@ Use Bluesky options on the draft Post. Each key in `altTextByAssetId` must match
 
 ## Retry behavior
 
-OpenPMM derives one Bluesky record key from the post idempotency key. A retry writes the same record instead of creating a second post.
+OpenPMM derives one Bluesky record key for each body item. A retry checks each
+exact record and resumes at the first missing reply instead of creating a
+second post.
 
 ## Provider references
 

@@ -21,6 +21,10 @@ openpmm posts create \
 
 Store the returned Post `id` and `version`.
 
+Repeat `--body` to create an ordered self-reply chain for X, Bluesky, Mastodon,
+or Threads. OpenPMM attaches media to the opening post. The other channels
+accept one body item.
+
 For a direct or scheduled Post, use `--destination` instead of `--channel`.
 Put provider-specific settings in `--options`. For example:
 
@@ -73,3 +77,7 @@ multiple draft Posts, publish all of them together with `--file request.json`.
 
 The CLI safely retries a request that has an idempotency key.
 Reuse `--idempotency-key` after a timeout.
+
+If a provider stops after it publishes part of a thread, OpenPMM keeps the
+published receipts. A retry resumes at the first missing reply instead of
+publishing the opening posts again.

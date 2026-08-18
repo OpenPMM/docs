@@ -6,6 +6,15 @@ description: "See the video and image limits that OpenPMM applies for a Threads 
 
 Threads has the most detailed video contract of the Meta channels. Read [Media guidelines](/media/overview) for the general rules.
 
+## Self-reply chains
+
+Repeat the Post `body` value to publish a Threads self-reply chain. Media
+attaches to the opening post. OpenPMM checks both the Threads post quota and
+reply quota before publication. Existing connections must be reconnected once
+to grant the `threads_manage_replies` permission.
+
+If publication stops part-way, a retry resumes at the first missing reply.
+
 ## Media per post
 
 A Threads post accepts up to 20 assets.
