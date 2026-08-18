@@ -23,7 +23,8 @@
             "group": "Get started",
             "pages": [
               "index",
-              "quickstart"
+              "quickstart",
+              "guides/create-account"
             ]
           },
           {
@@ -74,6 +75,7 @@
             "group": "Get started",
             "pages": [
               "cli/overview",
+              "cli/signup",
               "cli/authentication"
             ]
           },
@@ -106,6 +108,12 @@
               "reference/pagination",
               "reference/idempotency",
               "reference/errors"
+            ]
+          },
+          {
+            "group": "Signup",
+            "pages": [
+              "POST /signup-intents"
             ]
           },
           {

@@ -1,0 +1,30 @@
+---
+title: "Create an account"
+sidebarTitle: "Signup"
+description: "Create a browser signup link from the OpenPMM CLI."
+---
+
+Use `signup create` before you have an API key.
+
+```bash
+openpmm signup create \
+  --email publisher@example.com \
+  --workspace-name "Product Marketing" \
+  --json
+```
+
+The command returns `signup_url`. Open that URL in a browser. Continue with
+Google or create an account with the same email address and a password. If the
+address already has an OpenPMM identity, select **Sign in** on the signup page.
+
+The command calls `POST /signup-intents`. It does not read or send an OpenPMM
+API key. The link expires after 30 minutes.
+
+Use `--file` to provide the complete JSON request instead.
+
+```json
+{
+  "email": "publisher@example.com",
+  "workspace_name": "Product Marketing"
+}
+```
