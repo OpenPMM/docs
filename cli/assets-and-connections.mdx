@@ -57,6 +57,21 @@ openpmm destinations disconnect dst_... --workspace ws_01JABCDEF --yes
 Provider consent completes in a browser. The connection command returns its authorization URL.
 Bluesky requires `--account` with a handle or DID. Mastodon requires `--instance-origin`.
 
+### Configure a Destination queue
+
+Pass the complete queue policy as JSON.
+The CLI gets the current Destination ETag before it sends the change.
+
+```bash
+openpmm destinations update dst_01JABCDEF \
+  --workspace ws_01JABCDEF \
+  --queue-policy '{"enabled_weekdays":["monday","tuesday","wednesday","thursday","friday"],"windows":[{"weekdays":["monday","tuesday","wednesday","thursday","friday"],"start_time":"08:00","end_time":"10:00"}]}' \
+  --json
+```
+
+Use `--file request.json` for a policy that is easier to review in a file.
+Include a returned window `id` when you keep or change that window.
+
 ## Manage Slack notifications
 
 ```bash

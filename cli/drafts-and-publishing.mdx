@@ -41,6 +41,19 @@ openpmm posts create \
 OpenPMM checks these settings during the create request. If a required setting
 is missing, the CLI reports a non-retryable `422` validation error.
 
+Use `--when queue` to select the next Destination queue slot.
+OpenPMM uses the Workspace time zone.
+
+```bash
+openpmm posts create \
+  --workspace ws_01JABCDEF \
+  --destination dst_01JABCDEF \
+  --when queue \
+  --body 'Queued update' \
+  --yes \
+  --json
+```
+
 ## Edit a Post
 
 The CLI gets the current ETag before it changes a draft.
@@ -70,8 +83,27 @@ openpmm posts publish \
   --json
 ```
 
-Use `--at 2026-08-13T12:00:00Z` to schedule the Post. If a group contains
-multiple draft Posts, publish all of them together with `--file request.json`.
+Use `--at 2026-08-13T12:00:00Z` to schedule the Post at an exact time.
+Use `--at queue` to select the next queue slot.
+If a group contains multiple draft Posts, publish all Posts with `--file request.json`.
+
+## Move a queued Post
+
+Get the Post and copy its current `scheduled_for` value.
+Select a local date in the Workspace time zone.
+
+```bash
+openpmm posts move-in-queue \
+  --workspace ws_01JABCDEF \
+  --post post_01JABCDEF \
+  --expected-scheduled-at 2026-08-20T08:37:00.000Z \
+  --local-date 2026-08-22 \
+  --yes \
+  --json
+```
+
+Use `--file request.json` to move multiple Posts in one atomic request.
+OpenPMM moves all requested Posts or does not move any Post.
 
 ## Recover an uncertain request
 

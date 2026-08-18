@@ -9,11 +9,16 @@ A **Post** contains content for one channel. It also contains the publishing sta
 | --- | --- | --- |
 | Create with `when: "draft"` | An editable Post | No |
 | Publish with `when: "now"` | The same Post starts publishing | Yes |
+| Publish with `when: "queue"` | The same Post uses the next Destination queue slot | At the selected time |
 | Publish with a timestamp | The same Post becomes scheduled | At the scheduled time |
 
 The Post keeps the same `id` when you publish it.
 Use `version` and the ETag to prevent changes to an old draft version.
 Publish every draft Post in a group together. This keeps the group consistent.
+
+A queued Post has the `scheduled` state and the `queue` schedule mode.
+OpenPMM selects an exact time when the Post enters the queue.
+You can move a queued Post to another local date without selecting an exact time.
 
 ## Post details
 

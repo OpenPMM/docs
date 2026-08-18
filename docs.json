@@ -146,6 +146,7 @@
             "pages": [
               "POST /workspaces/{workspace_id}/posts",
               "GET /workspaces/{workspace_id}/posts",
+              "POST /workspaces/{workspace_id}/posts/move-in-queue",
               "GET /workspaces/{workspace_id}/posts/{post}",
               "PATCH /workspaces/{workspace_id}/posts/{post}",
               "DELETE /workspaces/{workspace_id}/posts/{post}",
