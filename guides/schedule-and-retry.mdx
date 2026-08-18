@@ -1,7 +1,95 @@
 ---
-title: "Schedule and retry"
-description: "Schedule a post, change its publication time, or retry it."
+title: "Queue, schedule, and retry"
+description: "Queue a Post, select an exact time, move a queued Post, or retry a Post."
 ---
+
+## Queue a Post
+
+Set `when` to `queue` to use the next available Destination queue slot.
+Do not send `time_zone` for a queue request.
+OpenPMM uses the Workspace time zone.
+
+```json
+{
+  "confirmed": true,
+  "when": "queue",
+  "posts": [
+    {
+      "destination_id": "dst_example",
+      "headline": null,
+      "body": ["Queued update"],
+      "media": [],
+      "options": null
+    }
+  ]
+}
+```
+
+OpenPMM selects and stores an exact time before it returns the Post.
+Each Destination can get a different time in the same request.
+The Post response includes `scheduled_for`, `time_zone`, `schedule_mode`, `queue_local_date`, and `queue_window_id`.
+
+### Configure a Destination queue
+
+Each posting window gives one queue slot on each selected weekday.
+A Destination can contain 10 posting windows maximum.
+The start time is inclusive. The end time is exclusive.
+
+Use `PATCH /workspaces/{workspace_id}/destinations/{destination_id}` to change a queue policy.
+Send the Destination ETag in `If-Match`.
+
+```json
+{
+  "queue_policy": {
+    "enabled_weekdays": ["monday", "tuesday", "wednesday", "thursday", "friday"],
+    "windows": [
+      {
+        "weekdays": ["monday", "tuesday", "wednesday", "thursday", "friday"],
+        "start_time": "08:00",
+        "end_time": "10:00"
+      },
+      {
+        "weekdays": ["monday", "tuesday", "wednesday", "thursday", "friday"],
+        "start_time": "13:00",
+        "end_time": "18:00"
+      }
+    ]
+  }
+}
+```
+
+OpenPMM assigns an ID to each new window.
+Include this ID when you keep or change that window.
+Remove a window from the array to delete it.
+
+An exact schedule or immediate Post counts when OpenPMM finds an available day.
+You can still create another exact schedule or immediate Post for a full day.
+This manual Post does not move an existing queued Post.
+
+### Move queued Posts
+
+Use `POST /workspaces/{workspace_id}/posts/move-in-queue` to move queued Posts to one local date.
+Send the current `scheduled_for` value for each Post.
+OpenPMM moves all requested Posts or does not move any Post.
+
+```json
+{
+  "confirmed": true,
+  "local_date": "2026-08-22",
+  "posts": [
+    {
+      "id": "post_example",
+      "expected_scheduled_at": "2026-08-20T08:37:00.000Z"
+    }
+  ]
+}
+```
+
+The target date must have a queue slot for every requested Post.
+OpenPMM returns `412` if a Post schedule changed before the request.
+Use the same `Idempotency-Key` when you retry the same move.
+
+## Schedule an exact time
 
 Set `when` to an ISO 8601 timestamp to schedule a post. The timestamp must include a UTC offset. Use `time_zone` to record the local time zone.
 

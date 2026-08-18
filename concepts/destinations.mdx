@@ -26,3 +26,16 @@ An enabled destination can receive a post. A workspace can have one default dest
 <Tip>
   Store destination IDs in your configuration. Show the provider and account name to users. Send the destination ID to the API.
 </Tip>
+
+## Destination queue
+
+Each Destination has its own queue policy.
+The policy contains enabled weekdays and local-time posting windows.
+Each posting window gives one queue slot on each matching weekday.
+
+OpenPMM creates suggested windows for a new Destination.
+You can change, add, or delete these windows.
+OpenPMM uses the Workspace time zone for every future queue allocation.
+
+Queue policy changes do not move a queued Post.
+The Post keeps the exact time that OpenPMM selected when it entered the queue.
