@@ -112,6 +112,9 @@ Set `when` to an ISO 8601 timestamp to schedule a post. The timestamp must inclu
 
 OpenPMM prepares safe image changes automatically when you schedule the Post.
 The original image stays in the Workspace.
+If a video needs a safe technical conversion, OpenPMM returns `202 Accepted`
+with the Post in `preparing`. Conversion continues in the background and keeps
+the scheduled publication time, including any provider upload lead time.
 
 ## Update a scheduled post
 
@@ -130,5 +133,8 @@ Send `confirmed: true` in the request body. Also send a new `Idempotency-Key` fo
   temporarily limited. Read `reason` and wait until `retry_at` when it is
   present. The failed Post remains unchanged.
 - Review a post with the `needs-attention` state. Do not create a duplicate post.
+
+A confirmed video-preparation retry can also return `202 Accepted`. Continue
+with other work and read the same Post until it leaves `preparing`.
 
 See [Idempotency](/reference/idempotency) for retry rules. See [Errors](/reference/errors) for error handling.
