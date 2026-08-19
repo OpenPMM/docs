@@ -1,0 +1,105 @@
+---
+title: "Publish to LinkedIn with the OpenPMM API"
+description: "Publish text, images, and video to a LinkedIn Destination with the OpenPMM API, including media limits and review steps."
+---
+
+Use the OpenPMM API to prepare and publish a Post to a LinkedIn Destination. This guide shows the LinkedIn-specific choices. Read [Create posts](/guides/publish-posts) first for the complete Post workflow.
+
+<Warning>
+  Publishing creates content on LinkedIn. Review the Destination, content, media, and timing before you send a confirmed request.
+</Warning>
+
+## Before you start
+
+You need these objects:
+
+- An API credential with access to the Workspace.
+- A Workspace ID.
+- A connected LinkedIn Destination ID.
+- Any media Asset that the Post uses.
+
+Use [Connect a destination](/guides/connect-a-destination) to authorize the LinkedIn account. Use [Upload assets](/guides/upload-assets) when the Post includes media.
+
+## Choose the LinkedIn Post type
+
+LinkedIn accepts one video or a set of images in one Post. It does not accept a video and an image in the same Post.
+
+Use the following content choices:
+
+- Text only when the Post has no media.
+- One video when the Post contains a video.
+- One to 20 images when the Post contains images.
+
+The [LinkedIn media guidelines](/media/linkedin) page lists the current file and duration limits.
+
+## Create a LinkedIn draft
+
+Create a draft with the LinkedIn channel. A draft uses `channel` because it does not have a Destination yet.
+
+```json
+{
+  "when": "draft",
+  "group": "linkedin-launch",
+  "posts": [
+    {
+      "channel": "linkedin",
+      "headline": null,
+      "body": ["A release update from OpenPMM."],
+      "media": [],
+      "options": null
+    }
+  ]
+}
+```
+
+Send the request to `POST /workspaces/{workspace_id}/posts`. Store the returned Post `id` and `version`.
+
+## Add media to the Post
+
+Upload the file as an Asset before you publish the Post. Add the Asset ID to the Post body that should contain the media.
+
+Use one of these patterns:
+
+- Add one video Asset to the Post.
+- Add up to 20 image Assets to the Post.
+- Do not mix a video Asset with image Assets in the same LinkedIn Post.
+
+OpenPMM checks the media before publication. It can make a safe image conversion when the file type or pixel count needs a technical change. It does not change the meaning of the image.
+
+## Publish the reviewed Post
+
+Publish the same Post with its current version and the LinkedIn Destination ID.
+
+```json
+{
+  "confirmed": true,
+  "when": "now",
+  "time_zone": "UTC",
+  "posts": [
+    {
+      "id": "post_01JABCDEF",
+      "version": 1,
+      "destination_id": "dst_01JABCDEF"
+    }
+  ]
+}
+```
+
+Send the body to `POST /workspaces/{workspace_id}/posts/publish`. Add a unique `Idempotency-Key` header. Use the same key when you retry the same request after a timeout.
+
+For a scheduled Post, use `when: "schedule"` and provide the publication time described in [Queue, schedule, and retry](/guides/schedule-and-retry).
+
+## Check the result
+
+Use `GET /workspaces/{workspace_id}/posts/{post}` after the request. The Post response includes its state and publication receipt.
+
+If the Post enters `preparing`, it has not reached LinkedIn. Poll the Post until it becomes `ready`, `scheduled`, or `needs-attention`. Do not confirm the same Post again after it moves from `preparing`.
+
+If LinkedIn rejects the media or content, read the error details and correct the Post. OpenPMM keeps other Posts in the same submission independent when they target other Destinations.
+
+## Related pages
+
+- [LinkedIn media guidelines](/media/linkedin)
+- [Check media compatibility](/guides/media-compatibility)
+- [Create posts](/guides/publish-posts)
+- [Queue, schedule, and retry](/guides/schedule-and-retry)

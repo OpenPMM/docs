@@ -1,0 +1,112 @@
+---
+title: "Publish to Instagram with the OpenPMM API"
+description: "Publish Instagram posts, Reels, and Stories with the OpenPMM API, including media choices, limits, and confirmation steps."
+---
+
+Use the OpenPMM API to prepare and publish a Post to an Instagram Destination. This guide shows the Instagram-specific choices. Read [Create posts](/guides/publish-posts) first for the complete Post workflow.
+
+<Warning>
+  Publishing creates content on Instagram. Review the Destination, content, media, and timing before you send a confirmed request.
+</Warning>
+
+## Before you start
+
+You need these objects:
+
+- An API credential with access to the Workspace.
+- A Workspace ID.
+- A connected Instagram Destination ID.
+- Media Assets for the Post, Reel, or Story.
+
+Use [Connect a destination](/guides/connect-a-destination) to authorize the Instagram account. Use [Upload assets](/guides/upload-assets) when you need to add media.
+
+## Choose the Instagram content type
+
+Instagram requires media for every Post. Set the `type` value in the Instagram options:
+
+| Type | Media requirement |
+| --- | --- |
+| `post` | One to 10 images |
+| `reel` | Exactly one video |
+| `story` | Exactly one image or video |
+
+Use `post` for a single image or carousel. Use `reel` for one video. Use `story` for one temporary profile Story.
+
+The [Instagram media guidelines](/media/instagram) page lists the current file, aspect ratio, and duration limits.
+
+## Create an Instagram draft
+
+Create a draft with the Instagram channel. Set the Instagram type in `options`.
+
+```json
+{
+  "when": "draft",
+  "group": "instagram-launch",
+  "posts": [
+    {
+      "channel": "instagram",
+      "headline": null,
+      "body": ["A release update from OpenPMM."],
+      "media": [],
+      "options": {
+        "type": "post"
+      }
+    }
+  ]
+}
+```
+
+Send the request to `POST /workspaces/{workspace_id}/posts`. Store the returned Post `id` and `version`.
+
+## Prepare Instagram media
+
+Upload each file as an Asset before publication. Add the Asset IDs to the Post body in the order that you want Instagram to display them.
+
+OpenPMM applies these product limits:
+
+- Image files use JPEG format and have an 8 MB maximum.
+- A carousel accepts one to 10 images.
+- A Reel accepts one MP4 or MOV video.
+- An Instagram video can be up to 500 MiB.
+- A Reel video can be 3 seconds to 15 minutes long.
+- An image Post uses a 4:5 to 1.91:1 aspect ratio.
+
+OpenPMM converts PNG and WebP images to JPEG when safe. It does not crop or pad an image when the aspect ratio changes what the image shows. Use another file or remove the Instagram Destination.
+
+## Publish the reviewed Post
+
+Publish the same Post with its current version and the Instagram Destination ID.
+
+```json
+{
+  "confirmed": true,
+  "when": "now",
+  "time_zone": "UTC",
+  "posts": [
+    {
+      "id": "post_01JABCDEF",
+      "version": 1,
+      "destination_id": "dst_01JABCDEF"
+    }
+  ]
+}
+```
+
+Send the body to `POST /workspaces/{workspace_id}/posts/publish`. Add a unique `Idempotency-Key` header. Use the same key when you retry the same request after a timeout.
+
+For a scheduled Post, use `when: "schedule"` and provide the publication time described in [Queue, schedule, and retry](/guides/schedule-and-retry).
+
+## Check the result
+
+Use `GET /workspaces/{workspace_id}/posts/{post}` after the request. The response includes the Post state and publication receipt.
+
+If the Post enters `preparing`, it has not reached Instagram. Poll the Post until it becomes `ready`, `scheduled`, or `needs-attention`. Do not confirm the same Post again after it moves from `preparing`.
+
+If Instagram returns a media validation error, correct the file or the `options.type` value. A Post and a Story accept an image. A Reel requires a video.
+
+## Related pages
+
+- [Instagram media guidelines](/media/instagram)
+- [Check media compatibility](/guides/media-compatibility)
+- [Create posts](/guides/publish-posts)
+- [Queue, schedule, and retry](/guides/schedule-and-retry)
