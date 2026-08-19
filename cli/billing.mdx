@@ -1,0 +1,93 @@
+---
+title: "Billing"
+description: "Manage the Account subscription through public billing operations."
+---
+
+Billing commands use the public `/v1` API. They do not use a Workspace selector.
+
+Use an API credential with `billing:read` or `billing:write`.
+
+## Get billing status
+
+```bash
+openpmm billing show --json
+```
+
+The response includes the subscription status, Workspace quantity, trial end, and current X usage.
+
+## Start a subscription trial
+
+```bash
+openpmm billing subscribe \
+  --interval month \
+  --yes \
+  --json
+```
+
+Use `--interval year` for annual billing. Open the returned `url` in a browser.
+
+The 14-day trial does not require payment details. X remains unavailable until the first payment succeeds.
+
+## Open the Stripe portal
+
+```bash
+openpmm billing portal --json
+```
+
+Open the returned `url`. Use the portal for payment details, invoices, cancellation, and plan changes. Monthly-to-annual changes are immediate and prorated. Annual-to-monthly changes start after the annual term.
+
+## End the trial
+
+Add a payment method in the Stripe portal first. Then run this command:
+
+```bash
+openpmm billing convert-trial --yes --json
+```
+
+This command charges the first invoice immediately. OpenPMM unlocks X after Stripe confirms payment.
+
+## Add a Workspace
+
+Creating another Workspace increases the subscription quantity and can charge
+a prorated amount immediately. Use an API credential with `billing:write` and
+confirm the charge:
+
+```bash
+openpmm workspaces create \
+  --file workspace.json \
+  --yes \
+  --json
+```
+
+The request file contains `name` and `time_zone`. The CLI sends
+`confirmed: true` only after you add `--yes`.
+
+## Cancel a Workspace subscription
+
+Create `cancellation.json` with the exact Workspace name:
+
+```json
+{
+  "confirmed": true,
+  "confirmation": "CANCEL Product Marketing"
+}
+```
+
+Then schedule cancellation at the end of the current paid term:
+
+```bash
+openpmm workspaces cancel-subscription \
+  --workspace ws_01JABCDEF \
+  --file cancellation.json \
+  --yes \
+  --json
+```
+
+After the paid term ends, the Workspace is archived. To permanently delete its
+data, use `workspaces delete` with `DELETE` followed by the exact Workspace
+name.
+
+<Warning>
+  Billing write commands can create a charge. Review the command before you add
+  `--yes`.
+</Warning>

@@ -67,6 +67,7 @@ you send it again. The table gives the typical action for each status.
 | --- | --- |
 | `400` or `422` | Correct the request before you retry |
 | `401` | Correct or replace the API key |
+| `402` | Start or correct the subscription. End the trial before you use X. |
 | `403` | Check the credential scopes and workspace access |
 | `404` | Check the resource ID and workspace ID |
 | `409` | Check the resource state or idempotency key |
@@ -85,6 +86,7 @@ OpenPMM applies separate controls to HTTP requests and provider work.
 | Control | Stable code | What it protects | Action |
 | --- | --- | --- | --- |
 | Public API request limit | `public_rate_limited` | The authenticated `/v1` API | Wait for `Retry-After` |
+| X monthly allowance | `x_usage_limit_reached` | The 50 X post items for one Workspace and UTC month | Wait for the next UTC month |
 | Publishing admission limit | `publishing_admission_limited` | The amount of new provider work for an Account | Read `reason`. Wait when `retry_at` is present |
 | Account publishing pause | `publishing_account_paused` | Shared publishing infrastructure after repeated safety violations | Wait until `retry_at` |
 

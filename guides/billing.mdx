@@ -1,0 +1,62 @@
+---
+title: "Manage billing"
+description: "Start a trial, manage the subscription, and understand Workspace and X limits."
+---
+
+OpenPMM charges for each Workspace. Account members do not add a charge.
+
+The monthly price is USD 9.95 or EUR 9.95 for each Workspace. The annual price is USD 99.50 or EUR 99.50.
+
+The annual price gives you two months at no charge. Stripe shows the currency and tax before you confirm payment.
+
+## Start the trial
+
+The free trial lasts 14 days. You do not add payment details to start it.
+
+The trial includes all product features except X. Drafts and other destinations remain available.
+
+Open **Account**, then select the monthly or annual trial. Stripe hosts the checkout page.
+
+OpenPMM creates the first Workspace after Stripe confirms the subscription.
+
+## Unlock X during the trial
+
+Open **Account**, then click **Manage plan, payment details, and invoices**. Add a payment method in Stripe.
+
+Return to OpenPMM. Click **End trial and unlock X**.
+
+Stripe charges the first invoice when you end the trial. OpenPMM unlocks X after Stripe confirms payment.
+
+## Use the X allowance
+
+Each paid Workspace includes 50 X post items in each UTC calendar month. Each item in an X thread counts once.
+
+OpenPMM rejects new X publishing when the Workspace reaches 50 items. Drafts remain available.
+
+An uncertain provider result keeps its allowance reservation. This rule prevents an accidental extra provider charge.
+
+## Add or remove a Workspace
+
+OpenPMM increases the subscription quantity before it creates an additional Workspace. Stripe charges the prorated amount immediately.
+
+Workspace removal takes effect at the end of the current paid term. You receive no mid-term credit.
+
+You can use the Workspace until its access end date. The last Workspace removal also schedules subscription cancellation.
+
+Cancel an active Workspace with `POST /v1/workspaces/{workspace_id}/cancellation` and a confirmation value of `CANCEL` followed by its exact name. OpenPMM archives the Workspace when the paid term ends. Permanent deletion is a separate `DELETE /v1/workspaces/{workspace_id}` action for an archived Workspace and requires `DELETE` followed by its exact name.
+
+## Handle a failed payment
+
+OpenPMM keeps publishing available for seven days after a failed renewal payment. Use the Stripe portal to correct payment details.
+
+The Account becomes read-only when the grace period ends. You can still view the Account and edit existing drafts.
+
+You cannot schedule or publish new Posts in read-only mode.
+
+## Manage the subscription
+
+Open **Account**, then click **Manage plan, payment details, and invoices**.
+
+Stripe hosts payment methods, invoices, cancellation, and plan changes. A cancellation takes effect at the paid term end.
+
+A change from monthly to annual billing takes effect immediately. Stripe applies the unused monthly amount as a credit on the annual invoice. A change from annual to monthly billing takes effect when the annual term ends.
