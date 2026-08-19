@@ -126,15 +126,6 @@
             ]
           },
           {
-            "group": "Billing",
-            "pages": [
-              "GET /billing",
-              "POST /billing/checkout-sessions",
-              "POST /billing/portal-sessions",
-              "POST /billing/trial-conversion"
-            ]
-          },
-          {
             "group": "Team",
             "pages": [
               "GET /account/members",
@@ -152,7 +143,6 @@
               "POST /workspaces",
               "GET /workspaces/{workspace_id}",
               "PATCH /workspaces/{workspace_id}",
-              "POST /workspaces/{workspace_id}/cancellation",
               "DELETE /workspaces/{workspace_id}"
             ]
           },
