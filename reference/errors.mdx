@@ -1,6 +1,6 @@
 ---
 title: "Errors"
-description: "Use error codes and request IDs to handle a failed request."
+description: "Use OpenPMM error codes and request IDs to diagnose failed API requests."
 ---
 
 OpenPMM returns an RFC 9457 problem response for an API error. The response has the `application/problem+json` media type. Use the HTTP status for the error class. Use `code` for application logic.

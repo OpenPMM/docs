@@ -1,6 +1,6 @@
 ---
 title: "Idempotency"
-description: "Retry an operation without creating duplicate work."
+description: "Retry a request safely with an idempotency key and avoid duplicate API work."
 ---
 
 Operations marked idempotent use an `Idempotency-Key` header. The Create Post endpoint requires this header when you publish or schedule. The header is optional when you create a draft.
