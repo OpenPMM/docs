@@ -1,0 +1,79 @@
+---
+title: "Refine post copy"
+description: "Use the Writing Assistant in the web editor."
+---
+
+The Writing Assistant refines one Post body item in the web editor.
+
+<Note>
+  The Writing Assistant is not available through the public API or the CLI.
+  OpenPMM provides reusable agent skills as a separate product surface.
+</Note>
+
+## Refine the copy
+
+1. Open a Post in the web editor.
+2. Click the sparkles icon below the body field.
+3. Select a refinement option.
+
+OpenPMM replaces the body item with the result. Click **Undo** to restore the
+previous copy.
+
+You can use these refinement options:
+
+- **Fix grammar**
+- **Improve writing**
+- **Make it punchier**
+- **Condense**
+- **Rephrase / Mix it up**
+- **Expand & elaborate**
+- **Improve structure & spacing**
+
+The built-in options keep facts, links, mentions, hashtags, and the source
+language. They also remove common machine-written patterns.
+
+## Use a custom prompt
+
+Type an instruction in the search field. Press **Enter**, or select **Use
+custom prompt**.
+
+OpenPMM applies the custom instruction and the channel rules. It does not apply
+the built-in humanization rules or the Workspace replacement instructions.
+
+## Use channel-aware copy
+
+The Writing Assistant uses the rules for the selected channel.
+
+- X copy uses short sentences and a strong opening.
+- LinkedIn copy uses useful opening lines and short paragraphs.
+- Threads copy uses a direct and conversational style.
+- Bluesky copy stays concise and respects its text limit.
+- Mastodon copy uses the limit from the selected destination.
+- Other channels use their native body format and text limit.
+
+The Writing Assistant refines only the selected body item. It does not create
+new thread items or change a YouTube title.
+
+## Refine synced copy
+
+A synced follower channel cannot use the Writing Assistant. Unsync that channel
+before you refine its copy.
+
+You can refine the master channel. OpenPMM sends the exact result to each
+compatible synced channel through the normal sync rules. It does not create a
+separate channel-specific result for a synced follower.
+
+## Set Workspace instructions
+
+Click the cog in the Writing Assistant menu. You can set instructions for these
+options:
+
+- **Condense**
+- **Make it punchier**
+- **Improve writing**
+
+The instructions are shared by all users in the Workspace. An instruction
+replaces conflicting built-in writing guidance for that option.
+
+The replacement does not change source fidelity, output format, safety rules,
+or channel limits.
