@@ -1,0 +1,82 @@
+---
+title: "Analytics"
+sidebarTitle: "Analytics"
+description: "Read and refresh current Post analytics with the OpenPMM CLI."
+---
+
+The analytics commands use only the public `/v1` API.
+Read commands require `posts:read`.
+Refresh commands require `posts:write`.
+
+## Read one Post
+
+```bash
+openpmm analytics show \
+  --post post_01JABCDEF \
+  --workspace ws_01JABCDEF \
+  --json
+```
+
+The response contains the latest stored snapshot.
+It also contains canonical metric values, freshness, and refresh state.
+
+## Read one Post group
+
+```bash
+openpmm analytics show \
+  --group launch-2026-08 \
+  --workspace ws_01JABCDEF \
+  --json
+```
+
+The response contains every published Post in the group.
+It also contains totals and coverage for each metric.
+
+## Refresh analytics
+
+Refresh one Post:
+
+```bash
+openpmm analytics refresh \
+  --post post_01JABCDEF \
+  --workspace ws_01JABCDEF \
+  --idempotency-key analytics-post-01 \
+  --json
+```
+
+Refresh one Post group:
+
+```bash
+openpmm analytics refresh \
+  --group launch-2026-08 \
+  --workspace ws_01JABCDEF \
+  --idempotency-key analytics-group-01 \
+  --json
+```
+
+The command returns after OpenPMM accepts or combines the request.
+Add `--wait` to poll for a bounded time.
+The command can still return a pending state after that wait.
+
+Reuse the same idempotency key when you retry an uncertain request.
+
+## Read the dashboard report
+
+```bash
+openpmm analytics report \
+  --workspace ws_01JABCDEF \
+  --from 2026-08-01 \
+  --until 2026-08-08 \
+  --bucket day \
+  --channel linkedin \
+  --limit 50 \
+  --json
+```
+
+`--from` is inclusive. `--until` is exclusive.
+Use `--bucket day` or `--bucket week`.
+Omit `--channel` to include all channels.
+Use `--after` with `next_cursor` to read the next Post page.
+
+The report groups Posts by publication time in the Workspace time zone.
+It does not group the audience events by event time.

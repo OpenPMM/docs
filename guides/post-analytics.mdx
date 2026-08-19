@@ -1,0 +1,105 @@
+---
+title: "Review post analytics"
+description: "Read current provider metrics for Posts, groups, and publication cohorts."
+---
+
+OpenPMM collects current metrics for Posts that it publishes.
+It stores one current snapshot for each Post.
+A refresh replaces that snapshot.
+OpenPMM does not store a metric history for each Post.
+
+## Read the metrics
+
+OpenPMM uses seven metric names:
+
+| Metric | Meaning |
+| --- | --- |
+| Views | Provider-reported content views or plays |
+| Impressions | Provider-reported screen appearances |
+| Comments | Comments or replies |
+| Reactions | Likes, favorites, or reactions |
+| Shares | Reposts, reshares, boosts, or quotes |
+| Saves | Saves or bookmarks |
+| Link clicks | Provider-reported link clicks |
+
+Views and impressions are different metrics.
+OpenPMM does not convert impressions into views.
+Every Destination uses the same metric keys.
+A metric is `null` until OpenPMM has a current provider value.
+OpenPMM never converts a missing value into zero.
+Providers can add more values without changing the response shape.
+
+## Understand totals
+
+A Post group shows the sum for its Posts.
+Each total also shows coverage.
+Coverage states the total number of Posts, how many have a fetched value, and
+how many have a failed refresh.
+
+The Analytics dashboard groups Posts by their publication date.
+A daily bucket shows current totals for Posts published on that day.
+A weekly bucket shows current totals for Posts published during that week.
+The Workspace time zone defines the bucket boundaries.
+
+These buckets do not show when audience activity happened.
+A past bucket can increase after a later refresh.
+
+Select a bucket to list its Posts.
+Select a Post group to review each destination in that group.
+
+## Refresh analytics
+
+OpenPMM requests automatic snapshots near these times after publication:
+
+- 1 hour
+- 12 hours
+- 24 hours
+- 2 days
+- 5 days
+
+The exact time has a small deterministic offset.
+This offset spreads provider requests safely.
+
+You can refresh one Post or one Post group manually.
+The request is asynchronous.
+OpenPMM keeps the last successful values while a refresh runs or fails.
+
+A five-minute cooldown applies to each Post.
+Concurrent refresh requests for the same Post are combined.
+A group refresh handles each Post independently.
+
+## Reconnect analytics access
+
+Some providers need more OAuth permissions for analytics.
+OpenPMM can show **Reconnect for analytics** for an existing Destination.
+Existing publishing access remains connected during this state.
+
+Reconnect the affected Destination to grant the new permissions.
+The provider can show its consent screen again.
+Meta, LinkedIn, TikTok, and Mastodon can require renewed consent.
+Provider app owners can also need provider review before these permissions work.
+
+OpenPMM requests these additional permissions:
+
+| Provider | Analytics permission |
+| --- | --- |
+| Facebook | `read_insights` |
+| Instagram | `instagram_business_manage_insights` |
+| Threads | `threads_manage_insights` |
+| LinkedIn member Posts | `r_member_postAnalytics` |
+| LinkedIn organization Posts | `rw_organization_admin` |
+| TikTok | `video.list` |
+| Mastodon | `read:statuses` |
+
+X and YouTube use permissions that OpenPMM already requests.
+Bluesky reads public counters and does not need an additional permission.
+
+## Use the API
+
+Use the Analytics operations in the API reference.
+Read operations return the current stored values only.
+Refresh operations return `202 Accepted` and a `Location` header.
+Read that location to observe the current refresh state.
+
+Analytics reads require `posts:read`.
+Analytics refreshes require `posts:write` and an `Idempotency-Key`.
