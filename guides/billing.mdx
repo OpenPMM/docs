@@ -1,6 +1,6 @@
 ---
 title: "Manage billing"
-description: "Start a trial, manage the subscription, and understand Workspace and X limits."
+description: "Use the trial, manage the subscription, and understand Workspace and X limits."
 ---
 
 OpenPMM charges for each Workspace. Account members do not add a charge.
@@ -13,19 +13,17 @@ The annual price gives you two months at no charge. Stripe shows the currency an
 
 The free trial lasts 14 days. You do not add payment details to start it.
 
+OpenPMM starts the trial when you complete signup. OpenPMM also creates your first Workspace.
+
 The trial includes all product features except X. Drafts and other destinations remain available.
-
-Open **Account**, then select the monthly or annual trial. Stripe hosts the checkout page.
-
-OpenPMM creates the first Workspace after Stripe confirms the subscription.
 
 ## Unlock X during the trial
 
-Open **Account**, then click **Manage plan, payment details, and invoices**. Add a payment method in Stripe.
+Open **Account**, then click **Subscribe monthly** or **Subscribe annually**.
 
-Return to OpenPMM. Click **End trial and unlock X**.
+Stripe hosts the checkout page. Paid service starts immediately after Stripe confirms payment.
 
-Stripe charges the first invoice when you end the trial. OpenPMM unlocks X after Stripe confirms payment.
+OpenPMM unlocks X after Stripe confirms payment.
 
 ## Use the X allowance
 
@@ -41,6 +39,8 @@ OpenPMM increases the subscription quantity before it creates an additional Work
 
 Workspace removal takes effect at the end of the current paid term. You receive no mid-term credit.
 
+You can delete a trial Workspace immediately because it has no paid term.
+
 You can use the Workspace until its access end date. The last Workspace removal also schedules subscription cancellation.
 
 Cancel an active Workspace with `POST /v1/workspaces/{workspace_id}/cancellation` and a confirmation value of `CANCEL` followed by its exact name. OpenPMM archives the Workspace when the paid term ends. Permanent deletion is a separate `DELETE /v1/workspaces/{workspace_id}` action for an archived Workspace and requires `DELETE` followed by its exact name.
@@ -55,7 +55,7 @@ You cannot schedule or publish new Posts in read-only mode.
 
 ## Manage the subscription
 
-Open **Account**, then click **Manage plan, payment details, and invoices**.
+After payment, open **Account**. Then click **Manage plan, payment details, and invoices**.
 
 Stripe hosts payment methods, invoices, cancellation, and plan changes. A cancellation takes effect at the paid term end.
 

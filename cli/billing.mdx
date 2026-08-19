@@ -15,7 +15,7 @@ openpmm billing show --json
 
 The response includes the subscription status, Workspace quantity, trial end, and current X usage.
 
-## Start a subscription trial
+## Start paid service
 
 ```bash
 openpmm billing subscribe \
@@ -26,7 +26,9 @@ openpmm billing subscribe \
 
 Use `--interval year` for annual billing. Open the returned `url` in a browser.
 
-The 14-day trial does not require payment details. X remains unavailable until the first payment succeeds.
+Signup starts the 14-day trial automatically. This command starts paid service immediately.
+
+Stripe collects payment details in the checkout page. OpenPMM unlocks X after Stripe confirms payment.
 
 ## Open the Stripe portal
 
@@ -36,9 +38,9 @@ openpmm billing portal --json
 
 Open the returned `url`. Use the portal for payment details, invoices, cancellation, and plan changes. Monthly-to-annual changes are immediate and prorated. Annual-to-monthly changes start after the annual term.
 
-## End the trial
+## Convert a legacy Stripe trial
 
-Add a payment method in the Stripe portal first. Then run this command:
+New trials use `billing subscribe`. Use this command only for a legacy Stripe-hosted trial:
 
 ```bash
 openpmm billing convert-trial --yes --json
@@ -86,6 +88,8 @@ openpmm workspaces cancel-subscription \
 After the paid term ends, the Workspace is archived. To permanently delete its
 data, use `workspaces delete` with `DELETE` followed by the exact Workspace
 name.
+
+You can delete a trial Workspace immediately. A trial Workspace has no paid term.
 
 <Warning>
   Billing write commands can create a charge. Review the command before you add
