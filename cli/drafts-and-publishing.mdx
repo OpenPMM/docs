@@ -58,7 +58,8 @@ openpmm posts create \
 
 ## Edit a Post
 
-The CLI gets the current ETag before it changes a draft.
+You can change the copy and publishing options on a draft or scheduled Post.
+The CLI gets the current ETag before it changes the Post.
 
 ```bash
 openpmm posts update post_01JABCDEF \
@@ -68,6 +69,13 @@ openpmm posts update post_01JABCDEF \
 ```
 
 Use `--etag` to change the version that you reviewed.
+
+Use `--options` with JSON to change the Destination publishing options.
+The scheduled Post keeps its current time and assets.
+
+<Warning>
+  Cancel the schedule before you change assets or thread structure.
+</Warning>
 
 ## Publish a Post
 

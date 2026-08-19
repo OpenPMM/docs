@@ -13,12 +13,15 @@ A **Post** contains content for one channel. It also contains the publishing sta
 | Publish with a timestamp | The same Post becomes scheduled | At the scheduled time |
 
 The Post keeps the same `id` when you publish it.
-Use `version` and the ETag to prevent changes to an old draft version.
+Use the ETag to prevent changes to an old Post revision.
 Publish every draft Post in a group together. This keeps the group consistent.
 
 A queued Post has the `scheduled` state and the `queue` schedule mode.
 OpenPMM selects an exact time when the Post enters the queue.
 You can move a queued Post to another local date without selecting an exact time.
+You can change the copy and Destination publishing options on a scheduled Post.
+The Post keeps its schedule after these changes.
+Cancel the schedule before you change assets or thread structure.
 
 ## Post details
 
