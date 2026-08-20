@@ -51,8 +51,15 @@ This command charges the first invoice immediately. OpenPMM unlocks X after Stri
 ## Add a Workspace
 
 Creating another Workspace increases the subscription quantity and can charge
-a prorated amount immediately. Use an API credential with `billing:write` and
-confirm the charge:
+a prorated amount immediately. Preview the charge first:
+
+```bash
+openpmm workspaces preview-create --json
+```
+
+The response includes the amount due now and the new monthly or annual total.
+
+Use an API credential with `billing:write` and confirm the charge:
 
 ```bash
 openpmm workspaces create \
@@ -61,8 +68,12 @@ openpmm workspaces create \
   --json
 ```
 
-The request file contains `name` and `time_zone`. The CLI sends
-`confirmed: true` only after you add `--yes`.
+The request file contains `name` and `time_zone`. The CLI gets a fresh preview
+before it sends the request. It sends `confirmed: true` and the preview only
+after you add `--yes`.
+
+OpenPMM rejects the request if the charge changes before confirmation. Run the
+command again to review the new amount.
 
 ## Cancel a Workspace subscription
 
