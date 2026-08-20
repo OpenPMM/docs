@@ -7,7 +7,26 @@ description: "Create an OpenPMM signup link, then verify the requested email in 
 An agent can prepare your first OpenPMM Workspace. The user must finish
 authentication in a browser. The signup request does not need an API key.
 
-## Create a signup link
+## Use the CLI
+
+The CLI is the shortest path because the same browser flow creates the account,
+approves the CLI, and selects the Workspace.
+
+```bash
+openpmm signup create \
+  --email publisher@example.com \
+  --workspace-name "Product Marketing" \
+  --authorize-cli
+```
+
+The command returns the signup URL immediately. After browser approval, finish
+the pending authorization and store the credential locally:
+
+```bash
+openpmm auth login --resume
+```
+
+## Create a signup link through the API
 
 Send the email address and Workspace name.
 
@@ -42,5 +61,7 @@ select **Sign in** on the signup page instead.
   customer-facing Workspace setup.
 </Note>
 
-After signup, create an API key in the OpenPMM application. Use the API key for
-all other public API operations.
+To authorize a CLI without handling an API key, call
+`POST /cli-authorizations`, open its `verification_uri_complete`, then poll
+`POST /cli-authorizations/token` with the device secret. A successful exchange
+returns the API key once.

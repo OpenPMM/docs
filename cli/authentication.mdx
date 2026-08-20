@@ -1,11 +1,31 @@
 ---
 title: "Authenticate the CLI"
 sidebarTitle: "Authentication"
-description: "Configure an OpenPMM API key and set the Workspace context for CLI requests."
+description: "Authorize the OpenPMM CLI in a browser and select a Workspace."
 ---
 
-The CLI uses an OpenPMM API key. It does not use browser cookies or your
-password.
+Run the browser authorization flow. You do not need to create or copy an API
+key.
+
+```bash
+openpmm auth login
+```
+
+The CLI opens OpenPMM in your browser. Sign in, choose a Workspace when your
+account has more than one, and select **Authorize CLI**. The CLI creates a
+full-access API key, stores it in a user-only file, and completes the command.
+It never receives your browser cookie or password.
+
+For an agent-friendly flow, return safe authorization metadata immediately,
+then resume after browser approval:
+
+```bash
+openpmm auth login --no-wait --json
+openpmm auth login --resume --json
+```
+
+The CLI stores the sensitive pending state locally. Neither JSON response
+contains the device secret or resulting API key.
 
 ## Use an environment variable
 
@@ -13,12 +33,12 @@ Use the environment for automation and one-time `npx` commands:
 
 ```bash
 export OPENPMM_API_KEY=opm_live_...
-openpmm auth status --json
+openpmm accounts show --json
 ```
 
 The environment has priority over a stored credential.
 
-## Store a local credential
+## Import an existing API key
 
 Send the key through stdin. The CLI does not accept an API key as a flag,
 positional argument, or URL.
@@ -26,12 +46,16 @@ positional argument, or URL.
 ```bash
 printf '%s' "$OPENPMM_API_KEY" | openpmm auth login --with-token
 unset OPENPMM_API_KEY
-openpmm auth status
+openpmm accounts show
 ```
 
-The CLI stores the key in a file that only your operating-system user can
-read. `openpmm auth logout` removes the local copy for the active API origin.
-It does not revoke the key.
+Use `--with-token` only when you already have an API key. The normal browser
+authorization is faster and keeps the key out of your clipboard.
+
+The CLI stores credentials in `~/.config/openpmm/credentials.json`. On systems
+with POSIX permissions, the directory is mode `0700` and the file is mode
+`0600`. `openpmm auth logout` removes the local credential for the active API
+origin. It does not revoke the key in OpenPMM.
 
 Create, rotate, and revoke API keys in the OpenPMM portal. These operations
 require a recent browser session.
@@ -42,22 +66,24 @@ require a recent browser session.
 
 ## Select a workspace
 
-Every tenant command requires a public workspace ID:
+The browser flow stores the approved Workspace. If a key can access exactly
+one Workspace, the CLI also discovers it automatically.
 
 ```bash
 openpmm workspaces list --json
-openpmm posts list --workspace ws_01JABCDEF
+openpmm posts list
 ```
 
-Set a workspace for several commands:
+Pass a Workspace only when the key can access more than one:
 
 ```bash
 export OPENPMM_WORKSPACE=ws_01JABCDEF
 openpmm destinations list --json
 ```
 
-`--workspace` has priority over `OPENPMM_WORKSPACE`. The CLI does not choose
-the first workspace and does not store a hidden last-used workspace.
+`--workspace` has priority over `OPENPMM_WORKSPACE` and the Workspace stored by
+browser authorization. The CLI never guesses when more than one Workspace is
+available.
 
 ## Select an API origin
 

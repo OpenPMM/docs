@@ -4,27 +4,47 @@ sidebarTitle: "Signup"
 description: "Create an OpenPMM signup link and start a verified account and Workspace from the CLI."
 ---
 
-Use `signup create` before you have an API key.
+Use `signup create --authorize-cli` for one account and CLI setup flow.
 
 ```bash
 openpmm signup create \
   --email publisher@example.com \
   --workspace-name "Product Marketing" \
+  --authorize-cli \
   --json
 ```
 
-The command returns `signup_url`. Open that URL in a browser. Continue with
-Google or create an account with the same email address and a password. If the
-address already has an OpenPMM identity, select **Sign in** on the signup page.
+The CLI opens `signup_url` in a browser and returns the safe URL immediately.
+Continue with Google or
+create an account with the same email address and a password. If the address
+already has an OpenPMM identity, select **Sign in** on the signup page. Then
+approve the CLI.
+
+After approval, resume the pending authorization:
+
+```bash
+openpmm auth login --resume --json
+```
+
+OpenPMM creates and stores the API key automatically. The signup and resume
+JSON never contain the device secret or API key.
+
+Google sign-in completes without a separate email-confirmation step. Email and
+password signup requires you to open the confirmation email first. The
+confirmation returns you to the same CLI approval page.
 
 The command calls `POST /signup-intents`. It does not read or send an OpenPMM
-API key. The link expires after 30 minutes.
+API key. The link expires after 30 minutes. Use `--no-open` when the agent or
+terminal cannot launch a browser; the CLI prints the URL to stderr.
 
 Use `--file` to provide the complete JSON request instead.
 
 ```json
 {
   "email": "publisher@example.com",
-  "workspace_name": "Product Marketing"
+  "workspace_name": "Product Marketing",
+  "authorize_cli": true,
+  "device_name": "Yannick MacBook Pro",
+  "cli_version": "0.1.0"
 }
 ```
