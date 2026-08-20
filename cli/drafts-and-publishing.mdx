@@ -43,6 +43,23 @@ openpmm posts create \
 OpenPMM checks these settings during the create request. If a required setting
 is missing, the CLI reports a non-retryable `422` validation error.
 
+For a Bluesky video, attach one video Asset to one body item:
+
+```bash
+openpmm posts create \
+  --workspace ws_01JABCDEF \
+  --destination dst_01JABCDEF \
+  --body 'Video update' \
+  --media-item '0:ast_01JABCDEF' \
+  --options '{"channel":"bluesky","languages":["en"],"contentLabels":[],"altTextByAssetId":{}}' \
+  --yes \
+  --json
+```
+
+Bluesky accepts one MP4 video without other media. OpenPMM can prepare a safe MP4 conversion.
+
+The command can return while Bluesky processes the video. Use `posts show` to poll the Post.
+
 Use `--when queue` to select the next Destination queue slot.
 OpenPMM uses the Workspace time zone.
 

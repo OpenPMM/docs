@@ -1,10 +1,10 @@
 ---
 title: "Bluesky media guidelines"
 sidebarTitle: "Bluesky"
-description: "See the image limits that OpenPMM applies to Bluesky Destinations and uploads."
+description: "See the image and video limits that OpenPMM applies to Bluesky Destinations and uploads."
 ---
 
-Bluesky accepts text with zero to four images in the first OpenPMM release. OpenPMM does not publish Bluesky video yet.
+Bluesky accepts text with up to four images or one video. Do not mix a video with other media.
 
 ## Text
 
@@ -29,11 +29,29 @@ OpenPMM removes image metadata before upload. This step can change the file size
 
 OpenPMM checks the file type and the file size when you attach the image. It converts a GIF, and makes an image smaller when it is above 2,000,000 bytes. A conversion for Bluesky aims below the limit, because the metadata removal step can make the file larger again. See [Media compatibility](/guides/media-compatibility). Bluesky shows a still image, so OpenPMM does not convert an animated image.
 
+## Video
+
+| Property | Limit |
+| --- | --- |
+| Count | One video without other media. |
+| File type | MP4. |
+| File size | 100,000,000 bytes maximum. |
+| Duration | 180 seconds maximum. |
+| Alt text | Optional. |
+
+OpenPMM can convert a compatible MOV or WebM file to MP4. It keeps the original Asset.
+
+Bluesky processes the video before OpenPMM creates the Post. The Post can show a processing state during this step.
+
+An old Bluesky connection can lack the video permission. Connect the Destination again when OpenPMM requests authorization.
+
 ## Content labels
 
 You can add the `porn`, `sexual`, `nudity`, or `graphic-media` self-label. Add every label that applies before publication.
 
-Use Bluesky options on the draft Post. Each key in `altTextByAssetId` must match an attached asset ID.
+Use Bluesky options on the draft Post. Each key in `altTextByAssetId` must match an attached Asset ID.
+
+Add alt text for every image. Video alt text is optional.
 
 ```json
 {
@@ -56,3 +74,4 @@ second post.
 
 - [Bluesky post schema](https://github.com/bluesky-social/atproto/blob/main/lexicons/app/bsky/feed/post.json)
 - [Bluesky image schema](https://github.com/bluesky-social/atproto/blob/main/lexicons/app/bsky/embed/images.json)
+- [Bluesky video upload guide](https://docs.bsky.app/docs/tutorials/video)
