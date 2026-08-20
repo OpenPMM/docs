@@ -122,6 +122,13 @@
             ]
           },
           {
+            "group": "CLI authorization",
+            "pages": [
+              "POST /cli-authorizations",
+              "POST /cli-authorizations/token"
+            ]
+          },
+          {
             "group": "Account",
             "pages": [
               "GET /account"

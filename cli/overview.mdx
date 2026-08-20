@@ -19,7 +19,7 @@ does not call private application routes.
     Audit the complete source, tests, and release workflow.
   </Card>
   <Card title="Authenticate the CLI" icon="key" href="/cli/authentication">
-    Configure an API key and select a workspace.
+    Sign in through your browser and approve a Workspace.
   </Card>
 </CardGroup>
 
@@ -55,10 +55,10 @@ node src/openpmm.js --help
 ```bash
 openpmm signup create \
   --email publisher@example.com \
-  --workspace-name "Product Marketing"
+  --workspace-name "Product Marketing" \
+  --authorize-cli
 
-export OPENPMM_API_KEY=opm_live_...
-export OPENPMM_WORKSPACE=ws_01JABCDEF
+openpmm auth login --resume
 
 openpmm posts create \
   --when draft \
@@ -74,8 +74,10 @@ openpmm posts publish \
   --json
 ```
 
-The signup command does not need an API key. Open the returned `signup_url` and
-finish authentication in a browser. See [Create an account](/cli/signup).
+The signup command does not need an API key. It opens the returned `signup_url`
+and returns immediately. After browser approval, `auth login --resume` stores
+the resulting credential and Workspace.
+See [Create an account](/cli/signup).
 
 Run `openpmm --help` to see the command tree. Run
 `openpmm <command> --help` to see its API operation, scope, side effects,

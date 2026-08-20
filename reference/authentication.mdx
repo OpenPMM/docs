@@ -7,8 +7,9 @@ An API credential belongs to one account. It can have access to all workspaces o
 
 OpenPMM shows the API key secret one time. Send the secret as a bearer token.
 
-`POST /signup-intents` is the only operation that does not need an API key. It
-creates a browser link that a user completes before an API key exists.
+`POST /signup-intents`, `POST /cli-authorizations`, and
+`POST /cli-authorizations/token` do not need an API key. They form the
+short-lived browser handoff that creates a credential before one exists.
 
 ```bash
 curl --request GET \

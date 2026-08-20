@@ -75,6 +75,14 @@ you send it again. The table gives the typical action for each status.
 | `429` | Read `code` and `reason`. Use `Retry-After` or `retry_at` when present. For `reason: backlog`, wait for existing posts to finish. |
 | `5xx` | Retry with a delay and the same idempotency key |
 
+### CLI browser authorization
+
+| Code | Status | Action |
+| --- | --- | --- |
+| `cli_authorization_not_found` | `404` | Start a new browser authorization. The request may be missing or expired. |
+| `cli_authorization_denied` | `403` | Ask the user before starting a new authorization. |
+| `cli_authorization_consumed` | `409` | Do not exchange the request again. Use the credential already stored by the successful CLI process, or start a new authorization if it was lost. |
+
 <Warning>
   A network timeout or provider error can occur after publication. Get the post status before you create a new post.
 </Warning>
