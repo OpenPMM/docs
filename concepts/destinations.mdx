@@ -3,25 +3,55 @@ title: "Destinations"
 description: "Learn how OpenPMM connects social accounts and manages publishable Destinations."
 ---
 
-A **destination** contains provider connection state and a publishing target. A publishable destination can receive a Post.
+A **destination** is a connected publishing target. A destination can receive a Post when its `status` is `ready`.
 
 Examples include a LinkedIn profile, a Facebook Page, or a Mastodon account.
 
-A disconnected provider appears as a non-publishable destination. Use its guidance to start a connection session.
+The destination list contains only targets that are linked to a current provider connection. It does not contain a static provider catalog. An empty `data` array means that the Workspace has no connected publishing targets.
+
+Supported providers are `bluesky`, `x`, `youtube`, `facebook`, `instagram`, `threads`, `mastodon`, `linkedin`, and `tiktok`. Use one of these values when you create a connection session.
+
+```json
+{
+  "data": [
+    {
+      "id": "dest_01JABCDEF",
+      "object": "destination",
+      "channel": "linkedin",
+      "display_name": "OpenPMM",
+      "status": "ready",
+      "is_default": true
+    }
+  ]
+}
+```
 
 ## Connection lifecycle
 
 1. Create a connection session for a provider.
 2. Open the returned authorization URL in a browser.
 3. Complete the provider authorization.
-4. Get the connection session until its status is `completed` or `expired`.
+4. Get the connection session until its status is `completed`, `failed`, or `expired`.
 5. List destinations and save the new destination ID.
 
 OpenPMM keeps provider access tokens on the server. Your integration receives destination IDs, not provider credentials.
 
+## Destination status
+
+| Status | Meaning |
+| --- | --- |
+| `ready` | The destination can receive Posts. |
+| `disabled` | The customer disabled the destination. |
+| `reauthorization-required` | A person must reconnect the provider account. |
+| `unavailable` | The provider no longer makes this target available. |
+
+Use the status as the publishing decision. You do not need to combine configuration, connection, and availability flags.
+
+The single-destination response includes publishing limits. YouTube destinations also include `allowed_privacy_statuses` and `minimum_upload_lead_minutes`; other channels omit these fields.
+
 ## Enabled and default destinations
 
-An enabled destination can receive a post. A workspace can have one default destination for each channel. Send `destination_id` when you must use a specific destination.
+A `ready` destination can receive a Post. A Workspace can have one default destination for each channel. Send `destination_id` when you must use a specific destination.
 
 <Tip>
   Store destination IDs in your configuration. Show the provider and account name to users. Send the destination ID to the API.
