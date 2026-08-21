@@ -30,13 +30,23 @@ Signup starts the 14-day trial automatically. This command starts paid service i
 
 Stripe collects payment details in the checkout page. OpenPMM unlocks X after Stripe confirms payment.
 
+OpenPMM applies the beta offer automatically. You do not enter a promotion code.
+
+The first three monthly payments are USD 1.99 or EUR 1.99. The standard monthly price is USD 9.95 or EUR 9.95.
+
+The first annual payment is USD 75.62 or EUR 75.62. The standard annual price is USD 99.50 or EUR 99.50.
+
 ## Open the Stripe portal
 
 ```bash
 openpmm billing portal --json
 ```
 
-Open the returned `url`. Use the portal for payment details, invoices, cancellation, and plan changes. Monthly-to-annual changes are immediate and prorated. Annual-to-monthly changes start after the annual term.
+Open the returned `url`. Use the portal for payment details, invoices, cancellation, and plan changes.
+
+Plan changes are unavailable while a beta discount is active. Monthly-to-annual changes are immediate after the offer ends.
+
+Annual-to-monthly changes start after the annual term.
 
 ## Convert a legacy Stripe trial
 
@@ -58,6 +68,8 @@ openpmm workspaces preview-create --json
 ```
 
 The response includes the amount due now and the new monthly or annual total.
+
+An active monthly beta discount applies to the prorated charge. An annual Workspace added after checkout uses the standard prorated price.
 
 Use an API credential with `billing:write` and confirm the charge:
 
