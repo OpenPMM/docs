@@ -269,11 +269,10 @@
       "cursor"
     ]
   },
+  "seo": {
+    "trailingSlash": false
+  },
   "redirects": [
-    {
-      "source": "/index",
-      "destination": "/"
-    },
     {
       "source": "/workflow",
       "destination": "/concepts/posts-and-sends"
