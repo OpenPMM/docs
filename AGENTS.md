@@ -15,7 +15,7 @@
 - **API credential** is an account-owned bearer key. It can have access to all
   workspaces or selected workspaces.
 - **Workspace** is the tenant boundary for destinations, assets, and Posts.
-- **Destination** contains provider connection state and a publishing target.
+- **Destination** is a connected publishing target.
 - **Post** is one channel's content and publishing state. Publishing changes
   the state of the post; it does not create a second customer object.
 - **Post submission** describes Posts that were published together. It appears

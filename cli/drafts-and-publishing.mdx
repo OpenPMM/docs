@@ -33,7 +33,7 @@ Put provider-specific settings in `--options`. For example:
 ```bash
 openpmm posts create \
   --workspace ws_01JABCDEF \
-  --destination dst_01JABCDEF \
+  --destination dest_01JABCDEF \
   --body 'Instagram caption' \
   --options '{"channel":"instagram","type":"post"}' \
   --yes \
@@ -48,7 +48,7 @@ For a Bluesky video, attach one video Asset to one body item:
 ```bash
 openpmm posts create \
   --workspace ws_01JABCDEF \
-  --destination dst_01JABCDEF \
+  --destination dest_01JABCDEF \
   --body 'Video update' \
   --media-item '0:ast_01JABCDEF' \
   --options '{"channel":"bluesky","languages":["en"],"contentLabels":[],"altTextByAssetId":{}}' \
@@ -66,7 +66,7 @@ OpenPMM uses the Workspace time zone.
 ```bash
 openpmm posts create \
   --workspace ws_01JABCDEF \
-  --destination dst_01JABCDEF \
+  --destination dest_01JABCDEF \
   --when queue \
   --body 'Queued update' \
   --yes \
@@ -105,7 +105,7 @@ openpmm posts publish \
   --workspace ws_01JABCDEF \
   --post post_01JABCDEF \
   --post-version 2 \
-  --destination dst_01JABCDEF \
+  --destination dest_01JABCDEF \
   --yes \
   --json
 ```

@@ -21,7 +21,7 @@ openpmm assets upload ./launch.webp \
 ```bash
 openpmm assets validate ast_01JABCDEF \
   --workspace ws_01JABCDEF \
-  --destination dst_01JABCDEF \
+  --destination dest_01JABCDEF \
   --json
 ```
 
@@ -43,7 +43,7 @@ openpmm assets download ast_01JABCDEF \
 
 ## Manage destinations
 
-Destinations include provider connection state and publishable targets.
+The destination list contains connected publishing targets. It does not contain disconnected provider placeholders. The `status` column is `ready`, `disabled`, `reauthorization-required`, or `unavailable`.
 
 ```bash
 openpmm destinations list --workspace ws_01JABCDEF --json
@@ -51,11 +51,12 @@ openpmm destinations connect --workspace ws_01JABCDEF --provider youtube
 openpmm destinations connect --workspace ws_01JABCDEF --provider bluesky --account alice.bsky.social
 openpmm destinations sessions show dcs_... --workspace ws_01JABCDEF
 openpmm destinations refresh --workspace ws_01JABCDEF
-openpmm destinations disconnect dst_... --workspace ws_01JABCDEF --yes
+openpmm destinations disconnect dest_... --workspace ws_01JABCDEF --yes
 ```
 
 Provider consent completes in a browser. The connection command returns its authorization URL.
 Bluesky requires `--account` with a handle or DID. Mastodon requires `--instance-origin`.
+The supported provider values are `bluesky`, `x`, `youtube`, `facebook`, `instagram`, `threads`, `mastodon`, `linkedin`, and `tiktok`.
 
 ### Configure a Destination queue
 
@@ -63,7 +64,7 @@ Pass the complete queue policy as JSON.
 The CLI gets the current Destination ETag before it sends the change.
 
 ```bash
-openpmm destinations update dst_01JABCDEF \
+openpmm destinations update dest_01JABCDEF \
   --workspace ws_01JABCDEF \
   --queue-policy '{"enabled_weekdays":["monday","tuesday","wednesday","thursday","friday"],"windows":[{"weekdays":["monday","tuesday","wednesday","thursday","friday"],"start_time":"08:00","end_time":"10:00"}]}' \
   --json

@@ -7,7 +7,9 @@ Use a connection session to authorize a provider account. OpenPMM stores the pro
 
 <Steps>
   <Step title="Choose a provider">
-    Use a provider value from the endpoint reference. For Mastodon, also send the instance origin. For Bluesky, also send the account handle or DID.
+    Use `bluesky`, `x`, `youtube`, `facebook`, `instagram`, `threads`, `mastodon`, `linkedin`, or `tiktok`. This enum is part of the connection-session request. OpenPMM does not provide a separate provider-catalog endpoint.
+
+    For Mastodon, also send the instance origin. For Bluesky, also send the account handle or DID.
   </Step>
   <Step title="Connect Bluesky">
     Bluesky OAuth requires the hosted OpenPMM service with its HTTPS public URL. A local HTTP development origin cannot act as this confidential OAuth client.
@@ -36,7 +38,7 @@ Use a connection session to authorize a provider account. OpenPMM stores the pro
     Open the returned `authorization_url` in a browser. A person must complete this step. Do not open the URL in an unattended worker.
   </Step>
   <Step title="Check the connection status">
-    Save the returned session `id`. Get the session until its status is `completed` or `expired`.
+    Save the returned session `id`. Get the session until its status is `completed`, `failed`, or `expired`.
 
     ```bash
     export OPENPMM_CONNECTION_SESSION_ID="your_connection_session_id"
@@ -47,13 +49,15 @@ Use a connection session to authorize a provider account. OpenPMM stores the pro
     ```
   </Step>
   <Step title="Get the destination ID">
-    After the session is complete, list the destinations. Store the new destination ID.
+    After the session is complete, list the connected publishing targets. Store the new destination ID.
 
     ```bash
     curl --request GET \
       --url "https://api.openpmm.com/v1/workspaces/$OPENPMM_WORKSPACE_ID/destinations" \
       --header "Authorization: Bearer $OPENPMM_API_KEY"
     ```
+
+    The response is `{"data":[]}` when the Workspace has no connected publishing targets. This endpoint does not use pagination.
   </Step>
 </Steps>
 
