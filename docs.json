@@ -150,7 +150,9 @@
             "pages": [
               "GET /workspaces",
               "GET /workspaces/{workspace_id}",
-              "PATCH /workspaces/{workspace_id}"
+              "PATCH /workspaces/{workspace_id}",
+              "GET /workspaces/{workspace_id}/writing-refinement-settings",
+              "PUT /workspaces/{workspace_id}/writing-refinement-settings"
             ]
           },
           {

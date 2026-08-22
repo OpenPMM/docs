@@ -3,12 +3,8 @@ title: "Refine post copy"
 description: "Use the Writing Assistant in the web editor."
 ---
 
-The Writing Assistant refines one Post body item in the web editor.
-
-<Note>
-  The Writing Assistant is not available through the public API or the CLI.
-  OpenPMM provides reusable agent skills as a separate product surface.
-</Note>
+The Writing Assistant refines one Post body item in the web editor. You can
+manage its Workspace settings in the web app, public API, or CLI.
 
 ## Refine the copy
 
@@ -16,10 +12,10 @@ The Writing Assistant refines one Post body item in the web editor.
 2. Click the sparkles icon below the body field.
 3. Select a refinement option.
 
-OpenPMM replaces the body item with the result. Click **Undo** to restore the
-previous copy.
+OpenPMM shows a comparison between the source copy and the refined copy. Select
+**Accept** to use the refined copy. Select **Reject** to keep the source copy.
 
-You can use these refinement options:
+The Workspace starts with these refinement options:
 
 - **Fix grammar**
 - **Improve writing**
@@ -32,13 +28,15 @@ You can use these refinement options:
 The built-in options keep facts, links, mentions, hashtags, and the source
 language. They also remove common machine-written patterns.
 
+A Workspace member can change the title, prompt, and icon for each option.
+
 ## Use a custom prompt
 
 Type an instruction in the search field. Press **Enter**, or select **Use
 custom prompt**.
 
 OpenPMM applies the custom instruction and the channel rules. It does not apply
-the built-in humanization rules or the Workspace replacement instructions.
+the built-in humanization rules or the Workspace option settings.
 
 ## Use channel-aware copy
 
@@ -63,19 +61,59 @@ You can refine the master channel. OpenPMM sends the exact result to each
 compatible synced channel through the normal sync rules. It does not create a
 separate channel-specific result for a synced follower.
 
-## Set Workspace instructions
+## Customize Workspace options
 
-Click the cog in the Writing Assistant menu. You can set instructions for these
-options:
+The AI Refine settings apply to all members of the Workspace.
 
-- **Condense**
-- **Make it punchier**
-- **Improve writing**
+1. Click the cog in the Writing Assistant menu.
+2. Change the **Title** field to change the menu label.
+3. Change the **Prompt template** field to change the refinement action.
+4. Click the icon button to open the icon picker.
+5. Select one of the 30 icons.
+6. Click **Save**.
 
-The instructions are shared by all users in the Workspace. An instruction
-replaces conflicting built-in writing guidance for that option.
-Changing a setting does not alter existing body text.
-The change applies the next time any Workspace user selects that option.
+You can change all seven options. For example, you can change **Fix grammar** to
+**Translate to German**. The prompt must tell OpenPMM to translate the copy.
 
-The replacement does not change source fidelity, output format, safety rules,
-or channel limits.
+Click **Reset** for an option to restore its default title, prompt, and icon.
+Click **Save** to save the reset.
+
+Changing a setting does not change existing body text. The setting applies the
+next time a Workspace member selects the option.
+
+### Manage options through the API or CLI
+
+Use `GET /v1/workspaces/{workspace_id}/writing-refinement-settings` to read the
+effective settings. The response always includes all seven stable action keys,
+including default values that the Workspace has not changed.
+
+Use `PUT /v1/workspaces/{workspace_id}/writing-refinement-settings` to replace
+the complete settings. Send the ETag from the GET response in `If-Match`. The
+request must include all seven actions. Each action requires a `title`,
+`prompt`, and supported `icon` key.
+
+The CLI performs the same workflow:
+
+```bash
+openpmm writing-assistant settings show --workspace ws_... --json
+openpmm writing-assistant settings update \
+  --workspace ws_... \
+  --file writing-assistant-settings.json \
+  --json
+```
+
+The update command reads the current ETag automatically. Pass `--etag` when a
+script must update only the exact version that it read earlier.
+
+## Review the system prompt
+
+The settings dialog includes a **System prompt** information icon. Point to the
+icon or move keyboard focus to it to read the system prompt.
+
+The system prompt shows the source rules, channel guidance, content limit, and
+humanization rules. It also shows where OpenPMM adds your prompt template.
+
+Click the information icon to keep the system prompt open on a touch device.
+
+You cannot change the source rules, output format, or channel limits. A custom
+prompt does not use the humanization rules.
