@@ -9,6 +9,8 @@ Use a connection session to authorize a provider account. OpenPMM stores the pro
   <Step title="Choose a provider">
     Use `bluesky`, `x`, `youtube`, `facebook`, `instagram`, `threads`, `mastodon`, `linkedin`, or `tiktok`. This enum is part of the connection-session request. OpenPMM does not provide a separate provider-catalog endpoint.
 
+    During the beta, some providers are not connectable yet in every deployment. A connection session for a provider that is not available fails with a `destination_unavailable` error rather than returning a pending session.
+
     For Mastodon, also send the instance origin. For Bluesky, also send the account handle or DID.
   </Step>
   <Step title="Connect Bluesky">

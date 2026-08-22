@@ -60,32 +60,10 @@ This command charges the first invoice immediately. OpenPMM unlocks X after Stri
 
 ## Add a Workspace
 
-Creating another Workspace increases the subscription quantity and can charge
-a prorated amount immediately. Preview the charge first:
-
-```bash
-openpmm workspaces preview-create --json
-```
-
-The response includes the amount due now and the new monthly or annual total.
-
-An active monthly beta discount applies to the prorated charge. An annual Workspace added after checkout uses the standard prorated price.
-
-Use an API credential with `billing:write` and confirm the charge:
-
-```bash
-openpmm workspaces create \
-  --file workspace.json \
-  --yes \
-  --json
-```
-
-The request file contains `name` and `time_zone`. The CLI gets a fresh preview
-before it sends the request. It sends `confirmed: true` and the preview only
-after you add `--yes`.
-
-OpenPMM rejects the request if the charge changes before confirmation. Run the
-command again to review the new amount.
+Creating another Workspace increases the subscription quantity and charges a
+prorated amount immediately. Add a Workspace in the OpenPMM web app, where you
+review the exact charge before you confirm it. The public API and the CLI do
+not create Workspaces.
 
 ## Cancel a Workspace subscription
 
@@ -108,9 +86,9 @@ openpmm workspaces cancel-subscription \
   --json
 ```
 
-After the paid term ends, the Workspace is archived. To permanently delete its
-data, use `workspaces delete` with `DELETE` followed by the exact Workspace
-name.
+After the paid term ends, the Workspace is archived. Permanently deleting a
+Workspace and its data is done in the OpenPMM web app; the public API and the
+CLI do not delete Workspaces.
 
 You can delete a trial Workspace immediately. A trial Workspace has no paid term.
 

@@ -149,11 +149,8 @@
             "group": "Workspaces",
             "pages": [
               "GET /workspaces",
-              "GET /workspace-creation-preview",
-              "POST /workspaces",
               "GET /workspaces/{workspace_id}",
-              "PATCH /workspaces/{workspace_id}",
-              "DELETE /workspaces/{workspace_id}"
+              "PATCH /workspaces/{workspace_id}"
             ]
           },
           {

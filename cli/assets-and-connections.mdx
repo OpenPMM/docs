@@ -58,6 +58,12 @@ Provider consent completes in a browser. The connection command returns its auth
 Bluesky requires `--account` with a handle or DID. Mastodon requires `--instance-origin`.
 The supported provider values are `bluesky`, `x`, `youtube`, `facebook`, `instagram`, `threads`, `mastodon`, `linkedin`, and `tiktok`.
 
+<Note>
+During the beta, not every provider is connectable in every deployment. When a
+provider is not available yet, `destinations connect` fails immediately with a
+`destination_unavailable` error instead of returning a pending session.
+</Note>
+
 ### Configure a Destination queue
 
 Pass the complete queue policy as JSON.

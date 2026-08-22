@@ -9,7 +9,7 @@ Examples include a LinkedIn profile, a Facebook Page, or a Mastodon account.
 
 The destination list contains only targets that are linked to a current provider connection. It does not contain a static provider catalog. An empty `data` array means that the Workspace has no connected publishing targets.
 
-Supported providers are `bluesky`, `x`, `youtube`, `facebook`, `instagram`, `threads`, `mastodon`, `linkedin`, and `tiktok`. Use one of these values when you create a connection session.
+Supported providers are `bluesky`, `x`, `youtube`, `facebook`, `instagram`, `threads`, `mastodon`, `linkedin`, and `tiktok`. Use one of these values when you create a connection session. During the beta, some providers are not connectable yet in every deployment; a connection session for one of these fails with a `destination_unavailable` error.
 
 ```json
 {
