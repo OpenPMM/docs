@@ -138,6 +138,18 @@ background. Use `openpmm posts show post_01JABCDEF --workspace ws_01JABCDEF
 --json` to poll the Post. OpenPMM publishes or schedules it after preparation;
 you do not run `posts publish` again.
 
+## List Posts by state
+
+Use `--view` to filter `posts list` by state:
+
+```bash
+openpmm posts list --workspace ws_01JABCDEF --view failed --json
+```
+
+The views are `all`, `drafts`, `scheduled`, `published`, `attention`, and
+`failed`. `failed` returns the Posts that need attention — the same set the
+**Failed** tab shows in the web app.
+
 ## Recover an uncertain request
 
 The CLI safely retries a request that has an idempotency key.
