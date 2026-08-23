@@ -49,17 +49,19 @@ An old Bluesky connection can lack the video permission. Connect the Destination
 
 You can add the `porn`, `sexual`, `nudity`, or `graphic-media` self-label. Add every label that applies before publication.
 
-Use Bluesky options on the draft Post. Each key in `altTextByAssetId` must match an attached Asset ID.
+Use `destination_options.bluesky` on the draft Post. Each key in
+`alt_text_by_asset_id` must match an attached Asset ID.
 
 Add alt text for every image. Video alt text is optional.
 
 ```json
 {
-  "channel": "bluesky",
-  "languages": ["en"],
-  "contentLabels": [],
-  "altTextByAssetId": {
-    "ast_01JABCDEF": "A laptop showing the OpenPMM post editor."
+  "bluesky": {
+    "languages": ["en"],
+    "content_labels": [],
+    "alt_text_by_asset_id": {
+      "ast_01JABCDEF": "A laptop showing the OpenPMM post editor."
+    }
   }
 }
 ```

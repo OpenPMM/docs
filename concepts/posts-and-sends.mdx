@@ -26,8 +26,14 @@ Cancel the schedule before you change assets or thread structure.
 ## Post details
 
 `GET /workspaces/{workspace_id}/posts/{post}` returns the complete Post status.
-The response includes the submission metadata and publication receipts.
-The response also includes the latest error and the delivery attempt count.
+The response includes lifecycle metadata, the latest error, and publication receipts.
+Use `include=attempts` to include sanitized publishing attempts.
+
+## Groups
+
+`group` is an optional label that you assign to related Posts.
+It is not a separate resource and has no publishing state.
+Use `GET /workspaces/{workspace_id}/posts?group={group}` to retrieve the Posts.
 
 ## Confirmation
 

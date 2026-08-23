@@ -22,7 +22,7 @@ Use [Connect a destination](/guides/connect-a-destination) to authorize the Inst
 
 ## Choose the Instagram content type
 
-Instagram requires media for every Post. Set the `type` value in the Instagram options:
+Instagram requires media for every Post. Set `placement` in `destination_options.instagram`:
 
 | Type | Media requirement |
 | --- | --- |
@@ -36,7 +36,7 @@ The [Instagram media guidelines](/media/instagram) page lists the current file, 
 
 ## Create an Instagram draft
 
-Create a draft with the Instagram channel. Set the Instagram type in `options`.
+Create a draft with the Instagram channel. Set the Instagram placement in `destination_options`.
 
 ```json
 {
@@ -48,8 +48,10 @@ Create a draft with the Instagram channel. Set the Instagram type in `options`.
       "headline": null,
       "body": ["A release update from OpenPMM."],
       "media": [],
-      "options": {
-        "type": "post"
+      "destination_options": {
+        "instagram": {
+          "placement": "post"
+        }
       }
     }
   ]
@@ -102,7 +104,7 @@ Use `GET /workspaces/{workspace_id}/posts/{post}` after the request. The respons
 
 If the Post enters `preparing`, it has not reached Instagram. Poll the Post until it becomes `ready`, `scheduled`, or `needs-attention`. Do not confirm the same Post again after it moves from `preparing`.
 
-If Instagram returns a media validation error, correct the file or the `options.type` value. A Post and a Story accept an image. A Reel requires a video.
+If Instagram returns a media validation error, correct the file or the `destination_options.instagram.placement` value. A Post and a Story accept an image. A Reel requires a video.
 
 ## Related pages
 

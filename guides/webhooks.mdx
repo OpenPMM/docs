@@ -1,0 +1,67 @@
+---
+title: "Receive webhook events"
+description: "Create a webhook endpoint and verify signed Post events."
+---
+
+Use a webhook endpoint to reduce the delay before your service sees a Post state change.
+Webhook events are best-effort notifications.
+OpenPMM can lose a notification before it enters the delivery queue.
+Poll the Post API periodically, even when you do not observe a delivery failure.
+
+## Create an endpoint
+
+Send `POST /workspaces/{workspace_id}/webhook-endpoints`.
+Select the event types and the content mode.
+
+```json
+{
+  "name": "Production events",
+  "url": "https://example.com/openpmm/events",
+  "event_types": ["post.published", "post.failed"],
+  "content_mode": "metadata"
+}
+```
+
+OpenPMM returns the signing secret one time.
+Store the secret in protected storage.
+
+## Verify the signature
+
+Read the exact request body bytes before you parse JSON.
+Read the timestamp and signatures from `OpenPMM-Signature`.
+Calculate HMAC-SHA256 over `<timestamp>.<raw request body>`.
+Reject a timestamp outside your replay tolerance.
+
+Secret rotation can add two `v1` signatures to the header.
+Accept a signature from either active secret during the overlap period.
+
+The CLI can verify a saved body without an API request:
+
+```bash
+OPENPMM_WEBHOOK_SECRET=whsec_... openpmm webhooks verify \
+  --signature 't=...,v1=...' \
+  --file ./payload.json
+```
+
+## Handle retries and order
+
+Use `OpenPMM-Event-Id` to deduplicate event processing.
+Use `OpenPMM-Delivery-Id` to correlate delivery attempts.
+Do not assume global event order.
+Your endpoint can receive the same event more than once.
+
+OpenPMM retries HTTP `408`, `425`, `429`, and `5xx` responses.
+Other HTTP `4xx` responses stop delivery attempts.
+These retries start only after OpenPMM creates the delivery task.
+They do not recover an event that fails before task creation.
+
+Return a successful HTTP status only after you store the event safely.
+Then get the Post when your workflow needs its current state.
+
+## Test the endpoint
+
+Use `POST /workspaces/{workspace_id}/webhook-endpoints/{endpoint_id}/test`.
+The test uses the endpoint configuration and signing contract.
+
+The public API does not provide durable event history, delivery history, or manual redelivery.
+Keep your own event IDs and request IDs for support.

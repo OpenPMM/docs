@@ -7,14 +7,17 @@ OpenPMM returns an RFC 9457 problem response for an API error. The response has 
 
 ```json
 {
-  "type": "https://docs.openpmm.com/errors/public_invalid_request",
-  "title": "Request failed",
+  "type": "https://www.openpmm.com/docs/reference/errors#public_invalid_request",
+  "title": "Invalid request",
   "status": 400,
   "detail": "The request body does not match the public contract.",
   "instance": "urn:openpmm:request:req_01JABCDEF",
   "code": "public_invalid_request",
+  "category": "validation",
   "request_id": "req_01JABCDEF",
   "retryable": false,
+  "retry": {"safety": "not_retryable", "after": null},
+  "user_action": "check_request",
   "errors": [
     {
       "pointer": "/posts/0/destination_id",
@@ -31,14 +34,17 @@ A problem response always has these fields.
 
 | Field | Description |
 | --- | --- |
-| `type` | A URI with the format `https://docs.openpmm.com/errors/{code}` |
+| `type` | The Errors page URI with the error code as its fragment |
 | `title` | A short summary of the failure |
 | `status` | The HTTP status |
 | `detail` | An explanation of this failure |
 | `instance` | The request URN with the format `urn:openpmm:request:{request_id}` |
 | `code` | The stable error code. Use this value in application logic |
+| `category` | The stable error category |
 | `request_id` | The identifier of the request |
 | `retryable` | `true` when you can send the same request again |
+| `retry` | The retry safety and optional delay |
+| `user_action` | The next action for a person or agent |
 | `errors` | The list of field errors. The list is empty when no field error applies |
 
 Some `429` responses also include `reason` and `retry_at`. Use `reason` to
@@ -51,7 +57,7 @@ Pointer to that member.
 
 Destination-specific Post errors can occur during Create Post or Publish Post.
 They use `publisher_validation_failed` with HTTP status `422`. For example, a
-missing Instagram `options` object points to `/posts/0/options`. These errors
+missing Instagram `destination_options` object points to `/posts/0/destination_options`. These errors
 are not retryable until you correct the request.
 
 ## What to log
@@ -107,6 +113,10 @@ product policy names, or versions.
 A publishing admission response rejects the complete new submission before
 OpenPMM stores a Post. The `reason` is `velocity`, `backlog`, or
 `account-paused`.
+
+`public_idempotency_outcome_unknown` means that the earlier mutation can have
+completed. The CLI uses exit `9` for this response. Inspect the affected Posts
+or other resources before you create new work.
 
 Provider publishing limits apply to one destination. A Post can fail with
 `provider_publishing_limit` and automatic retry is disabled. Other destination

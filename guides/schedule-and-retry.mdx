@@ -19,7 +19,7 @@ OpenPMM uses the Workspace time zone.
       "headline": null,
       "body": ["Queued update"],
       "media": [],
-      "options": null
+      "destination_options": null
     }
   ]
 }
@@ -27,7 +27,7 @@ OpenPMM uses the Workspace time zone.
 
 OpenPMM selects and stores an exact time before it returns the Post.
 Each Destination can get a different time in the same request.
-The Post response includes `scheduled_for`, `time_zone`, `schedule_mode`, `queue_local_date`, and `queue_window_id`.
+The Post response includes `scheduled_at`, `time_zone`, `schedule_mode`, `queue_local_date`, and `queue_window_id`.
 
 ### Configure a Destination queue
 
@@ -69,7 +69,7 @@ This manual Post does not move an existing queued Post.
 ### Move queued Posts
 
 Use `POST /workspaces/{workspace_id}/posts/move-in-queue` to move queued Posts to one local date.
-Send the current `scheduled_for` value for each Post.
+Send the current `scheduled_at` value for each Post.
 OpenPMM moves all requested Posts or does not move any Post.
 
 ```json
@@ -104,7 +104,7 @@ Set `when` to an ISO 8601 timestamp to schedule a post. The timestamp must inclu
       "headline": null,
       "body": ["Scheduled update"],
       "media": [],
-      "options": null
+      "destination_options": null
     }
   ]
 }
@@ -127,12 +127,14 @@ Send `confirmed: true` in the request body. Also send a new `Idempotency-Key` fo
 - Use the same `Idempotency-Key` when you retry the same request.
 - Get the post after a network timeout.
 - Do not assume that a provider error means that nothing was published.
-- Retry only when the error response has `retryable: true`.
+- Retry only when `retry_safety` is `safe`.
+- Verify the provider when `retry_safety` is `may_duplicate`.
+- Send `acknowledge_duplicate_risk: true` only after this verification.
 - For `provider_publishing_limit`, wait and use confirmed manual Retry. OpenPMM does not retry this error automatically.
 - A confirmed Retry can return `429` when Account publishing admission is
   temporarily limited. Read `reason` and wait until `retry_at` when it is
   present. The failed Post remains unchanged.
-- Review a post with the `needs-attention` state. Do not create a duplicate post.
+- Review a Post with the `needs-attention` state. Use its `available_actions`.
 
 A confirmed video-preparation retry can also return `202 Accepted`. Continue
 with other work and read the same Post until it leaves `preparing`.
