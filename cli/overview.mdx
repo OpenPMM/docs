@@ -28,7 +28,7 @@ does not call private application routes.
 Run the CLI without an installation:
 
 ```bash
-npx -y @openpmm/cli --help
+npx -y @openpmm/cli@0.4.0 --help
 ```
 
 Or install the `openpmm` command globally:
@@ -39,6 +39,16 @@ openpmm --version
 ```
 
 Node.js 22 or newer is required.
+
+If the global install succeeds but `openpmm` is not found, compare the npm bin
+directory with your `PATH`:
+
+```bash
+npm prefix --global
+printf '%s\n' "$PATH"
+```
+
+Add `<npm-prefix>/bin` to `PATH`, or use the pinned `npx` command.
 
 ## Run from source
 
@@ -67,7 +77,7 @@ openpmm posts create \
   --body 'Draft copy'
 openpmm posts list --view drafts --json
 openpmm posts publish \
-  --post post_01JABCDEF \
+  --post send_01JABCDEF \
   --post-version 1 \
   --destination dest_01JABCDEF \
   --yes \
@@ -81,7 +91,22 @@ See [Create an account](/cli/signup).
 
 Run `openpmm --help` to see the command tree. Run
 `openpmm <command> --help` to see its API operation, scope, side effects,
-input forms, output modes, exit codes, and a copyable example.
+input forms, complete flag list, output modes, exit codes, and a copyable
+example.
+
+Run a read-only compatibility check before automation:
+
+```bash
+openpmm doctor --json
+```
+
+It reports the CLI and API versions, authentication context, selected
+Workspace, scopes, ready Destinations, and credential file permissions. It
+never prints the API key.
+
+For an agent workflow, treat `openpmm` as the complete CLI interface. Do not
+read its credential file or use its key in another client. See
+[Agent workflow](/cli/agent-workflow).
 
 ## Customize the Writing Assistant
 

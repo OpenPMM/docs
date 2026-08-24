@@ -82,7 +82,8 @@
             "pages": [
               "cli/overview",
               "cli/signup",
-              "cli/authentication"
+              "cli/authentication",
+              "cli/agent-workflow"
             ]
           },
           {

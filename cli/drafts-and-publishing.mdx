@@ -58,7 +58,8 @@ openpmm posts create \
 
 Bluesky accepts one MP4 video without other media. OpenPMM can prepare a safe MP4 conversion.
 
-The command can return while Bluesky processes the video. Use `posts show` to poll the Post.
+The command can return while OpenPMM or the provider processes the Post. Add
+`--wait` for bounded CLI polling on an immediate publication.
 
 Use `--when queue` to select the next Destination queue slot.
 OpenPMM uses the Workspace time zone.
@@ -79,7 +80,7 @@ You can change the copy and publishing options on a draft or scheduled Post.
 The CLI gets the current ETag before it changes the Post.
 
 ```bash
-openpmm posts update post_01JABCDEF \
+openpmm posts update send_01JABCDEF \
   --workspace ws_01JABCDEF \
   --body 'Updated first post' \
   --body 'Updated second post'
@@ -103,16 +104,36 @@ The scheduled Post keeps its current time and assets.
 ```bash
 openpmm posts publish \
   --workspace ws_01JABCDEF \
-  --post post_01JABCDEF \
+  --post send_01JABCDEF \
   --post-version 2 \
   --destination dest_01JABCDEF \
   --yes \
+  --wait \
   --json
 ```
 
 Use `--at 2026-08-13T12:00:00Z` to schedule the Post at an exact time.
 Use `--at queue` to select the next queue slot.
 If a group contains multiple draft Posts, publish all Posts with `--file request.json`.
+
+`posts publish` returns after OpenPMM accepts the state change. It does not
+wait for provider completion unless you add `--wait`. Exit code `0` without
+`--wait` means that OpenPMM accepted or completed the requested transition.
+It does not always mean that the provider published the Post.
+
+For immediate publication, inspect `meta.publication`:
+
+- If `complete` is `true`, stop. The returned Posts include available receipts.
+- If `complete` is `false`, use the returned `next_command`, or run
+  `openpmm posts wait <post-id> --json`.
+- If `action_required_post_ids` is not empty, stop and inspect each Post's
+  `available_actions`. Do not keep polling.
+- Do not send `posts publish` again.
+
+`--wait` polls through the CLI for up to 300 seconds by default. Set
+`--wait-timeout` to change the bound. The final JSON includes `wait_complete`.
+The CLI stops when each Post is terminal or needs action. Scheduled and queued
+Posts are accepted work and do not use `--wait`.
 
 ## Move a queued Post
 
@@ -122,7 +143,7 @@ Select a local date in the Workspace time zone.
 ```bash
 openpmm posts move-in-queue \
   --workspace ws_01JABCDEF \
-  --post post_01JABCDEF \
+  --post send_01JABCDEF \
   --expected-scheduled-at 2026-08-20T08:37:00.000Z \
   --local-date 2026-08-22 \
   --yes \
@@ -132,11 +153,10 @@ openpmm posts move-in-queue \
 Use `--file request.json` to move multiple Posts in one atomic request.
 OpenPMM moves all requested Posts or does not move any Post.
 
-When a video needs a safe technical change, the command returns immediately
-and prints the Post with state `preparing`. The conversion continues in the
-background. Use `openpmm posts show post_01JABCDEF --workspace ws_01JABCDEF
---json` to poll the Post. OpenPMM publishes or schedules it after preparation;
-you do not run `posts publish` again.
+When background work continues, the command returns a nonterminal Post and a
+next command in JSON output. Use `posts wait` for immediate publication. You
+can use `posts show` for one read. OpenPMM continues the accepted work. Do not
+run `posts publish` again.
 
 ## List Posts by state
 

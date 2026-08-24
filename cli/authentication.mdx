@@ -57,6 +57,16 @@ with POSIX permissions, the directory is mode `0700` and the file is mode
 `0600`. `openpmm auth logout` removes the local credential for the active API
 origin. It does not revoke the key in OpenPMM.
 
+<Warning>
+  The credential store is an internal CLI implementation detail. Agents and
+  scripts must not read, parse, copy, export, or reuse its API key. Use the
+  `openpmm` command for a CLI-managed workflow.
+</Warning>
+
+If you build a direct `/v1` API integration, create a separate API credential
+with the minimum required scopes. Keep it in your secret manager. Do not import
+the CLI credential into an existing HTTP client.
+
 Create, rotate, and revoke API keys in the OpenPMM portal. These operations
 require a recent browser session.
 
