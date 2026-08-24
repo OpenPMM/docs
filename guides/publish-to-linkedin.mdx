@@ -46,7 +46,7 @@ Create a draft with the LinkedIn channel. A draft uses `channel` because it does
       "headline": null,
       "body": ["A release update from OpenPMM."],
       "media": [],
-      "options": null
+      "destination_options": null
     }
   ]
 }
@@ -95,7 +95,7 @@ Use `GET /workspaces/{workspace_id}/posts/{post}` after the request. The Post re
 
 If the Post enters `preparing`, it has not reached LinkedIn. Poll the Post until it becomes `ready`, `scheduled`, or `needs-attention`. Do not confirm the same Post again after it moves from `preparing`.
 
-If LinkedIn rejects the media or content, read the error details and correct the Post. OpenPMM keeps other Posts in the same submission independent when they target other Destinations.
+If LinkedIn rejects the media or content, read the error details and correct the Post. OpenPMM keeps each Post independent when the same request targets other Destinations.
 
 ## Related pages
 

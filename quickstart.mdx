@@ -1,10 +1,10 @@
 ---
 title: "OpenPMM API quickstart"
 sidebarTitle: "Quickstart"
-description: "Create an OpenPMM API key and make your first read-only API request safely."
+description: "Create an API key, find a Destination, and publish one Post safely."
 ---
 
-This guide makes a read-only request. It does not publish content.
+This guide creates a draft before it publishes the same Post.
 
 ## Before you begin
 
@@ -29,7 +29,7 @@ at [app.openpmm.com](https://app.openpmm.com).
 
     ```bash
     curl --request GET \
-      --url https://api.openpmm.com/v1/me \
+      --url https://api.openpmm.com/v1/account \
       --header "Authorization: Bearer $OPENPMM_API_KEY"
     ```
 
@@ -58,6 +58,54 @@ at [app.openpmm.com](https://app.openpmm.com).
       --url "https://api.openpmm.com/v1/workspaces/$OPENPMM_WORKSPACE_ID/destinations" \
       --header "Authorization: Bearer $OPENPMM_API_KEY"
     ```
+
+    Copy one X Destination `id`. Set it in your shell.
+
+    ```bash
+    export OPENPMM_DESTINATION_ID="your_destination_id"
+    ```
+  </Step>
+  <Step title="Create a draft Post">
+    A draft does not contact the provider.
+
+    ```bash
+    curl --request POST \
+      --url "https://api.openpmm.com/v1/workspaces/$OPENPMM_WORKSPACE_ID/posts" \
+      --header "Authorization: Bearer $OPENPMM_API_KEY" \
+      --header "Content-Type: application/json" \
+      --data '{"when":"draft","group":"quickstart","posts":[{"channel":"x","body":["Hello from OpenPMM"],"media":[],"destination_options":null}]}'
+    ```
+
+    Store the returned Post `id` and `version`.
+  </Step>
+  <Step title="Publish the Post">
+    <Warning>
+      This request creates public provider content. Review the Post first.
+    </Warning>
+
+    Send the Post ID, version, and Destination ID.
+    Add a unique idempotency key.
+
+    ```bash
+    curl --request POST \
+      --url "https://api.openpmm.com/v1/workspaces/$OPENPMM_WORKSPACE_ID/posts/publish" \
+      --header "Authorization: Bearer $OPENPMM_API_KEY" \
+      --header "Content-Type: application/json" \
+      --header "Idempotency-Key: quickstart-001" \
+      --data '{"confirmed":true,"when":"now","time_zone":"UTC","posts":[{"id":"post_01JABCDEF","version":1,"destination_id":"'"$OPENPMM_DESTINATION_ID"'"}]}'
+    ```
+  </Step>
+  <Step title="Inspect the Post">
+    Use the returned Post ID.
+
+    ```bash
+    curl --request GET \
+      --url "https://api.openpmm.com/v1/workspaces/$OPENPMM_WORKSPACE_ID/posts/post_01JABCDEF?include=attempts" \
+      --header "Authorization: Bearer $OPENPMM_API_KEY"
+    ```
+
+    Read `terminal`, `action_required`, `retry_safety`, and
+    `available_actions`. Store the receipt when the Post is published.
   </Step>
 </Steps>
 

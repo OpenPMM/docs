@@ -19,7 +19,7 @@ Publishing creates content on a provider. Review the draft before you publish it
           "headline": null,
           "body": ["A release update from OpenPMM."],
           "media": [],
-          "options": null
+          "destination_options": null
         }
       ]
     }
@@ -51,22 +51,21 @@ Publishing creates content on a provider. Review the draft before you publish it
 
     Add a unique `Idempotency-Key` header.
 
-    OpenPMM prepares safe image and video changes automatically. A video can
-    return `202 Accepted` with the Post in `preparing`. The work continues in
-    the background. OpenPMM returns status `422` when a file needs your
-    decision.
+    OpenPMM returns `202 Accepted` while immediate publication continues.
+    The response contains every Post ID. OpenPMM returns status `422` when a
+    file needs your decision.
   </Step>
   <Step title="Check the Post status">
     Use `GET /workspaces/{workspace_id}/posts/{post}`. The response includes
-    delivery status and receipts. A queued Post can also include `deferred` and
+    lifecycle fields, receipts, and `available_actions`. Use `include=attempts`
+    to get sanitized provider attempt diagnostics. A queued Post can include `deferred` and
     a future next-attempt time. The reason is `publishing_velocity` for a local
     dispatch delay or `provider_cooldown` when OpenPMM is waiting before it
     contacts that destination again. A failed Post stays failed while the
     deferral reports when OpenPMM can try it again.
 
-    A `preparing` Post has not reached a provider. Poll this operation until the
-    Post becomes `ready`, `scheduled`, or `needs-attention`. You do not confirm
-    the Post again.
+    Poll while `terminal` is `false` and no action is required. Use
+    `retry_safety` before you retry a failed Post.
   </Step>
 </Steps>
 
@@ -76,8 +75,8 @@ Publishing creates content on a provider. Review the draft before you publish it
 
 <Note>
   A direct or scheduled Post uses `destination_id` instead of `channel`. Put
-  destination-specific settings in `options`. For example, an Instagram Post
-  needs `{ "channel": "instagram", "type": "post" }`. OpenPMM checks these
+  destination-specific settings in `destination_options`. For example, an
+  Instagram Post needs `{ "instagram": { "placement": "post" } }`. OpenPMM checks these
   settings during Create Post and Publish Post. If a required setting is
   missing, the API returns `publisher_validation_failed` with status `422`.
 </Note>

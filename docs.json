@@ -47,6 +47,7 @@
               "guides/publish-to-linkedin",
               "guides/publish-to-instagram",
               "guides/schedule-and-retry",
+              "guides/webhooks",
               "guides/post-analytics"
             ]
           },
@@ -114,7 +115,8 @@
               "reference/authentication",
               "reference/pagination",
               "reference/idempotency",
-              "reference/errors"
+              "reference/errors",
+              "reference/changelog"
             ]
           },
           {

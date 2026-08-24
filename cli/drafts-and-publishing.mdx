@@ -28,14 +28,14 @@ specific body item. The first body index is `0`. The other channels accept one
 body item.
 
 For a direct or scheduled Post, use `--destination` instead of `--channel`.
-Put provider-specific settings in `--options`. For example:
+Put provider-specific settings in `--destination-options`. For example:
 
 ```bash
 openpmm posts create \
   --workspace ws_01JABCDEF \
   --destination dest_01JABCDEF \
   --body 'Instagram caption' \
-  --options '{"channel":"instagram","type":"post"}' \
+  --destination-options '{"instagram":{"placement":"post"}}' \
   --yes \
   --json
 ```
@@ -51,7 +51,7 @@ openpmm posts create \
   --destination dest_01JABCDEF \
   --body 'Video update' \
   --media-item '0:ast_01JABCDEF' \
-  --options '{"channel":"bluesky","languages":["en"],"contentLabels":[],"altTextByAssetId":{}}' \
+  --destination-options '{"bluesky":{"languages":["en"],"content_labels":[],"alt_text_by_asset_id":{}}}' \
   --yes \
   --json
 ```
@@ -87,7 +87,7 @@ openpmm posts update post_01JABCDEF \
 
 Use `--etag` to change the version that you reviewed.
 
-Use `--options` with JSON to change the Destination publishing options.
+Use `--destination-options` with JSON to change the Destination publishing options.
 The scheduled Post keeps its current time and assets.
 
 <Warning>
@@ -116,7 +116,7 @@ If a group contains multiple draft Posts, publish all Posts with `--file request
 
 ## Move a queued Post
 
-Get the Post and copy its current `scheduled_for` value.
+Get the Post and copy its current `scheduled_at` value.
 Select a local date in the Workspace time zone.
 
 ```bash
@@ -149,6 +149,21 @@ openpmm posts list --workspace ws_01JABCDEF --view failed --json
 The views are `all`, `drafts`, `scheduled`, `published`, `attention`, and
 `failed`. `failed` returns the Posts that need attention — the same set the
 **Failed** tab shows in the web app.
+
+Use exact filters when you reconcile a workflow:
+
+```bash
+openpmm posts list \
+  --workspace ws_01JABCDEF \
+  --group launch-2026-08 \
+  --destination dest_01JABCDEF \
+  --state needs-attention \
+  --include attempts \
+  --json
+```
+
+If `retry_safety` is `may_duplicate`, verify the provider first. Then add
+`--acknowledge-duplicate-risk` to `posts retry`.
 
 ## Recover an uncertain request
 

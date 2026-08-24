@@ -1,0 +1,16 @@
+---
+title: "API changelog"
+description: "Review changes to the OpenPMM public API and CLI contract."
+---
+
+## 2026-08-23
+
+- Post responses add lifecycle metadata and optional publishing attempts.
+- Post lists add Destination, exact state, creation time, and schedule filters.
+- Destination publishing options use provider namespaces and snake case.
+- Problem responses add a category, retry contract, and user action.
+- Unsafe Post retries require `acknowledge_duplicate_risk: true`.
+- Asset responses add status, checksum, inspection, retention, and rendition fields.
+- Writing Assistant settings are removed from the public API and CLI.
+
+OpenPMM is pre-launch. This update replaces the earlier public wire shapes.

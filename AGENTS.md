@@ -18,8 +18,10 @@
 - **Destination** is a connected publishing target.
 - **Post** is one channel's content and publishing state. Publishing changes
   the state of the post; it does not create a second customer object.
-- **Post submission** describes Posts that were published together. It appears
-  inside each submitted Post.
+- **Post Set** is the immediate response envelope for Posts accepted together.
+  It is not a durable resource.
+- **Group** is an optional caller-defined label for related Posts. You can use
+  it to filter the Post collection.
 
 Do not substitute internal model names for these terms in explanatory content.
 
