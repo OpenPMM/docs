@@ -13,7 +13,7 @@ Use an API credential with `billing:read` or `billing:write`.
 openpmm billing show --json
 ```
 
-The response includes the subscription status, Workspace quantity, trial end, and current X usage.
+The response includes the subscription status, Workspace quantity, subscription end, trial end, and current X usage.
 
 ## Start paid service
 
@@ -64,6 +64,9 @@ Creating another Workspace increases the subscription quantity and charges a
 prorated amount immediately. Add a Workspace in the OpenPMM web app, where you
 review the exact charge before you confirm it. The public API and the CLI do
 not create Workspaces.
+
+You cannot add a Workspace after you schedule subscription cancellation. Open
+the Stripe portal and resume the subscription first.
 
 ## Cancel a Workspace subscription
 

@@ -83,6 +83,28 @@ Run `openpmm --help` to see the command tree. Run
 `openpmm <command> --help` to see its API operation, scope, side effects,
 input forms, output modes, exit codes, and a copyable example.
 
+## Customize the Writing Assistant
+
+Read all seven effective Workspace refinement options:
+
+```bash
+openpmm writing-assistant settings show --json
+```
+
+Save the response's `actions` object in a JSON request file, then edit the
+titles, full prompt templates, and icon keys. Keep all seven action keys and
+send the complete replacement:
+
+```bash
+openpmm writing-assistant settings update \
+  --file writing-assistant-settings.json \
+  --json
+```
+
+The CLI reads the current ETag before the update. Use `--etag` to pin an update
+to a version that you read earlier. See [Refine post copy](/guides/refine-post-copy)
+for the web workflow and system prompt disclosure.
+
 ## Public compatibility contract
 
 Command names, flags, JSON fields, stdout and stderr behavior, and exit codes

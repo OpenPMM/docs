@@ -47,7 +47,8 @@
               "guides/publish-to-linkedin",
               "guides/publish-to-instagram",
               "guides/schedule-and-retry",
-              "guides/webhooks"
+              "guides/webhooks",
+              "guides/post-analytics"
             ]
           },
           {
@@ -88,6 +89,7 @@
             "group": "Workflows",
             "pages": [
               "cli/drafts-and-publishing",
+              "cli/analytics",
               "cli/assets-and-connections",
               "cli/billing",
               "cli/feedback",
@@ -152,7 +154,9 @@
             "pages": [
               "GET /workspaces",
               "GET /workspaces/{workspace_id}",
-              "PATCH /workspaces/{workspace_id}"
+              "PATCH /workspaces/{workspace_id}",
+              "GET /workspaces/{workspace_id}/writing-refinement-settings",
+              "PUT /workspaces/{workspace_id}/writing-refinement-settings"
             ]
           },
           {
@@ -186,6 +190,16 @@
               "POST /workspaces/{workspace_id}/asset-uploads",
               "GET /workspaces/{workspace_id}/asset-uploads/{upload_id}",
               "POST /workspaces/{workspace_id}/asset-uploads/{upload_id}/complete"
+            ]
+          },
+          {
+            "group": "Analytics",
+            "pages": [
+              "GET /workspaces/{workspace_id}/analytics",
+              "GET /workspaces/{workspace_id}/analytics/posts/{post}",
+              "POST /workspaces/{workspace_id}/analytics/posts/{post}/refresh",
+              "GET /workspaces/{workspace_id}/analytics/post-groups/{group}",
+              "POST /workspaces/{workspace_id}/analytics/post-groups/{group}/refresh"
             ]
           },
           {
