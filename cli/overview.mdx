@@ -10,9 +10,9 @@ from a terminal, shell script, CI job, or coding agent.
 The CLI has no database, provider credential, worker, or deployment access. It
 does not call private application routes.
 
-<Warning>
-  The source for `@openpmm/cli` 0.1.0 is public. The package is not published to npm yet. The first release waits until the production API supports every CLI operation.
-</Warning>
+<Note>
+  The public [`@openpmm/cli` package](https://www.npmjs.com/package/@openpmm/cli) is available on npm. Its source, tests, and release workflow are also public.
+</Note>
 
 <CardGroup cols={2}>
   <Card title="View source on GitHub" icon="github" href="https://github.com/OpenPMM/cli">
@@ -25,7 +25,7 @@ does not call private application routes.
 
 ## Install or run once
 
-After the first npm release, run the CLI without an installation:
+Run the CLI without an installation:
 
 ```bash
 npx -y @openpmm/cli --help
@@ -40,9 +40,9 @@ openpmm --version
 
 Node.js 22 or newer is required.
 
-## Run the source preview
+## Run from source
 
-You can run the audited source before the first npm release:
+You can also run the audited source:
 
 ```bash
 git clone https://github.com/OpenPMM/cli.git
