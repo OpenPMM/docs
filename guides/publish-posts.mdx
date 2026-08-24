@@ -41,7 +41,7 @@ Publishing creates content on a provider. Review the draft before you publish it
       "time_zone": "UTC",
       "posts": [
         {
-          "id": "post_01JABCDEF",
+          "id": "send_01JABCDEF",
           "version": 1,
           "destination_id": "dest_01JABCDEF"
         }
@@ -51,9 +51,10 @@ Publishing creates content on a provider. Review the draft before you publish it
 
     Add a unique `Idempotency-Key` header.
 
-    OpenPMM returns `202 Accepted` while immediate publication continues.
-    The response contains every Post ID. OpenPMM returns status `422` when a
-    file needs your decision.
+    OpenPMM returns after it accepts the state change. It does not wait for the
+    provider. Immediate, nonterminal publication returns `202 Accepted` and a
+    `Retry-After` header. The response contains every Post ID and all stored
+    receipts. OpenPMM returns status `422` when a file needs your decision.
   </Step>
   <Step title="Check the Post status">
     Use `GET /workspaces/{workspace_id}/posts/{post}`. The response includes
@@ -64,8 +65,9 @@ Publishing creates content on a provider. Review the draft before you publish it
     contacts that destination again. A failed Post stays failed while the
     deferral reports when OpenPMM can try it again.
 
-    Poll while `terminal` is `false` and no action is required. Use
-    `retry_safety` before you retry a failed Post.
+    Poll only while `terminal` and `action_required` are both `false`. Stop
+    when the Post is terminal or needs action. Do not send Publish Posts again.
+    Use `retry_safety` before you retry a failed Post.
   </Step>
 </Steps>
 

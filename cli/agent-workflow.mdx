@@ -1,0 +1,133 @@
+---
+title: "Agent workflow"
+sidebarTitle: "Agent workflow"
+description: "Use OpenPMM through the CLI with deterministic files, safe credentials, and bounded publication status checks."
+---
+
+Use this workflow when an agent owns the OpenPMM task through the CLI.
+
+<Warning>
+  The CLI is the boundary for this workflow. Do not read
+  `credentials.json`, extract its API key, or call `/v1` with that key. The
+  credential store is an internal CLI implementation detail.
+</Warning>
+
+## Agent rules
+
+1. Use only the `openpmm` command for OpenPMM operations in this workflow.
+2. Never read or export the CLI credential store.
+3. Do not call `/v1` with the CLI credential.
+4. Use `--file` and `--json` for deterministic automation.
+5. After a successful publish command, stop or use the CLI next command. Do
+   not add HTTP polling or send the publish command again.
+
+These rules do not remove the public API. A direct API integration uses its
+own least-privilege credential from a secret manager.
+
+## 1. Authorize the CLI
+
+```bash
+openpmm auth login --no-wait --json
+```
+
+Pause for browser approval. Then resume:
+
+```bash
+openpmm auth login --resume --json
+openpmm doctor --json
+```
+
+`doctor` is read-only. Confirm that API compatibility is ready, authentication
+is valid, a Workspace is selected, and at least one Destination is ready.
+
+## 2. Discover IDs
+
+```bash
+openpmm workspaces list --json
+openpmm destinations list --json
+```
+
+Use the selected Workspace from `doctor`. Copy a Destination `id` from
+`destinations list` for the publication file.
+
+## 3. Create approved drafts
+
+Save this complete request as `approved-drafts.json`:
+
+```json
+{
+  "when": "draft",
+  "group": "launch-2026-08",
+  "posts": [
+    {
+      "channel": "x",
+      "headline": null,
+      "body": ["A release update from OpenPMM."],
+      "media": [],
+      "destination_options": null
+    }
+  ]
+}
+```
+
+Create the drafts:
+
+```bash
+openpmm posts create \
+  --file approved-drafts.json \
+  --json
+```
+
+The result contains `data.posts`. Copy each Post `id` and `version`. Keep every
+Post in the group together for the publish request.
+
+## 4. Publish the same Posts
+
+Save this complete request as `approved-publication.json`. Replace the example
+values with the Post and Destination IDs that you discovered:
+
+```json
+{
+  "confirmed": true,
+  "when": "now",
+  "time_zone": "UTC",
+  "posts": [
+    {
+      "id": "send_01JABCDEF",
+      "version": 1,
+      "destination_id": "dest_01JABCDEF"
+    }
+  ]
+}
+```
+
+Publish and let the CLI handle bounded status checks:
+
+```bash
+openpmm posts publish \
+  --file approved-publication.json \
+  --yes \
+  --wait \
+  --json
+```
+
+The command waits for immediate Posts until they are terminal or need action.
+It waits for up to 300 seconds by default. The result includes
+`meta.publication.wait_complete`.
+
+- If `wait_complete` is `true`, stop. Read receipts from the returned Posts.
+- If it is `false`, the work is still accepted. Use the returned
+  `next_command`, such as `openpmm posts wait send_... --json`.
+- If `meta.publication.action_required_post_ids` is not empty, stop and inspect
+  each Post's `available_actions`.
+- Never send `posts publish` again for accepted work.
+
+For a scheduled or queued publication, omit `--wait`. A successful response
+means that OpenPMM stored the schedule or queue choice.
+
+## Existing HTTP clients
+
+If the repository contains a custom OpenPMM HTTP client, do not give it the
+CLI credential. Keep this agent workflow on CLI request files. If the project
+needs a direct API workflow, create a separate scoped credential and follow
+[API authentication](/reference/authentication).

@@ -92,7 +92,7 @@ at [app.openpmm.com](https://app.openpmm.com).
       --header "Authorization: Bearer $OPENPMM_API_KEY" \
       --header "Content-Type: application/json" \
       --header "Idempotency-Key: quickstart-001" \
-      --data '{"confirmed":true,"when":"now","time_zone":"UTC","posts":[{"id":"post_01JABCDEF","version":1,"destination_id":"'"$OPENPMM_DESTINATION_ID"'"}]}'
+      --data '{"confirmed":true,"when":"now","time_zone":"UTC","posts":[{"id":"send_01JABCDEF","version":1,"destination_id":"'"$OPENPMM_DESTINATION_ID"'"}]}'
     ```
   </Step>
   <Step title="Inspect the Post">
@@ -100,7 +100,7 @@ at [app.openpmm.com](https://app.openpmm.com).
 
     ```bash
     curl --request GET \
-      --url "https://api.openpmm.com/v1/workspaces/$OPENPMM_WORKSPACE_ID/posts/post_01JABCDEF?include=attempts" \
+      --url "https://api.openpmm.com/v1/workspaces/$OPENPMM_WORKSPACE_ID/posts/send_01JABCDEF?include=attempts" \
       --header "Authorization: Bearer $OPENPMM_API_KEY"
     ```
 

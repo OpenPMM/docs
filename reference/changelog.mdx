@@ -3,6 +3,18 @@ title: "API changelog"
 description: "Review changes to the OpenPMM public API and CLI contract."
 ---
 
+## 2026-08-24
+
+- CLI `0.4.0` adds `doctor`, bounded publication waiting, and complete
+  command-specific flag tables.
+- The CLI and docs define the CLI credential store as an internal detail. A
+  direct API client uses a separate credential.
+- Post publication docs now distinguish accepted work from provider
+  completion. This clarification does not change the API response behavior.
+- Public Post ID examples now use the runtime `send_` prefix.
+- Writing Assistant settings commands are available again in CLI `0.3.0` and
+  later.
+
 ## 2026-08-23
 
 - Post responses add lifecycle metadata and optional publishing attempts.

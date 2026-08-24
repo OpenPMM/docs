@@ -31,4 +31,10 @@ Authorization: Bearer <api-key>
 - Revoke a key when you do not need it.
 - Revoke and replace a key when another person or system can have access to it.
 
+<Warning>
+  Do not extract a key from the OpenPMM CLI credential store. A direct API
+  integration must use its own least-privilege credential. Let the CLI manage
+  the credential that it creates.
+</Warning>
+
 Call `GET /account` to get the account and credential context. Call `GET /workspaces` to list the workspaces that the credential can use.

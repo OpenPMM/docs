@@ -31,7 +31,7 @@ the correct recovery action. Wait until `retry_at` when it is present.
 
 ```bash
 openpmm posts list --workspace ws_01JABCDEF --json \
-  | jq '.data.items[] | .id'
+  | jq -r '.data[] | .id'
 
 openpmm posts list --workspace ws_01JABCDEF --jsonl \
   | while read -r post; do
@@ -64,6 +64,14 @@ version that you reviewed earlier.
 | `10` | Confirmation required |
 
 ## Protect credentials and content
+
+For a CLI-managed agent workflow, use only `openpmm` for OpenPMM operations.
+Do not inspect the CLI credential store or call `/v1` with its key. Use request
+files and `--json` for deterministic input and output.
+
+If a repository already contains a custom OpenPMM HTTP client, do not connect
+it to the CLI credential. Migrate the workflow to CLI request files. A direct
+API integration must use a separate, least-privilege credential.
 
 The CLI does not write API keys, provider tokens, signed media URLs, post copy,
 cookies, or user email addresses to diagnostics or telemetry.
