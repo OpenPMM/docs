@@ -9,9 +9,10 @@ Threads has the most detailed video contract of the Meta channels. Read [Media g
 ## Self-reply chains
 
 Repeat the Post `body` value to publish a Threads self-reply chain. Media
-can attach to each body item. OpenPMM checks both the Threads post quota and
-the reply quota before publication. Existing connections must reconnect once
-to grant the `threads_manage_replies` permission.
+can attach to each body item, and any body item can contain media without text.
+OpenPMM checks both the Threads post quota and the reply quota before
+publication. Existing connections must reconnect once to grant the
+`threads_manage_replies` permission.
 
 If publication stops part-way, a retry resumes at the first missing reply.
 

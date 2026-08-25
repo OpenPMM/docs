@@ -25,7 +25,19 @@ Store the returned Post `id` and `version`.
 Repeat `--body` to create an ordered self-reply chain for X, Bluesky, Mastodon,
 or Threads. Repeat `--media-item <body-index>:<asset-id>` to attach media to a
 specific body item. The first body index is `0`. The other channels accept one
-body item.
+body item. On X, Bluesky, Mastodon, and Threads, any body item can contain media
+without text. Keep an empty `--body ''` at that thread position and attach at
+least one Asset to the same index.
+
+```bash
+openpmm posts create \
+  --when draft \
+  --channel threads \
+  --body 'Opening post' \
+  --body '' \
+  --media-item '1:ast_01JABCDEF' \
+  --json
+```
 
 For X, every body item uses the selected Destination's effective limit.
 Read it with `openpmm destinations show <destination-id> --json`.
@@ -47,6 +59,10 @@ openpmm posts create \
 
 OpenPMM checks these settings during the create request. If a required setting
 is missing, the CLI reports a non-retryable `422` validation error.
+
+A Facebook feed accepts images only. If a feed request contains video,
+OpenPMM returns a non-retryable `422` error before publication. Use the `reel`
+placement for one video, or attach images to the feed Post.
 
 For a Bluesky video, attach one video Asset to one body item:
 

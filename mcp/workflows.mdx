@@ -26,6 +26,16 @@ Do not publish it.
 The agent can inspect the returned Post ID and version. Use those values for a
 later update or publication.
 
+The `createPosts` input schema has two explicit Post variants:
+
+- A draft requires `channel` and does not accept `destination_id`.
+- An immediate, queued, or scheduled publication requires `destination_id`
+  and does not accept `channel`.
+
+X, Bluesky, Mastodon, and Threads support media-only body items at any thread
+position. The body item stays present as an empty string, and at least one
+Asset must use the same `item_index`.
+
 ## Upload an asset
 
 OpenPMM preserves the public signed URL flow for assets:
@@ -59,6 +69,13 @@ tool annotation is not the confirmation boundary.
 
 If an immediate publication is accepted but not complete, ask the agent to
 inspect the same Post. Do not submit the publication again.
+
+OpenPMM validates the structured result of `createPosts` and `publishPosts`
+before it returns the result to the MCP client. If result validation ever fails
+after OpenPMM accepted one of these writes, the error includes `accepted: true`,
+`do_not_retry: true`, the request and idempotency keys, the affected Post group
+or IDs, and an exact safe `next_action`. Run that read action to reconcile the
+result. Do not repeat the mutation.
 
 ## Use another Workspace
 

@@ -74,3 +74,10 @@ must upload the file bytes to that URL. Then the agent must complete the upload
 through OpenPMM.
 
 See [Use OpenPMM from an agent](/mcp/workflows#upload-an-asset).
+
+## A mutation says response validation failed
+
+Check the structured recovery data before you retry. If it contains
+`accepted: true` and `do_not_retry: true`, OpenPMM accepted the write. Run the
+exact `next_action` to read the affected Post or Post group. Do not submit the
+mutation again.
