@@ -27,6 +27,11 @@ or Threads. Repeat `--media-item <body-index>:<asset-id>` to attach media to a
 specific body item. The first body index is `0`. The other channels accept one
 body item.
 
+For X, every body item uses the selected Destination's effective limit.
+Read it with `openpmm destinations show <destination-id> --json`.
+Run that command before you write or schedule long copy.
+Refresh Destinations after an X subscription change.
+
 For a direct or scheduled Post, use `--destination` instead of `--channel`.
 Put provider-specific settings in `--destination-options`. For example:
 
