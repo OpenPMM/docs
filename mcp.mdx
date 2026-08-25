@@ -1,0 +1,93 @@
+---
+title: "OpenPMM MCP"
+sidebarTitle: "Overview"
+description: "Connect an MCP-compatible agent to every public OpenPMM capability with browser-based OAuth."
+---
+
+OpenPMM provides a hosted MCP server for coding agents and other compatible
+clients. Add one remote server, sign in through your browser, and use OpenPMM
+without copying an API key.
+
+```text
+https://api.openpmm.com/mcp
+```
+
+The MCP server exposes every capability in the public OpenPMM API. It works
+across every Workspace in your Account.
+
+<Warning>
+  An MCP connection has full access to your OpenPMM Account. It can read and
+  change every current and future Workspace. OpenPMM does not offer partial MCP
+  permissions.
+</Warning>
+
+<CardGroup cols={2}>
+  <Card title="Connect an agent" icon="plug" href="/mcp/connect">
+    Add the remote server to Codex, Claude Code, or another MCP client.
+  </Card>
+  <Card title="Understand access" icon="shield-check" href="/mcp/access-and-safety">
+    Review permissions, confirmation steps, and connection management.
+  </Card>
+  <Card title="Run MCP workflows" icon="wand-magic-sparkles" href="/mcp/workflows">
+    Discover Workspaces, prepare Posts, upload assets, and publish.
+  </Card>
+  <Card title="Troubleshoot a connection" icon="screwdriver-wrench" href="/mcp/troubleshooting">
+    Fix sign-in, authorization, and connection problems.
+  </Card>
+</CardGroup>
+
+## Connect now
+
+### Any compatible agent
+
+Give your agent this instruction:
+
+```text
+Read https://docs.openpmm.com/mcp and connect this agent to OpenPMM.
+Use the remote MCP server at https://api.openpmm.com/mcp.
+Ask me to approve access in the browser.
+```
+
+### Claude Code
+
+```bash
+claude mcp add --transport http --scope user openpmm https://api.openpmm.com/mcp
+```
+
+### Codex
+
+```bash
+codex mcp add openpmm --url https://api.openpmm.com/mcp
+codex mcp login openpmm
+```
+
+Your client opens the OpenPMM authorization page. Sign in and approve the
+connection. Then ask the agent to list your OpenPMM Workspaces and
+Destinations.
+
+## Choose MCP or CLI
+
+| Use MCP when | Use the CLI when |
+| --- | --- |
+| You want to add OpenPMM directly to an agent UI. | The agent can run terminal commands. |
+| You want browser-based OAuth without an API key. | You need scripts, CI jobs, or request files. |
+| You want the agent to discover typed OpenPMM tools. | You need local file selection or deterministic JSON output. |
+
+You can use both interfaces. Each interface calls the same public OpenPMM
+contract. The CLI stores its own credential. MCP stores OAuth tokens in the MCP
+client.
+
+## Account signup
+
+MCP connects an existing OpenPMM Account. If you do not have an Account, your
+agent can create the signup link with the CLI. You do not need an API key.
+
+```bash
+npx -y @openpmm/cli@0.4.0 signup create \
+  --email "publisher@example.com" \
+  --workspace-name "Product Marketing" \
+  --authorize-cli \
+  --json
+```
+
+See [Create an account](/cli/signup) for the complete flow.

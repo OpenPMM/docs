@@ -1,0 +1,76 @@
+---
+title: "Troubleshoot MCP"
+sidebarTitle: "Troubleshooting"
+description: "Resolve common OpenPMM MCP connection, OAuth, and authorization problems."
+---
+
+## The browser does not open
+
+Start authorization from the client:
+
+```bash
+codex mcp login openpmm
+```
+
+```bash
+claude mcp login openpmm
+```
+
+If the command still does not open a browser, copy the authorization URL into
+your browser. Do not share that URL.
+
+## The authorization page says the client is unverified
+
+This is expected for a dynamically registered MCP client. Check the client
+name and redirect address. Continue only when you started the connection.
+
+## The redirect uses 127.0.0.1
+
+Local clients use a loopback redirect to receive the authorization result on
+your device. The port and callback path can change for every connection.
+
+Do not continue if you did not start a local connection.
+
+## The client returns an authorization error
+
+Remove stale OAuth state and reconnect.
+
+For Codex:
+
+```bash
+codex mcp logout openpmm
+codex mcp login openpmm
+```
+
+For Claude Code:
+
+```bash
+claude mcp logout openpmm
+claude mcp login openpmm
+```
+
+If you revoked the connection in OpenPMM, a new login creates a new grant.
+
+## The client connects but shows no tools
+
+Confirm that the client supports remote Streamable HTTP MCP servers. Confirm
+that the server URL is exactly:
+
+```text
+https://api.openpmm.com/mcp
+```
+
+Then reconnect and ask the client to refresh its MCP tool list.
+
+## A tool cannot find a Workspace
+
+Ask the agent to list Workspaces first. Then provide the exact Workspace name
+or ID. One MCP connection can use every Workspace in your Account.
+
+## An asset upload stops after creating a URL
+
+The MCP tool creates the signed upload URL. The client or another local tool
+must upload the file bytes to that URL. Then the agent must complete the upload
+through OpenPMM.
+
+See [Use OpenPMM from an agent](/mcp/workflows#upload-an-asset).

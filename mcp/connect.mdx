@@ -1,0 +1,82 @@
+---
+title: "Connect an MCP client"
+sidebarTitle: "Connect a client"
+description: "Add the OpenPMM remote MCP server to Codex, Claude Code, or another compatible client."
+---
+
+Use this remote Streamable HTTP server:
+
+```text
+https://api.openpmm.com/mcp
+```
+
+OpenPMM uses standard OAuth discovery. You do not need an API key, OAuth client
+ID, or OAuth client secret.
+
+## Any compatible agent
+
+Paste this instruction into an agent that can configure MCP servers:
+
+```text
+Read https://docs.openpmm.com/mcp and connect this agent to OpenPMM.
+Use the remote MCP server at https://api.openpmm.com/mcp.
+Ask me to approve access in the browser.
+After connection, list my OpenPMM Workspaces and Destinations.
+```
+
+If your client requires manual configuration, add a remote MCP server named
+`openpmm`. Use the server URL above and select OAuth authentication.
+
+## Claude Code
+
+Add OpenPMM to your user configuration. The connection is then available in
+every Claude Code project.
+
+```bash
+claude mcp add --transport http --scope user openpmm https://api.openpmm.com/mcp
+```
+
+If authorization does not start automatically, run:
+
+```bash
+claude mcp login openpmm
+```
+
+## Codex
+
+Add the remote server and start OAuth:
+
+```bash
+codex mcp add openpmm --url https://api.openpmm.com/mcp
+codex mcp login openpmm
+```
+
+The same Codex configuration is available to the Codex CLI and Codex app.
+
+## Cursor, OpenClaw, Hermes, and other clients
+
+Add a custom remote MCP server in the client's MCP settings. Use `openpmm` as
+the name and the production server URL above.
+
+The client must support remote Streamable HTTP and OAuth. OpenPMM supports
+standard client registration and OAuth discovery. The client opens your
+browser when it needs authorization.
+
+## Approve the connection
+
+The authorization page shows the client name, redirect address, and requested
+identity information.
+
+1. Confirm that you started the connection.
+2. Confirm that the redirect belongs to your MCP client.
+3. Approve the connection.
+4. Return to the client and ask it to list your Workspaces.
+
+A loopback redirect can use `127.0.0.1` and a temporary port. This is normal
+for a local client that you started. Do not continue if you did not start the
+connection.
+
+<Warning>
+  A familiar client name does not prove who registered it. Dynamically
+  registered clients are not verified by OpenPMM.
+</Warning>

@@ -1,0 +1,67 @@
+---
+title: "Use OpenPMM from an agent"
+sidebarTitle: "Agent workflows"
+description: "Use the OpenPMM MCP tools for discovery, drafts, assets, connections, and confirmed publication."
+---
+
+The MCP server exposes every public OpenPMM API operation as a task-specific
+tool. The agent reads the tool schema before each call.
+
+Start with a read-only request:
+
+```text
+List my OpenPMM Workspaces and the connected Destinations in each Workspace.
+```
+
+## Prepare a draft
+
+Ask the agent to create a draft before any public action:
+
+```text
+Create a draft X Post in my Product Marketing Workspace. Use this copy:
+"We shipped a smaller, safer publishing flow."
+Do not publish it.
+```
+
+The agent can inspect the returned Post ID and version. Use those values for a
+later update or publication.
+
+## Upload an asset
+
+OpenPMM preserves the public signed URL flow for assets:
+
+1. The agent asks OpenPMM to create an asset upload.
+2. OpenPMM returns a short-lived signed upload URL.
+3. The MCP client or another local tool uploads the file bytes to that URL.
+4. The agent completes the upload through OpenPMM.
+
+MCP does not read local file paths or accept file bytes directly. The MCP
+client controls the file upload step.
+
+## Connect a destination
+
+Provider authorization stays in your browser. The agent creates a Destination
+connection session and gives you its authorization URL. Open the URL, approve
+the provider, and ask the agent to check the session.
+
+## Publish a Post
+
+Publication is irreversible. Tell the agent exactly which Post and Destination
+you approved.
+
+```text
+Publish Post send_... version 3 to Destination dest_... now.
+I confirm this publication.
+```
+
+OpenPMM still requires the confirmed input for publication. The MCP client's
+tool annotation is not the confirmation boundary.
+
+If an immediate publication is accepted but not complete, ask the agent to
+inspect the same Post. Do not submit the publication again.
+
+## Use another Workspace
+
+One MCP authorization covers every current and future Workspace in your
+Account. Ask the agent to list Workspaces, then name or provide the Workspace ID
+for each task.
