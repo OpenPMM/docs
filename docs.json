@@ -75,6 +75,31 @@
         ]
       },
       {
+        "tab": "MCP",
+        "groups": [
+          {
+            "group": "Get started",
+            "pages": [
+              "mcp",
+              "mcp/connect"
+            ]
+          },
+          {
+            "group": "Workflows",
+            "pages": [
+              "mcp/workflows"
+            ]
+          },
+          {
+            "group": "Access and support",
+            "pages": [
+              "mcp/access-and-safety",
+              "mcp/troubleshooting"
+            ]
+          }
+        ]
+      },
+      {
         "tab": "CLI",
         "groups": [
           {

@@ -1,0 +1,66 @@
+---
+title: "MCP access and safety"
+sidebarTitle: "Access and safety"
+description: "Understand OpenPMM MCP permissions, OAuth identity data, confirmation steps, and revocation."
+---
+
+An OpenPMM MCP connection has the same capabilities as the complete public API.
+It can use every current and future Workspace in your Account.
+
+OpenPMM does not provide individual MCP scopes. Review the client and redirect
+address before you connect.
+
+## Identity information
+
+OpenPMM requests these OAuth identity scopes:
+
+- `openid` identifies your signed-in user.
+- `email` links the authorization to your OpenPMM identity.
+- `offline_access` lets the client refresh its connection without repeated sign-in.
+
+OpenPMM does not request `profile` or `phone` for MCP access. Identity scopes
+control information that Supabase shares during sign-in. They do not limit
+OpenPMM capabilities.
+
+## Human checkpoints
+
+MCP authorization does not remove OpenPMM safety checks:
+
+- Provider OAuth stays in your browser.
+- Publication requires an explicit confirmed input.
+- Destructive operations require their documented confirmation input.
+- The agent cannot widen its own OpenPMM access through an MCP tool.
+
+The MCP connection does not expose your OpenPMM password, browser cookie, API
+keys, or provider credentials to the client.
+
+## Dynamic clients
+
+Many MCP clients register themselves automatically. The authorization page
+labels these as unverified dynamic clients because OpenPMM did not pre-register
+or verify them.
+
+A local client often redirects to `127.0.0.1` with a temporary port. Continue
+only when you started that local connection.
+
+## Revoke access
+
+Open OpenPMM **Account settings**, find **MCP connections**, and select
+**Revoke** for the client.
+
+Revocation blocks that client's OpenPMM access. Then log out or remove the MCP
+server in the client to clear its local OAuth state and configuration.
+
+For Codex:
+
+```bash
+codex mcp logout openpmm
+codex mcp remove openpmm
+```
+
+For Claude Code:
+
+```bash
+claude mcp logout openpmm
+claude mcp remove --scope user openpmm
+```
