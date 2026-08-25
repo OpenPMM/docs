@@ -60,6 +60,12 @@ They use `publisher_validation_failed` with HTTP status `422`. For example, a
 missing Instagram `destination_options` object points to `/posts/0/destination_options`. These errors
 are not retryable until you correct the request.
 
+`x_character_limit_exceeded` is the top-level problem code when an X body item
+exceeds the selected Destination limit.
+The detail includes the effective weighted-character limit.
+Shorten the item and retry.
+Refresh the Destination after the X account subscription changes.
+
 ## What to log
 
 Log the HTTP status, `code`, and `request_id`. Do not log API keys, provider credentials, or post content.

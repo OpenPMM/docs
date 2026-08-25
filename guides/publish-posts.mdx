@@ -26,6 +26,11 @@ Publishing creates content on a provider. Review the draft before you publish it
     ```
 
     Send this body to `POST /workspaces/{workspace_id}/posts`.
+
+    Before you write X copy, get the selected Destination.
+    Inspect `capabilities.body_text_limit` in the response.
+    Each X thread item uses that Destination's effective limit.
+    Refresh Destinations after an X subscription change.
   </Step>
   <Step title="Store the Post version">
     Store the returned Post `id` and `version`. Use them when you publish the draft.
@@ -86,3 +91,9 @@ Publishing creates content on a provider. Review the draft before you publish it
 If one destination reaches a provider publishing limit, only that destination's
 Post fails. OpenPMM continues the other destination Posts. Use confirmed manual
 Retry later for the affected Post.
+
+An X body item above the connected Destination's limit fails with
+`x_character_limit_exceeded`. Shorten the item and retry. OpenPMM checks the
+capability again immediately before publishing a long X item, so a scheduled
+Post can fail safely before it creates provider content if the account was
+downgraded.

@@ -47,12 +47,19 @@ The destination list contains connected publishing targets. It does not contain 
 
 ```bash
 openpmm destinations list --workspace ws_01JABCDEF --json
+openpmm destinations show dest_01JABCDEF --workspace ws_01JABCDEF --json
 openpmm destinations connect --workspace ws_01JABCDEF --provider youtube
 openpmm destinations connect --workspace ws_01JABCDEF --provider bluesky --account alice.bsky.social
 openpmm destinations sessions show dcs_... --workspace ws_01JABCDEF
 openpmm destinations refresh --workspace ws_01JABCDEF
 openpmm destinations disconnect dest_... --workspace ws_01JABCDEF --yes
 ```
+
+Use `destinations show` to read the detailed capability contract.
+For X, `capabilities.body_text_limit` reports the maximum weighted characters.
+The limit applies to each thread item.
+Run `destinations refresh` after the X account changes subscription tier.
+The refresh updates the limit without changing the Destination ID.
 
 Provider consent completes in a browser. The connection command returns its authorization URL.
 Bluesky requires `--account` with a handle or DID. Mastodon requires `--instance-origin`.
