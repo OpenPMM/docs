@@ -2,6 +2,12 @@
 title: "OpenPMM CLI"
 sidebarTitle: "Overview"
 description: "Use the public OpenPMM API from a terminal, script, or coding agent to publish Posts."
+keywords:
+  - "OpenPMM CLI"
+  - "@openpmm/cli"
+  - "social media CLI"
+  - "coding agent publishing"
+  - "MCP social publishing"
 ---
 
 The OpenPMM CLI is the first-party client for the public `/v1` API. Use it
@@ -101,8 +107,11 @@ openpmm doctor --json
 ```
 
 It reports the CLI and API versions, authentication context, selected
-Workspace, scopes, ready Destinations, and credential file permissions. It
-never prints the API key.
+Workspace, scopes, ready Destinations, and credential file permissions. The
+`workflows.draft.ready` field checks the requirements for draft creation. The
+`workflows.publish.ready` field also requires a ready Destination. A missing
+Destination does not block draft creation. The command never prints the API
+key.
 
 For an agent workflow, treat `openpmm` as the complete CLI interface. Do not
 read its credential file or use its key in another client. See

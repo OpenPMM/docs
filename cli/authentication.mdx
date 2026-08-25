@@ -27,6 +27,10 @@ openpmm auth login --resume --json
 The CLI stores the sensitive pending state locally. Neither JSON response
 contains the device secret or resulting API key.
 
+When a JSON command has no credential, the error has a `null` HTTP status and
+includes these commands in its structured `recovery` object. The error is
+local. OpenPMM did not receive an HTTP request.
+
 ## Use an environment variable
 
 Use the environment for automation and one-time `npx` commands:

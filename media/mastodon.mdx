@@ -10,8 +10,9 @@ A Mastodon instance owns its media limits. Two instances can have different limi
 
 Repeat the Post `body` value to publish a Mastodon thread. OpenPMM publishes
 the first status, then replies to the previous status for every later body
-item. Media can attach to each body item. If publication stops part-way, a
-retry resumes at the first missing reply.
+item. Media can attach to each body item, and any body item can contain media
+without text. If publication stops part-way, a retry resumes at the first
+missing reply.
 
 ## Limits from your instance
 
