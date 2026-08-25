@@ -9,8 +9,8 @@
     "dark": "#D84420"
   },
   "appearance": {
-    "default": "light",
-    "strict": true
+    "default": "system",
+    "strict": false
   },
   "favicon": "/favicon.ico",
   "logo": "/logo/openpmm.png",

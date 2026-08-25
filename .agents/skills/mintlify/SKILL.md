@@ -51,6 +51,7 @@ Review the Mintlify [components](https://www.mintlify.com/docs/components) to se
 ## Quick reference
 
 ### CLI commands
+- Before you run `mint`, check the active Node.js major version. Mintlify rejects Node.js 25 or newer. If `fnm` and Node.js 22 are installed, run the command as `fnm exec --using=22 mint <arguments>`. Otherwise, stop and use a supported LTS Node.js version.
 - `npm i -g mint` - Install the Mintlify CLI
 - `mint dev` - Local preview at localhost:3000
 - `mint broken-links` - Check internal links
