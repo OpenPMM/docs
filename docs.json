@@ -80,7 +80,7 @@
           {
             "group": "Get started",
             "pages": [
-              "mcp",
+              "mcp/overview",
               "mcp/connect"
             ]
           },
