@@ -88,6 +88,9 @@ Publishing creates content on a provider. Review the draft before you publish it
   missing, the API returns `publisher_validation_failed` with status `422`.
 </Note>
 
+For Facebook, one attached video uses the `reel` placement automatically.
+OpenPMM also changes an explicit `feed` value to `reel` for one video.
+
 If one destination reaches a provider publishing limit, only that destination's
 Post fails. OpenPMM continues the other destination Posts. Use confirmed manual
 Retry later for the affected Post.
