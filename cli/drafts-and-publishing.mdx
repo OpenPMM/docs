@@ -60,9 +60,8 @@ openpmm posts create \
 OpenPMM checks these settings during the create request. If a required setting
 is missing, the CLI reports a non-retryable `422` validation error.
 
-A Facebook feed accepts images only. If a feed request contains video,
-OpenPMM returns a non-retryable `422` error before publication. Use the `reel`
-placement for one video, or attach images to the feed Post.
+Attach one video to make a Facebook Reel. OpenPMM selects the `reel` placement
+automatically. You do not have to send `--destination-options` for this case.
 
 For a Bluesky video, attach one video Asset to one body item:
 

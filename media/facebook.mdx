@@ -4,7 +4,7 @@ sidebarTitle: "Facebook"
 description: "See the video and image limits that OpenPMM applies to Facebook Destinations."
 ---
 
-Facebook has two placements, and each placement has its own media rules. Set `placement` in the Facebook post options. Read [Media guidelines](/media/overview) for the general rules.
+Facebook has two placements. OpenPMM selects the placement from the attached media. Read [Media guidelines](/media/overview) for the general rules.
 
 ## Media per post
 
@@ -13,7 +13,7 @@ Facebook has two placements, and each placement has its own media rules. Set `pl
 | `reel` | Exactly one video |
 | `feed` | Up to 10 images |
 
-A Facebook feed post accepts images only.
+A Post with one video uses the `reel` placement automatically. A Post with images uses the `feed` placement.
 
 ## Reel video limits
 
@@ -27,7 +27,7 @@ A Facebook feed post accepts images only.
 | File size | 500 MiB |
 
 <Note>
-  OpenPMM applies these limits when `placement` is `reel`. Select the placement before you validate the post. A different placement has a different contract, and OpenPMM cannot apply the Reel limits to it.
+  You can omit the Facebook post options. If you send `feed` with one video, OpenPMM changes the placement to `reel`.
 </Note>
 
 ## Image limits
