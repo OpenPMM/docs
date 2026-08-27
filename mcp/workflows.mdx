@@ -36,8 +36,8 @@ X, Bluesky, Mastodon, and Threads support media-only body items at any thread
 position. The body item stays present as an empty string, and at least one
 Asset must use the same `item_index`.
 
-One video makes a Facebook Post a Reel. The agent does not have to set the
-Facebook placement or inspect the Asset type before it calls `createPosts`.
+One video makes a Facebook Post a Reel. Do not send a `facebook` member in
+`destination_options`.
 
 ## Upload an asset
 

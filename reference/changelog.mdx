@@ -3,11 +3,26 @@ title: "API changelog"
 description: "Review changes to the OpenPMM public API and CLI contract."
 ---
 
+## 2026-08-27
+
+- Asset validation is removed from the public API, MCP, and CLI.
+- Asset responses no longer include `rendition_summary`.
+- Compatible media produces no separate compatibility result. Publication
+  returns `media_change_required` only when the caller must change a file or
+  Destination. The response confirms that no provider request started.
+- Temporary preparation failures return `media_preparation_unavailable` with a
+  safe retry instruction instead of asking the caller to change media.
+- Facebook placement is automatic. A video publishes as a Reel and other media
+  publishes to the Page feed. The API and CLI reject
+  `destination_options.facebook`.
+- CLI `0.5.0` returns `outcome` for publication commands and exits with code
+  `11` when a Post needs action. Structured results and receipts are preserved.
+- CLI authorization metadata includes `sensitive: true`.
+
 ## 2026-08-26
 
 - A Facebook Post with one video uses the `reel` placement automatically.
-- The API changes an explicit Facebook `feed` value to `reel` for one video.
-- MCP and CLI callers do not have to inspect the Asset type before Create Post.
+- MCP and CLI callers do not have to select a Facebook placement.
 
 ## 2026-08-24
 
@@ -28,7 +43,7 @@ description: "Review changes to the OpenPMM public API and CLI contract."
 - Destination publishing options use provider namespaces and snake case.
 - Problem responses add a category, retry contract, and user action.
 - Unsafe Post retries require `acknowledge_duplicate_risk: true`.
-- Asset responses add status, checksum, inspection, retention, and rendition fields.
+- Asset responses add status, checksum, inspection, and retention fields.
 - Writing Assistant settings are removed from the public API and CLI.
 
 OpenPMM is pre-launch. This update replaces the earlier public wire shapes.

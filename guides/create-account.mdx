@@ -64,4 +64,5 @@ select **Sign in** on the signup page instead.
 To authorize a CLI without handling an API key, call
 `POST /cli-authorizations`, open its `verification_uri_complete`, then poll
 `POST /cli-authorizations/token` with the device secret. A successful exchange
-returns the API key once.
+returns the API key once. The authorization response includes `sensitive: true`.
+Treat the one-time URL and device secret as credentials.

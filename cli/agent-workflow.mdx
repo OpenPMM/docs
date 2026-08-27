@@ -119,7 +119,8 @@ It waits for up to 300 seconds by default. The result includes
 - If it is `false`, the work is still accepted. Use the returned
   `next_command`, such as `openpmm posts wait send_... --json`.
 - If `meta.publication.action_required_post_ids` is not empty, stop and inspect
-  each Post's `available_actions`.
+  each Post's `available_actions`. The command exits with code `11`.
+- Read top-level `outcome`: `success`, `partial_failure`, or `failure`.
 - Never send `posts publish` again for accepted work.
 
 For a scheduled or queued publication, omit `--wait`. A successful response

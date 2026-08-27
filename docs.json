@@ -220,7 +220,6 @@
             "pages": [
               "GET /workspaces/{workspace_id}/assets",
               "GET /workspaces/{workspace_id}/assets/{asset_id}",
-              "POST /workspaces/{workspace_id}/assets/{asset_id}/validations",
               "DELETE /workspaces/{workspace_id}/assets/{asset_id}",
               "POST /workspaces/{workspace_id}/asset-uploads",
               "GET /workspaces/{workspace_id}/asset-uploads/{upload_id}",

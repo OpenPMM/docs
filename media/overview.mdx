@@ -18,107 +18,25 @@ Use this page for the general rules. Use the destination pages for the exact lim
 
 The 500 MiB limit is an OpenPMM limit. Some providers accept a larger file, but OpenPMM does not. Send the exact `content_type` and `byte_size` of the file when you create the upload. For the three upload steps, see [Upload assets](/guides/upload-assets).
 
-## How OpenPMM checks a file
+## Publication checks
 
-<Steps>
-  <Step title="When you attach the file">
-    OpenPMM reads the technical properties one time. For a video these are the duration, the dimensions, the frame rate, the codecs, and the audio layout. For an image these are the format, the dimensions, the aspect ratio, the transparency, the stored rotation, and the frame count. OpenPMM gives you the result immediately. You do not have to save or publish the post first.
-  </Step>
-  <Step title="When you validate an asset">
-    Send `POST /workspaces/{workspace_id}/assets/{asset_id}/validations`. Include destination IDs or channel names. OpenPMM returns the media problems for an image or for a video.
-  </Step>
-  <Step title="Before publication">
-    OpenPMM checks the file again when you publish or schedule the post. A blocked post gets a `422` response, and OpenPMM sends no request to the provider.
-  </Step>
-</Steps>
+Upload the file, attach it to the Post, and publish normally. OpenPMM returns
+no separate compatibility result when the file can publish.
 
-A readable file is always a valid asset. A destination limit that the file does not obey blocks the post, but it does not delete the asset. The asset stays in the workspace library, and you can use it for a different destination.
+If a selected Destination needs a different file, OpenPMM returns status `422`
+with code `media_change_required`. No provider request has started. Each entry
+in `errors` identifies the Asset, Destination, property, actual value, required
+value, and allowed actions.
 
-<Note>
-  OpenPMM prepares an image or video automatically when a destination needs a safe technical change. OpenPMM always keeps the original. Image preparation can change the format, dimensions, file size, metadata, stored rotation, and transparent background. Video preparation runs in the background and can change the container, codecs, frame rate, dimensions, and file size without changing the content. See [Media compatibility](/guides/media-compatibility).
-</Note>
+A readable file stays in the Workspace library even when it cannot publish to
+one Destination. You can use it for a different Destination.
 
-## Blockers and advice
-
-OpenPMM gives a `severity` to each media problem:
-
-- A **blocker** stops the post for that destination. Correct the file, or remove the destination.
-- A **recommendation** is advice. The post can publish, but the provider recommends a different value.
-
-OpenPMM cannot read some rules from a file. Two examples are a closed group of pictures (GOP) and the verification status of a YouTube account. OpenPMM gives advice for these rules and does not block the post.
-
-## Who owns a limit
-
-Each media rule has an owner. The owner tells you where to make the correction.
-
-| Owner | Meaning |
-| --- | --- |
-| `openpmm` | An OpenPMM product limit. The 500 MiB upload limit is an example. |
-| `provider` | A limit in the public documentation of the provider. |
-| `destination` | A limit that your connected account or your instance reports. |
-
-Two destinations report their own limits. TikTok gives the maximum video duration for your creator account. A Mastodon instance gives its own file types and size limits. OpenPMM reads these values from the destination before publication. If a value is not available, OpenPMM tells you in the response and keeps the other checks.
-
-## What OpenPMM can repair
-
-Each media problem has a `repair_kind`:
-
-| Value | Meaning |
-| --- | --- |
-| `technical` | The format, codec, frame rate, file size, pixel count, stored rotation, or a white background. OpenPMM repairs supported changes automatically. |
-| `editorial` | The aspect ratio, duration, crop, padding, animation, or meaningful audio. A change here needs your decision, so OpenPMM never makes it for you. |
-| `none` | No change repairs the problem. Use another file, or remove the destination. |
-
-If a destination value is not current, OpenPMM reports the problem as advice and does not block the post. The destination can then still refuse the file.
-
-## Read a media problem
-
-A blocked request returns a problem response. Each entry in `errors` names one destination and one property.
-
-```json
-{
-  "type": "https://www.openpmm.com/docs/reference/errors#media_incompatible",
-  "title": "Request failed",
-  "status": 422,
-  "detail": "The video frame rate is outside tiktok’s limits.",
-  "instance": "urn:openpmm:request:req_01JABCDEF",
-  "code": "media_incompatible",
-  "request_id": "req_01JABCDEF",
-  "retryable": false,
-  "errors": [
-    {
-      "code": "video_frame_rate_invalid",
-      "media_kind": "video",
-      "detail": "The video frame rate is outside tiktok’s limits.",
-      "asset_id": "ast_01JABCDEF",
-      "channel": "tiktok",
-      "destination_label": "Brand account",
-      "property": "frame_rate",
-      "actual": { "kind": "number", "value": 120, "unit": "fps" },
-      "required": {
-        "kind": "range",
-        "min": 23,
-        "max": 60,
-        "unit": "fps",
-        "owner": "provider"
-      },
-      "severity": "blocker",
-      "repair_kind": "technical"
-    }
-  ]
-}
-```
-
-Use `property` and `required` to see what to correct. Use `actual` for the value in your file. Use `asset_id`, `channel`, and `destination_label` to find the media and the destination. For the general error rules, see [Errors](/reference/errors).
-
-## What to do when a check fails
-
-1. Read the `property`, the `actual` value, and the `required` value.
-2. Replace the file with a file that obeys the limit, or remove the destination from the post.
-3. Validate the post again.
+See [Resolve media changes](/guides/media-compatibility) for the error shape and
+recovery workflow.
 
 <Warning>
-  A provider can still refuse media after the checks pass. Rights, moderation, and account rules are examples. Get the post status after publication.
+  A provider can still refuse media for rights, moderation, or account rules.
+  Read the Post after publication to get the provider result.
 </Warning>
 
 ## Destination guidelines
