@@ -16,16 +16,18 @@ account has more than one, and select **Authorize CLI**. The CLI creates a
 full-access API key, stores it in a user-only file, and completes the command.
 It never receives your browser cookie or password.
 
-For an agent-friendly flow, return safe authorization metadata immediately,
-then resume after browser approval:
+For an agent-friendly flow, return authorization metadata immediately, then
+resume after browser approval:
 
 ```bash
 openpmm auth login --no-wait --json
 openpmm auth login --resume --json
 ```
 
-The CLI stores the sensitive pending state locally. Neither JSON response
-contains the device secret or resulting API key.
+The JSON metadata includes `sensitive: true` because the one-time browser URL
+authorizes this CLI. Treat the complete JSON result as a credential. The CLI
+stores the device secret locally, and neither JSON response contains the device
+secret or resulting API key.
 
 When a JSON command has no credential, the error has a `null` HTTP status and
 includes these commands in its structured `recovery` object. The error is

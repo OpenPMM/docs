@@ -1,6 +1,6 @@
 ---
 title: "Upload assets"
-description: "Upload a media file, validate it, and attach it to an OpenPMM Post."
+description: "Upload a media file and attach it to an OpenPMM Post."
 ---
 
 OpenPMM uses a multipart upload for each file. Each part is 8 MiB, except the final part.
@@ -70,19 +70,9 @@ opening post. Use `media_items` to select a body item in a self-reply chain:
 
 The first body item has the `item_index` value `0`.
 
-## Check the asset
-
-Send `POST /workspaces/{workspace_id}/assets/{asset_id}/validations` with your
-destination IDs. OpenPMM answers with every problem for every destination, for
-an image and for a video. This check is optional.
-
-Each problem gives the actual value, the required value, and the rule owner.
-A blocker prevents publication to the affected destination.
-
-The `auto_convertible` status means OpenPMM prepares the image or video
-automatically when you confirm publication. Validation does not start the
-work.
-See [Media compatibility](/guides/media-compatibility).
+Attach the returned Asset to a Post and publish normally. If the file cannot
+publish to a selected Destination, the publication request returns
+`media_change_required`. See [Resolve media changes](/guides/media-compatibility).
 
 <Warning>
   The upload URLs expire at `expires_at`. Create a new upload after this time.

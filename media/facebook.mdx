@@ -27,7 +27,8 @@ A Post with one video uses the `reel` placement automatically. A Post with image
 | File size | 500 MiB |
 
 <Note>
-  You can omit the Facebook post options. If you send `feed` with one video, OpenPMM changes the placement to `reel`.
+  Facebook placement is automatic. Do not send a `facebook` member in
+  `destination_options`.
 </Note>
 
 ## Image limits
@@ -43,8 +44,7 @@ this, but it does not block the post.
 Facebook documents no dimension limit and no aspect ratio limit for an image.
 Facebook makes an image smaller itself and removes the location metadata.
 
-OpenPMM converts a WebP image and makes the file smaller when it is above 4 MB.
-See [Media compatibility](/guides/media-compatibility).
+Use a JPEG, PNG, or GIF image that is no larger than 4 MB.
 
 ## Provider documentation
 

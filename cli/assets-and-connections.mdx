@@ -16,21 +16,6 @@ openpmm assets upload ./launch.webp \
   --json
 ```
 
-## Check an asset against its destinations
-
-```bash
-openpmm assets validate ast_01JABCDEF \
-  --workspace ws_01JABCDEF \
-  --destination dest_01JABCDEF \
-  --json
-```
-
-Use `--channel` instead of `--destination` to check the documented provider
-limits without a connected account.
-
-Validation is optional. OpenPMM prepares safe image changes automatically when
-you schedule or publish. See [Media compatibility](/guides/media-compatibility).
-
 ## Download an asset
 
 The CLI refuses to overwrite an existing local file.

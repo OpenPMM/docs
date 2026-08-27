@@ -61,7 +61,7 @@ OpenPMM checks these settings during the create request. If a required setting
 is missing, the CLI reports a non-retryable `422` validation error.
 
 Attach one video to make a Facebook Reel. OpenPMM selects the `reel` placement
-automatically. You do not have to send `--destination-options` for this case.
+automatically. Do not send a `facebook` member in `--destination-options`.
 
 For a Bluesky video, attach one video Asset to one body item:
 
@@ -76,7 +76,7 @@ openpmm posts create \
   --json
 ```
 
-Bluesky accepts one MP4 video without other media. OpenPMM can prepare a safe MP4 conversion.
+Bluesky accepts one MP4 video without other media.
 
 The command can return while OpenPMM or the provider processes the Post. Add
 `--wait` for bounded CLI polling on an immediate publication.
@@ -137,9 +137,10 @@ Use `--at queue` to select the next queue slot.
 If a group contains multiple draft Posts, publish all Posts with `--file request.json`.
 
 `posts publish` returns after OpenPMM accepts the state change. It does not
-wait for provider completion unless you add `--wait`. Exit code `0` without
-`--wait` means that OpenPMM accepted or completed the requested transition.
-It does not always mean that the provider published the Post.
+wait for provider completion unless you add `--wait`. Exit code `0` means that
+OpenPMM accepted or completed the requested transition. Exit code `11` means
+that one or more Posts need action. Both exits preserve the JSON result and
+available receipts.
 
 For immediate publication, inspect `meta.publication`:
 
@@ -147,7 +148,8 @@ For immediate publication, inspect `meta.publication`:
 - If `complete` is `false`, use the returned `next_command`, or run
   `openpmm posts wait <post-id> --json`.
 - If `action_required_post_ids` is not empty, stop and inspect each Post's
-  `available_actions`. Do not keep polling.
+  `available_actions`. The CLI exits with code `11`. Do not keep polling.
+- Read top-level `outcome`: `success`, `partial_failure`, or `failure`.
 - Do not send `posts publish` again.
 
 `--wait` polls through the CLI for up to 300 seconds by default. Set

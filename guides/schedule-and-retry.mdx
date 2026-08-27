@@ -110,11 +110,9 @@ Set `when` to an ISO 8601 timestamp to schedule a post. The timestamp must inclu
 }
 ```
 
-OpenPMM prepares safe image changes automatically when you schedule the Post.
-The original image stays in the Workspace.
-If a video needs a safe technical conversion, OpenPMM returns `202 Accepted`
-with the Post in `preparing`. Conversion continues in the background and keeps
-the scheduled publication time, including any provider upload lead time.
+A Post can return `202 Accepted` in the `preparing` state. The scheduled
+publication time and any provider upload lead time stay unchanged. Read the
+Post until it advances or needs action.
 
 ## Update a scheduled post
 

@@ -34,7 +34,7 @@ does not call private application routes.
 Run the CLI without an installation:
 
 ```bash
-npx -y @openpmm/cli@0.4.0 --help
+npx -y @openpmm/cli@0.5.0 --help
 ```
 
 Or install the `openpmm` command globally:
@@ -142,6 +142,6 @@ for the web workflow and system prompt disclosure.
 ## Public compatibility contract
 
 Command names, flags, JSON fields, stdout and stderr behavior, and exit codes
-are public interfaces. Additive changes can ship in a minor release. Breaking
-changes require a major release and a documented deprecation when a safe
-compatibility path exists.
+are public interfaces. Before `1.0`, a minor release can contain breaking
+changes. After `1.0`, breaking changes require a major release and a documented
+deprecation when a safe compatibility path exists.

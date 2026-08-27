@@ -89,7 +89,8 @@ Publishing creates content on a provider. Review the draft before you publish it
 </Note>
 
 For Facebook, one attached video uses the `reel` placement automatically.
-OpenPMM also changes an explicit `feed` value to `reel` for one video.
+Do not send a `facebook` member in `destination_options`. The API rejects this
+retired input.
 
 If one destination reaches a provider publishing limit, only that destination's
 Post fails. OpenPMM continues the other destination Posts. Use confirmed manual
