@@ -4,7 +4,10 @@ sidebarTitle: "YouTube"
 description: "See the video limits that OpenPMM applies to YouTube Destinations and uploads."
 ---
 
-YouTube accepts one video for each post. A Short has additional limits. Set `kind` in the YouTube post options. Read [Media guidelines](/media/overview) for the general rules.
+YouTube accepts one video for each post. A Short has additional limits. The
+Asset `kind` is always `video`. Set `destination_options.youtube.kind` to
+`video` for a regular upload or `short` for a Short. Read [Media
+guidelines](/media/overview) for the general rules.
 
 ## Media per post
 
@@ -20,7 +23,7 @@ A YouTube post needs exactly one video. It does not accept an image.
 
 ## Short limits
 
-A Short is a post with `kind` set to `short`.
+A Short is a post with `destination_options.youtube.kind` set to `short`.
 
 | Property | Limit |
 | --- | --- |

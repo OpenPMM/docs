@@ -30,11 +30,14 @@ openpmm feedback submit \
 ```
 
 The command calls `POST /workspaces/{workspace_id}/feedback`. The CLI includes
-the Workspace, CLI environment, and request identifiers in the submission.
+the Workspace, CLI environment, and stable submission identifier in the
+submission.
 
 OpenPMM uses the Account email of the API credential creator as the reply-to
 address. The command returns a feedback receipt after OpenPMM submits the
 email.
 
 The CLI creates an idempotency key for each new submission. Use
-`--idempotency-key <key>` to retry the same request after a timeout.
+`--idempotency-key <key>` to retry the same request within 23 hours after a
+timeout. After that time, an unknown email outcome stays unknown so OpenPMM
+cannot send a duplicate.

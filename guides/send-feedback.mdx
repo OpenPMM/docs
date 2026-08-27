@@ -39,8 +39,9 @@ curl --request POST \
 The API uses the Account email of the API credential creator as the reply-to
 address. The API returns a feedback receipt after it submits the email.
 
-Use the same idempotency key when you retry the same request. Use a new key
-when the message or Workspace changes.
+Use the same idempotency key when you retry the same request within 23 hours.
+After that time, an unknown email outcome stays unknown so OpenPMM cannot send
+a duplicate. Use a new key when the message or Workspace changes.
 
 ## Use the CLI
 
@@ -52,4 +53,4 @@ openpmm feedback submit \
 ```
 
 The CLI creates an idempotency key. You can pass `--idempotency-key <key>` when
-you must retry a request with the same key.
+you must retry the same request within 23 hours.

@@ -16,6 +16,10 @@ openpmm assets upload ./launch.webp \
   --json
 ```
 
+Video files use the generic `video` Asset kind. This value does not select a
+YouTube Short or a provider Reel placement. Use the Post destination options
+for that choice.
+
 ## Download an asset
 
 The CLI refuses to overwrite an existing local file.
@@ -28,7 +32,7 @@ openpmm assets download ast_01JABCDEF \
 
 ## Manage destinations
 
-The destination list contains connected publishing targets. It does not contain disconnected provider placeholders. The `status` column is `ready`, `disabled`, `reauthorization-required`, or `unavailable`.
+The destination list contains connected publishing targets. It does not contain disconnected provider placeholders. The `status` column is `ready`, `disabled`, `reauthorization-required`, or `unavailable`. When a Destination is unavailable, `unavailable_reason` identifies the cause. Refresh warnings also include a machine-readable `reason`.
 
 ```bash
 openpmm destinations list --workspace ws_01JABCDEF --json
