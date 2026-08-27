@@ -12,11 +12,16 @@ Use this page for the general rules. Use the destination pages for the exact lim
 
 | Asset kind | Content | File types | Maximum size |
 | --- | --- | --- | --- |
-| `reel` | Video | MP4, MOV, WebM | 500 MiB |
+| `video` | Video | MP4, MOV, WebM | 500 MiB |
 | `card` | Image | PNG, JPEG, WebP, GIF | 500 MiB |
 | `poster` | Image for a video | PNG, JPEG, WebP, GIF | 500 MiB |
 
 The 500 MiB limit is an OpenPMM limit. Some providers accept a larger file, but OpenPMM does not. Send the exact `content_type` and `byte_size` of the file when you create the upload. For the three upload steps, see [Upload assets](/guides/upload-assets).
+
+`video` identifies the uploaded file type. It does not select a provider
+placement. For YouTube, set `destination_options.youtube.kind` to `video` or
+`short`. Provider pages describe the equivalent placement options for other
+Destinations.
 
 ## Publication checks
 

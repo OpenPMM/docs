@@ -5,6 +5,14 @@ description: "Review changes to the OpenPMM public API and CLI contract."
 
 ## 2026-08-27
 
+- Generic video Assets use `video` instead of `reel`. This value does not
+  select a YouTube Short or a provider Reel placement. The retired `reel`
+  Asset kind is rejected.
+- Destination responses add `unavailable_reason`. Destination refresh warnings
+  add a machine-readable `reason`. A non-authoritative provider result no
+  longer changes a ready Destination to unavailable.
+- Feedback retries with the same idempotency key can recover an unknown email
+  outcome during the provider safety window without sending a duplicate email.
 - Asset validation is removed from the public API, MCP, and CLI.
 - Asset responses no longer include `rendition_summary`.
 - Compatible media produces no separate compatibility result. Publication

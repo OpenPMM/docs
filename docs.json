@@ -16,6 +16,7 @@
   "logo": "/logo/openpmm.png",
   "seo": {
     "indexing": "navigable",
+    "trailingSlash": false,
     "organization": {
       "name": "OpenPMM",
       "url": "https://www.openpmm.com",
@@ -315,9 +316,6 @@
       "claude",
       "cursor"
     ]
-  },
-  "seo": {
-    "trailingSlash": false
   },
   "redirects": [
     {
