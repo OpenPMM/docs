@@ -25,24 +25,35 @@ The value is `openpmm` for a Post that OpenPMM publishes.
 
 ## Read the metrics
 
-OpenPMM uses seven metric names:
+OpenPMM uses six metric names:
 
 | Metric | Meaning |
 | --- | --- |
-| Views | Provider-reported content views or plays |
-| Impressions | Provider-reported screen appearances |
+| Views | Provider-reported times a Post was shown or played |
 | Comments | Comments or replies |
 | Reactions | Likes, favorites, or reactions |
 | Shares | Reposts, reshares, boosts, or quotes |
 | Saves | Saves or bookmarks |
 | Link clicks | Provider-reported link clicks |
 
-Views and impressions are different metrics.
-OpenPMM does not convert impressions into views.
+Views do not count unique people.
+Some providers name this value impressions.
+OpenPMM returns that value as `views`.
 Every Destination uses the same metric keys.
 A metric is `null` until OpenPMM has a current provider value.
 OpenPMM never converts a missing value into zero.
 Providers can add more values without changing the response shape.
+
+| Provider | Source for views |
+| --- | --- |
+| X | Impressions |
+| LinkedIn | Impressions |
+| Facebook | Video views, or post impressions when video views are unavailable |
+| Instagram | Views or plays |
+| Threads | Views |
+| TikTok | Video views |
+| YouTube | Video views |
+| Bluesky and Mastodon | No view counter |
 
 ## Understand totals
 
