@@ -78,6 +78,21 @@ openpmm posts create \
 
 Bluesky accepts one MP4 video without other media.
 
+For YouTube, set `thumbnail_timestamp_ms` to select a frame from the video.
+This example selects the frame at 1 second:
+
+```bash
+openpmm posts create \
+  --workspace ws_01JABCDEF \
+  --destination dest_01JABCDEF \
+  --headline 'Feature title' \
+  --body 'Feature description' \
+  --media media_reel_01JABCDEF \
+  --destination-options '{"youtube":{"kind":"short","privacy_status":"private","category_id":"22","self_declared_made_for_kids":false,"contains_synthetic_media":false,"notify_subscribers":false,"thumbnail_timestamp_ms":1000}}' \
+  --yes \
+  --json
+```
+
 The command can return while OpenPMM or the provider processes the Post. Add
 `--wait` for bounded CLI polling on an immediate publication.
 

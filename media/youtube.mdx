@@ -30,6 +30,36 @@ A Short is a post with `destination_options.youtube.kind` set to `short`.
 | Shape | Square or vertical. The width must not be more than the height. |
 | Duration | 3 minutes maximum |
 
+## Select a thumbnail frame
+
+Set `destination_options.youtube.thumbnail_timestamp_ms` to select a video
+frame. The value is an integer number of milliseconds. It must be less than
+the video duration.
+
+OpenPMM extracts the frame and sends it to YouTube as a custom thumbnail. This
+setting works with a regular video or a Short. Omit the field or use `null` to
+let YouTube select the thumbnail.
+
+For example, use `1000` to select the frame at 1 second:
+
+```json
+{
+  "youtube": {
+    "kind": "short",
+    "privacy_status": "private",
+    "category_id": "22",
+    "self_declared_made_for_kids": false,
+    "contains_synthetic_media": false,
+    "notify_subscribers": false,
+    "thumbnail_timestamp_ms": 1000
+  }
+}
+```
+
+YouTube can reject a custom thumbnail when the channel does not have
+permission. OpenPMM retries a temporary failure up to three times. Thumbnail
+failure does not block the video. OpenPMM records the video as published.
+
 ## Recommended encoding
 
 YouTube recommends these values. OpenPMM gives advice for a different value, but it does not block the post.
@@ -47,4 +77,4 @@ YouTube needs a verified account for a video that is longer than 15 minutes. Ope
 
 ## Provider documentation
 
-[YouTube supported formats](https://support.google.com/youtube/troubleshooter/2888402) and [recommended encoding](https://support.google.com/youtube/answer/1722171)
+[YouTube supported formats](https://support.google.com/youtube/troubleshooter/2888402), [recommended encoding](https://support.google.com/youtube/answer/1722171), and [thumbnail requirements](https://developers.google.com/youtube/v3/docs/thumbnails/set)
