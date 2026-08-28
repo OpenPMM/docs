@@ -192,6 +192,11 @@ The views are `all`, `drafts`, `scheduled`, `published`, `attention`, and
 `failed`. `failed` returns the Posts that need attention — the same set the
 **Failed** tab shows in the web app.
 
+The list can include Posts that OpenPMM imports from a connected provider.
+Read `publication_source` in JSON output to identify them.
+The value is `provider` for an imported Post.
+The value is `openpmm` for a Post that OpenPMM publishes.
+
 Use exact filters when you reconcile a workflow:
 
 ```bash

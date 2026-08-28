@@ -3,10 +3,25 @@ title: "Review post analytics"
 description: "Read current provider metrics for Posts, groups, and publication cohorts."
 ---
 
-OpenPMM collects current metrics for Posts that it publishes.
+OpenPMM collects current metrics for Posts that it publishes or imports.
 It stores one current snapshot for each Post.
 A refresh replaces that snapshot.
 OpenPMM does not store a metric history for each Post.
+
+## Review YouTube history
+
+When you connect YouTube, OpenPMM imports Posts from the previous 28 days.
+OpenPMM also imports the current views, comments, and likes for each video.
+OpenPMM checks the connected channel once each day for new videos and values.
+OpenPMM removes imported Posts after they leave the rolling 28-day window.
+
+An imported Post has an **Imported from YouTube** badge in the Posts feed.
+The badge means that the Post was first published on YouTube.
+OpenPMM does not make imported Posts editable.
+
+The API returns `publication_source` for each Post.
+The value is `provider` for an imported Post.
+The value is `openpmm` for a Post that OpenPMM publishes.
 
 ## Read the metrics
 
