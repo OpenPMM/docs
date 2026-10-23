@@ -1,0 +1,134 @@
+---
+title: "Reply to comments"
+description: "Read comments on your posts from every channel and reply to them from one inbox."
+---
+
+The inbox shows comments on the posts of your connected channels.
+A post can come from OpenPMM, from a post import, or from the provider app.
+You can reply to a comment or resolve it from the dashboard, the API, the CLI, or MCP.
+
+## Understand the objects
+
+- A **thread** is one provider post and the comments on it.
+- A **comment** is a message in a thread. The connected account can write a comment too.
+- A **reply** is a comment that OpenPMM sends for you.
+
+Each comment has one state:
+
+| State | Meaning |
+| --- | --- |
+| `unanswered` | Nobody answered the comment. |
+| `replied` | The connected account answered the comment, in OpenPMM or in the provider app. |
+| `resolved` | A person or an agent marked the comment as done. |
+
+A comment from the connected account has no state.
+OpenPMM changes a comment from `unanswered` to `replied` when the account answers it.
+OpenPMM does not change a `resolved` comment.
+
+## Check the capability of each channel
+
+Send `GET /workspaces/{workspace_id}/inbox`.
+The response gives a `capability` for each Destination.
+
+| Capability | Meaning |
+| --- | --- |
+| `available` | OpenPMM reads comments and sends replies. |
+| `read-only` | OpenPMM reads comments. Reply in the provider app. |
+| `reauthorization-required` | Connect the Destination again to read comments. |
+| `unsupported` | OpenPMM cannot read comments for this Destination. |
+
+Connect a Destination again after OpenPMM adds inbox access for its channel.
+The existing connection continues to publish Posts.
+
+## Coverage for each channel
+
+| Channel | Reply | Coverage | Time to a new comment |
+| --- | --- | --- | --- |
+| Mastodon | Yes | Every post | 15 minutes |
+| Bluesky | Yes | Every post | 15 minutes |
+| X | Yes | Every post | 15 minutes |
+| YouTube | No | Videos from the last 90 days, then every video once a day | 15 minutes, or 24 hours for older videos |
+| Facebook | Yes | Posts from the last 90 days, then every post once a day | 15 minutes, or 24 hours for older posts |
+| Instagram | Yes | Posts from the last 90 days, then every post once a day | 15 minutes, or 24 hours for older posts |
+| Threads | Yes | Posts from the last 3 days, then the last 90 days once a day | 15 minutes, or 24 hours for older posts |
+| LinkedIn | Yes | Organization pages. Member profiles need approval from LinkedIn. | 15 minutes, or 24 hours for older posts |
+| TikTok | No | TikTok does not offer a comment API. | Not available |
+
+OpenPMM shows only channels that your deployment enabled.
+YouTube is read-only. Use the comment URL to reply on YouTube.
+LinkedIn does not give OpenPMM the names of people who comment.
+
+Send `POST /workspaces/{workspace_id}/inbox/refresh` to check for new comments now.
+OpenPMM accepts one check for each Destination every 2 minutes.
+
+## List threads and comments
+
+Send `GET /workspaces/{workspace_id}/inbox/threads` for the posts that have comments.
+Send `GET /workspaces/{workspace_id}/inbox/comments` for a flat list of comments.
+The default order shows unanswered comments first.
+Use `state=unanswered` to get the open queue.
+
+Send `GET /workspaces/{workspace_id}/inbox/threads/{thread}` to read one thread.
+The comments are in time order. Use `parent_id` to find a nested reply.
+
+## Send a reply
+
+<Warning>
+  A reply is public. You cannot undo a reply.
+</Warning>
+
+Send `POST /workspaces/{workspace_id}/inbox/comments/{comment}/replies`.
+Send an `Idempotency-Key` header and use a live API credential.
+
+```json
+{
+  "body": "@andy_intl Thanks. It ships next week.",
+  "confirmed": true
+}
+```
+
+OpenPMM returns `202` with the reply in the `queued` state.
+OpenPMM usually sends the reply in a few seconds.
+Get the comment to see the reply state: `queued`, `sending`, `sent`, or `failed`.
+Use the same idempotency key when you retry a request.
+OpenPMM sends one reply for one key.
+
+OpenPMM sends the body without changes.
+On X, Mastodon, Bluesky, Threads, and Instagram, a reply usually starts with the author handle.
+Add the handle yourself when you want it.
+
+A `read-only` or `unsupported` Destination refuses a reply with `inbox_reply_unavailable`.
+
+## Resolve a comment
+
+Send `PATCH /workspaces/{workspace_id}/inbox/comments/{comment}` with `{"state": "resolved"}`.
+Send `{"state": "unanswered"}` to open the comment again.
+A comment with a reply goes back to `replied`.
+
+Send `POST /workspaces/{workspace_id}/inbox/threads/{thread}/resolve` to resolve every unanswered comment in a thread.
+
+## Receive new comments
+
+Subscribe a webhook endpoint to `comment.received`.
+OpenPMM sends the event for each new comment from another person.
+OpenPMM does not send events for the comments that it reads when you first connect a Destination.
+Subscribe to `comment.reply.failed` to learn about a reply that OpenPMM cannot send.
+See [Receive webhook events](/guides/webhooks).
+
+You can also get a Slack message about new comments.
+Send `PATCH /workspaces/{workspace_id}/notification-settings` with `{"comment_digest_enabled": true}`.
+OpenPMM sends at most one message every 15 minutes to the Workspace channel.
+The message gives the number of new comments and a link to the inbox.
+It does not contain the comment text.
+
+## Data retention
+
+OpenPMM keeps a comment for 90 days after the author posted it.
+OpenPMM deletes a comment when it finds that the author deleted it on the provider.
+
+## API scopes
+
+Read operations require `inbox:read`.
+Reply, resolve, and refresh operations require `inbox:write`.
+An API credential that you created before the inbox does not have these scopes.
+Create a new credential, or run `openpmm auth login` again for the CLI.
