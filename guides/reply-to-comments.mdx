@@ -47,7 +47,7 @@ The existing connection continues to publish Posts.
 | Mastodon | Yes | Every post | 15 minutes |
 | Bluesky | Yes | Every post | 15 minutes |
 | X | Yes | Every post | 15 minutes |
-| YouTube | No | Videos from the last 90 days, then every video once a day | 15 minutes, or 24 hours for older videos |
+| YouTube | No | Not available. YouTube requires a permission that OpenPMM does not request. | Not available |
 | Facebook | Yes | Posts from the last 90 days, then every post once a day | 15 minutes, or 24 hours for older posts |
 | Instagram | Yes | Posts from the last 90 days, then every post once a day | 15 minutes, or 24 hours for older posts |
 | Threads | Yes | Posts from the last 3 days, then the last 90 days once a day | 15 minutes, or 24 hours for older posts |
@@ -55,7 +55,6 @@ The existing connection continues to publish Posts.
 | TikTok | No | TikTok does not offer a comment API. | Not available |
 
 OpenPMM shows only channels that your deployment enabled.
-YouTube is read-only. Use the comment URL to reply on YouTube.
 LinkedIn does not give OpenPMM the names of people who comment.
 
 Send `POST /workspaces/{workspace_id}/inbox/refresh` to check for new comments now.
