@@ -1,0 +1,83 @@
+---
+title: "Inbox"
+sidebarTitle: "Inbox"
+description: "Read comments on your posts and reply to them with the OpenPMM CLI."
+---
+
+The inbox commands use only the public `/v1` API.
+Read commands require `inbox:read`.
+Reply, resolve, and refresh commands require `inbox:write`.
+See [Reply to comments](/guides/reply-to-comments) for the channel coverage.
+
+## Check each channel
+
+```bash
+openpmm inbox summary --workspace ws_01JABCDEF --json
+```
+
+The response gives the unanswered count and the `capability` of each Destination.
+Reply only on a Destination with the `available` capability.
+
+## List the open queue
+
+```bash
+openpmm inbox list \
+  --state unanswered \
+  --workspace ws_01JABCDEF \
+  --json
+```
+
+Use `--channel`, `--destination`, `--thread`, `--since`, and `--until` to filter the list.
+Use `--sort unanswered_first`, `--sort newest`, or `--sort oldest`.
+
+List the posts that have comments:
+
+```bash
+openpmm inbox threads list --workspace ws_01JABCDEF --json
+openpmm inbox threads show thr_01JABCDEF --workspace ws_01JABCDEF --json
+```
+
+## Send a reply
+
+<Warning>
+  A reply is public. You cannot undo a reply. The command requires `--yes`.
+</Warning>
+
+```bash
+openpmm inbox reply cmt_01JABCDEF \
+  --body "@andy_intl Thanks. It ships next week." \
+  --workspace ws_01JABCDEF \
+  --yes \
+  --json
+```
+
+The command returns when the reply is queued.
+Read the comment to follow the reply state:
+
+```bash
+openpmm inbox show cmt_01JABCDEF --workspace ws_01JABCDEF --json
+```
+
+The CLI creates an idempotency key when you omit `--idempotency-key`.
+Use the same key when you retry an uncertain request.
+
+## Resolve comments
+
+```bash
+openpmm inbox resolve cmt_01JABCDEF --workspace ws_01JABCDEF
+openpmm inbox reopen cmt_01JABCDEF --workspace ws_01JABCDEF
+openpmm inbox threads resolve thr_01JABCDEF --workspace ws_01JABCDEF
+```
+
+`inbox reopen` opens a resolved comment again.
+`inbox threads resolve` resolves every unanswered comment in the thread.
+
+## Check for new comments now
+
+```bash
+openpmm inbox refresh --workspace ws_01JABCDEF --json
+openpmm inbox refresh --destination dest_01JABCDEF --workspace ws_01JABCDEF --json
+```
+
+Each Destination accepts one check every 2 minutes.
+A Destination that you checked recently returns `cooldown`.

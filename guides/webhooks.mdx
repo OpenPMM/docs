@@ -25,6 +25,15 @@ Select the event types and the content mode.
 OpenPMM returns the signing secret one time.
 Store the secret in protected storage.
 
+## Comment events
+
+Subscribe to `comment.received` to learn about a new comment on your posts.
+Subscribe to `comment.reply.failed` to learn about a reply that OpenPMM cannot send.
+In `metadata` mode, the event contains identifiers and the comment URL.
+In `full` mode, the event also contains the comment text and the author.
+Comment text and author names are personal data. Protect them in your service.
+See [Reply to comments](/guides/reply-to-comments).
+
 ## Verify the signature
 
 Read the exact request body bytes before you parse JSON.

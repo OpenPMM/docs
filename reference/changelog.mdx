@@ -3,6 +3,21 @@ title: "API changelog"
 description: "Review changes to the OpenPMM public API and CLI contract."
 ---
 
+## 2026-09-25
+
+- The inbox API reads comments on your posts and sends replies. It adds nine
+  operations under `/workspaces/{workspace_id}/inbox`.
+- API credentials add the `inbox:read` and `inbox:write` scopes. A credential
+  that you created before this change does not have them.
+- Webhook endpoints add the `comment.received` and `comment.reply.failed`
+  event types.
+- Create Reply requires `confirmed: true`, a live credential, and an
+  idempotency key.
+- The CLI adds the `inbox` commands.
+- Notification settings add `comment_digest_enabled`. When it is `true`,
+  OpenPMM sends a Slack message about new comments at most every 15 minutes.
+  `slack_channel_id` is now optional in Update Notification Settings.
+
 ## 2026-08-28
 
 - YouTube Destination options add `thumbnail_timestamp_ms`. OpenPMM uses the
