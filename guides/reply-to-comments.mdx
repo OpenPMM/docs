@@ -12,6 +12,8 @@ You can reply to a comment or resolve it from the dashboard, the API, the CLI, o
 - A **thread** is one provider post and the comments on it.
 - A **comment** is a message in a thread. The connected account can write a comment too.
 - A **reply** is a comment that OpenPMM sends for you.
+- A **conversation** is a comment from another person and all the replies below it.
+- A **post part** is a comment from the connected account that continues its own post, such as part 2 of a thread. A post part is not in a conversation.
 
 Each comment has one state:
 
@@ -23,6 +25,7 @@ Each comment has one state:
 
 A comment from the connected account has no state.
 OpenPMM changes a comment from `unanswered` to `replied` when the account answers it.
+A reply from the account also answers every earlier comment in the same conversation.
 OpenPMM does not change a `resolved` comment.
 
 ## Check the capability of each channel
@@ -69,6 +72,20 @@ Use `state=unanswered` to get the open queue.
 
 Send `GET /workspaces/{workspace_id}/inbox/threads/{thread}` to read one thread.
 The comments are in time order. Use `parent_id` to find a nested reply.
+
+The response also groups the comments:
+
+- `post_part_ids` lists the post parts. They are never `unanswered`.
+- `conversations` lists each conversation, with the conversations that wait for a reply first.
+
+| Conversation state | Meaning |
+| --- | --- |
+| `waiting` | One or more comments in the conversation are `unanswered`. |
+| `answered` | No comment waits, and one or more comments are `replied`. |
+| `resolved` | Every comment from another person is `resolved`. |
+
+Send your reply to `latest_waiting_id`, the newest comment that waits.
+The reply answers every earlier comment in the conversation.
 
 ## Send a reply
 
