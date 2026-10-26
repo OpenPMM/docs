@@ -3,6 +3,15 @@ title: "API changelog"
 description: "Review changes to the OpenPMM public API and CLI contract."
 ---
 
+## 2026-10-26
+
+- Get Inbox Thread adds `post_part_ids` and `conversations`. A conversation is
+  a comment from another person and all the replies below it.
+- A reply from the connected account now answers every earlier comment in the
+  same conversation. Before this change, it answered only its parent comment.
+- A comment from the connected account that continues its own post is a post
+  part. Comments on a post part start a new conversation.
+
 ## 2026-09-25
 
 - The inbox API reads comments on your posts and sends replies. It adds nine
